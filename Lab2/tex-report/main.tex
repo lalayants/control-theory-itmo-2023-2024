@@ -6,11 +6,11 @@
 \usepackage[english, russian]{babel}
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
 \usepackage[colorlinks=true, linkcolor=black, citecolor=blue, urlcolor=blue]{hyperref}       % hyperlinks
-\usepackage{url}            % simple URL typesetting
-\usepackage{booktabs}       % professional-quality tables
-\usepackage{amsfonts}       % blackboard math symbols
-\usepackage{nicefrac}       % compact symbols for 1/2, etc.
-\usepackage{microtype}      % microtypography
+\usepackage{url}            
+\usepackage{booktabs}       
+\usepackage{amsfonts}       
+\usepackage{nicefrac}      
+\usepackage{microtype} 
 \usepackage{graphicx}
 \usepackage{natbib}
 \usepackage{doi}
@@ -19,22 +19,22 @@
 \usepackage{graphicx}
 \graphicspath{ {./figs/} }
 
+
 \setcitestyle{aysep={,}}
 
 
 
-\title{ЛР \textnumero 1 <<Формы представления линейных систем>>}
+\title{ЛР \textnumero 2 <<Переходные процессы, свободное движение, устойчивость>>}
 
 \author{
 Студент \\
 Кирилл Лалаянц\\
 R33352\\
 336700\\
-Вариант - 5\\
+Вариант - 6\\
 \\
 Преподаватель\\
 Пашенко А.В. \\
-\\
 \\
 \\
 Факультет Систем Управления и Робототехники\\
@@ -46,7 +46,7 @@ R33352\\
 \date{13.09.2023}
 
 % Uncomment to override  the `A preprint' in the header
-\renewcommand{\headeright}{ЛР \textnumero 1 <<Формы представления линейных систем>>}
+\renewcommand{\headeright}{ЛР \textnumero 2 <<Переходные процессы, свободное движение, устойчивость>>}
 \renewcommand{\undertitle}{Отчет}
 \renewcommand{\shorttitle}{}
 
@@ -61,49 +61,23 @@ R33352\\
 \setcounter{page}{1}
 \section{Вводные данные}
 \subsection{Цель работы}
-В этой работе пройдет изучение представления линейных систем в форме Transfer Function и State Space, а так же их дальнейшее моделирование.
+В этой работе будет проведенно исследование следующих вопросов:
+\begin{itemize}
+    \item Характер свободного поведения системы в зависимости от корней ее характеристического уравнения. 
+    \item Исследования границ зоны устойчивости конкретной системы. 
+    \item Создание автономного генератора для воссаздания поведения системы. 
+    \item Изучение фазовых портретов канонической управляемой формы.
+\end{itemize} 
 
-\subsection{Данные варианта. Инициализация необходимых переменных в Python}
+\subsection{Инициализация необходимых переменных в Python}
 Импорт необходимых библиотек (для реализации здесь и далее используется \href{https://python-control.readthedocs.io}{Python Control Systems Library}); инициализация массива временных отметок:
 \begin{minted}[linenos, fontsize=\footnotesize,numbersep=5pt, frame=lines, framesep=2mm]{python}
 import matplotlib.pyplot as plt
 import numpy as np
 import control 
 import sympy
-
-sympy.init_printing()
-p = sympy.Symbol("s")
-
-dt = 0.001  # шаг симуляции
-max_t = 50  # время симуляции
-ts = np.linspace(0, max_t, int(max_t / dt))
-\end{minted}
-
-Ввод данных варианта:
-\begin{minted}[linenos, fontsize=\footnotesize,numbersep=5pt, frame=lines, framesep=2mm]{python}
-var_num = 6
-
-# Task 1 & 2
-a2, a1, a0, b2, b1, b0 = [9, 3, 6, 12, 7, 7]
-# Task 3
-A11 = p + 19
-A12 = p + 3
-A21 = p + 6
-A22 = p + 2
-task3_A = sympy.Matrix([[A11, A12], [A21, A22]])
-B11 = 7
-B12 = 7
-B21 = 5
-B22 = 6
-task3_B = sympy.Matrix([[B11, B12], [B21, B22]])
-# Task 4
-task4_A = np.array([[0, -9], [1, -6]])
-task4_B = np.array([[1], [5]])
-task4_C = np.array([2, 5])
-# Task 5
-task5_A = np.array([[0, -9], [1, -6]])
-task5_B = np.array([[1, 4], [3, 5]])
-task5_C = np.array([[2, 7], [4, 6]])
+import os
+import math
 \end{minted}
 
 \newpage
@@ -111,45 +85,100 @@ task5_C = np.array([[2, 7], [4, 6]])
 \label{sec:headings}
 
 
-\subsection{Задание 1. Одноканальная система в форме вход-выход.}
+\subsection{Задание 1. Свободное движение.}
 
 \subsubsection{Теория}
-Для моделирования системы сначала получим её TF из ДУ.
-Имеем:
-% $$\dddoty$$
-\[ \dddot{y} + a_2\ddot{y} + a_1\dot{y} + a_0y = b_2\ddot{u} + b_1\dot{u} + b_0u \]
+Хотим получить ДУ системы вида:
+\[\ddot{y} + a_1\dot{y} + a_0y = u\]
+Cначала получим характеристическое уравнение для частного решения вида:
+\[\ddot{y} + a_1\dot{y} + a_0y = 0\]
+Имеем два корня -- \(\lambda_1\) и \(\lambda_2\). Тогда:
+\[ (p - \lambda_1)(p-\lambda_2) = p^2 - (\lambda_1 + \lambda_2)p + \lambda_1\lambda_2 = 0,\]
+умножив которое на \(y\) получаем:
+\[\ddot{y} + (\lambda_1 + \lambda_2)\dot{y} + \lambda_1\lambda_2y = 0.\]
 
-Введем оператор дифференцирования по времени:
-
-\[ s \doteq \frac{d}{dt} ,\]
-
-тогда получим:
-
-\[ s^3 y + s^2 a_2 y + s a_1 y + a_0 y = s^2 b_2 u + s b_1 u + b_0 u \]
-\[ y = \frac{b_2 s^2 + b_1 s + b_0}{s^3 + a_2 s^2 + a_1 s + a_0}u = W(p)u \]
-\[ W(p) = \frac{b_2 s^2 + b_1 s + b_0}{s^3 + a_2 s^2 + a_1 s + a_0} =  \frac{12 s^2 + 7 s + 7}{s^3 + 9 s^2 + 3 s + 6}\]
-
-Полученная TF соответсвует критерию физической реализуемости. Динамический порядок = 3; относительный динамический порядок = 1.
-
+Для данного ДУ известно частичное решение:
+\[ y_{0}(t) = c_1 e^{\lambda_1 t} + c_2 e^{\lambda_2 t},\]
+параметры \(c_1\) и \(c_2\) которого вычисляются из начальных условий.
+\\
+Также подставим характеристическое уравнение в знаменатель TF \(W(p)\):
+\[W(p) = \frac{1}{p^2 - (\lambda_1 + \lambda_2)p + \lambda_1\lambda_2}\]
+Полученная TF соотвествует системе с желаемыми корнями характеристического уравнения.
 \subsubsection{Программная реализация}
 \begin{minted}[linenos, fontsize=\footnotesize,numbersep=5pt, frame=lines, framesep=2mm]{python}
-# Создание TF
-den = [1, a2, a1, a0]  # denominator
-num = [b2, b1, b0]  # numerator
-transferFunction = control.tf(num, den)
+def task1_output(m1, m2, initial_value, ts, plot_name, save_name):
+    poly = sympy.simplify((p - m1) * (p - m2))
+    coeffs = sympy.Poly(poly, p).all_coeffs()
+    
+    ss = control.tf2ss(control.tf(1, np.array(coeffs, dtype=np.float64)))
+    ss_reachable = control.canonical_form(ss, form="reachable")[0]
 
-# Моделирование с 0 начальными значениями
-transferFunction_y = control.forced_response(transferFunction, U=1, X0=0, T=ts).outputs
+    tf2_y_0_0 = control.forced_response(ss_reachable, U=0, X0=[0, 0], T=ts)
+    tf2_y_1_1 = control.forced_response(ss_reachable, U=0, X0=initial_value, T=ts)
+    plot_task1(tf2_y_0_0, tf2_y_1_1, initial_value, ts, plot_name, save_name)
 \end{minted}
 
 \subsubsection{Результаты}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{task1}
-	\caption{Результаты первого задания.}
-	\label{fig:fig1}
-\end{figure}
-На графике видно поведение системы.
+\begin{itemize}
+    \item Устойчивая и неустойчивая апереодические моды 
+    
+
+    Выбраны \(\lambda_1 = -1\) и \(\lambda_2 = 1\). Получено уравнение свободного движения вида:
+    \[y_0(t)= c_1 e^{-t} + c_2 e^t\]
+    Из аналитического решения видно, что система, при отличных от 0 начальных условиях, со временем стремится к бесконечноcти, следовательно -- неустойчива.
+    
+    
+    Проверим моделированием:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{task1_2}
+        \caption{Результаты устойчивой и неустойчивой апереодических мод.}
+        \label{fig:fig1}
+    \end{figure}
+
+    Действительно, все так.
+
+    \item Нейтральная и неустойчивая апереодические моды 
+    
+    
+    Выбраны \(\lambda_1 = 0\) и \(\lambda_2 = 1\). Получено уравнение свободного движения вида:
+    \[y_0(t)= c_1 e^{-t} + c_2\]
+    Из аналитического решения видно, что система, при отличных от 0 начальных условиях, со временем стремится к бесконечноcти, следовательно -- неустойчива.
+    
+    
+    Проверим моделированием:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{task1_4}
+        \caption{Результаты нейтральной и неустойчивой апереодических мод.}
+        \label{fig:fig2}
+    \end{figure}
+
+    Действительно, все так.
+
+    \item Пара консервативных мод
+    
+    
+    Выбраны \(\lambda_1 = i\) и \(\lambda_2 = -i\). Получено уравнение свободного движения вида:
+    \[y_0(t)= c_1 cos(t) + c_2 sin(t)\]
+    Из аналитического решения видно, что система, при отличных от 0 начальных условиях, устойчива по Ляпунову.
+    
+    
+    Проверим моделированием:
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{task1_6}
+        \caption{Результаты пары консервативных мод.}
+        \label{fig:fig3}
+    \end{figure}
+
+    Действительно, все так.
+\end{itemize}
+
+
 
 \newpage
 \subsection{Задание 2. Переход от формы вход-выход к форме вход-состояние-выход.}
@@ -272,7 +301,7 @@ stateSpaceAuto_y = control.forced_response(desired_form, U=1, X0=0, T=ts).output
 \subsubsection{Результаты}
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{task2}
+	\includegraphics[width=\textwidth]{task1_2}
 	\caption{Результаты второго задания.}
 	\label{fig:fig2}
 \end{figure}
@@ -322,7 +351,7 @@ mimo_TF_y = control.forced_response(
 \subsubsection{Результаты}
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{task3}
+	\includegraphics[width=\textwidth]{task1_2}
 	\caption{Результаты третьего задания.}
 	\label{fig:fig3}
 \end{figure}
@@ -386,7 +415,7 @@ siso_SS_y = control.forced_response(siso_SS, U=1, X0=[0, 0], T=small_ts).outputs
 \subsubsection{Результаты}
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{task4}
+	\includegraphics[width=\textwidth]{task1_2}
 	\caption{Результаты четвертого задания.}
 	\label{fig:fig4}
 \end{figure}
@@ -434,7 +463,7 @@ mimo_SS_y = control.forced_response(mimo_SS, U=mimo_Us, X0=[0, 0], T=ts).outputs
 \subsubsection{Результаты}
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{task5}
+	\includegraphics[width=\textwidth]{task1_2}
 	\caption{Результаты пятого задания.}
 	\label{fig:fig5}
 \end{figure}
