@@ -95,7 +95,7 @@ Cначала получим характеристическое уравнен
 Имеем два корня -- \(\lambda_1\) и \(\lambda_2\). Тогда:
 \[ (p - \lambda_1)(p-\lambda_2) = p^2 - (\lambda_1 + \lambda_2)p + \lambda_1\lambda_2 = 0,\]
 умножив которое на \(y\) получаем:
-\[\ddot{y} + (\lambda_1 + \lambda_2)\dot{y} + \lambda_1\lambda_2y = 0.\]
+\[\ddot{y} - (\lambda_1 + \lambda_2)\dot{y} + \lambda_1\lambda_2y = 0.\]
 
 Для данного ДУ известно частичное решение:
 \[ y_{0}(t) = c_1 e^{\lambda_1 t} + c_2 e^{\lambda_2 t},\]
@@ -387,98 +387,80 @@ ss_response = control.forced_response(task3_ss, ts, X0=task3_initial)
 
 
 \newpage
-\subsection{Задание 4. Одноканальная система в форме вход-состояние-выход.}
+\subsection{Задание 4. (Необязательное) Изучение канонической управляемой формы:
+фазовые портреты.}
 \subsubsection{Теория}
-Необходимо промоделировать SISO систему в формате SS:
-\[ 
-    \begin{cases}
-        \dot{x} = Ax + Bu \\
-        y = Cx + Du \\
-    \end{cases},
-\]
-где:
 
-\[ 
+Рассмотрим фазовый портрет системы 3 из первого задания.
+\[\ddot{y} + y = 0\]
+
+Её TF имеет вид:
+\[W(p) = \frac{1}{p^2 + 1}\]
+
+В форме SS имеет вид:
+\[
     A = \begin{bmatrix}
-        0 &  -9 \\
-        1 &  -6 
+        0 & 1  \\
+        -1 & 0 \\
+        \end{bmatrix}, 
+    C = \begin{bmatrix}
+        1 & 0  \\
         \end{bmatrix},
-        B = \begin{bmatrix}
-            1 \\
-            5
-            \end{bmatrix},
-        C = \begin{bmatrix}
-            2 & 5
-            \end{bmatrix},
-        D = \begin{bmatrix}
-            0
-            \end{bmatrix};
+    B = D = 0; 
 \]
 
 \subsubsection{Программная реализация}
 \begin{minted}[linenos, fontsize=\footnotesize,numbersep=5pt, frame=lines, framesep=2mm]{python}
-# Создание системы из матриц В-С-В
-siso_SS = control.ss(task4_A, task4_B, task4_C, [0])
+def task4_output(m1, m2, initial_values, ts):
+    plot_name = f'Моды: {m1, m2}'
+    save_name = f'task4_{m1}_{m2}.jpg'
+    poly = sympy.simplify((p - m1) * (p - m2))
+    coeffs = sympy.Poly(poly, p).all_coeffs()
+    tf_y = control.tf(1, np.array(coeffs, dtype=np.float64))
+    tf_dy = tf_y * control.tf([1, 0], [1]) 
+    ss = control.tf2ss(tf_dy)
+    ss_reachable = control.canonical_form(ss, form="reachable")[0]
+    
+    ss = control.tf2ss(tf_y)
+    ss_reachable = control.canonical_form(ss, form="reachable")[0]
 
-# Симуляция
-small_ts = ts[:5000]
-siso_SS_y = control.forced_response(siso_SS, U=1, X0=[0, 0], T=small_ts).outputs
+    responses = []
+    for initial_value in initial_values:
+        tf_y_response = control.forced_response(tf_y, U=0, X0=initial_value, T=ts)
+        tf_dy_response = control.forced_response(tf_dy, U=0, X0=initial_value, T=ts)
+        ss_response = control.forced_response(ss_reachable, U=0, X0=initial_value, T=ts)
+        responses.append([initial_value, tf_y_response, tf_dy_response, ss_response])
+    
+    task4_plot(responses, plot_name, save_name)
 \end{minted}
 
+\newpage
 \subsubsection{Результаты}
-
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{task4_-I_I}
+	\caption{Результаты четвертого задания.}
+	\label{fig:fig9}
+\end{figure}
+Полученные графики совпали, что в целом максимально ожидаймо, потому что вектор состояния для системы второго порядка из себя и представляет \(\dot{y}\) и \(y\).
 
 \newpage
-\subsection{Задание 5. Многоканальная система в форме вход-состояние-выход.}
-\subsubsection{Теория}
-Необходимо промоделировать MIMO систему в формате SS:
-\[ 
-    \begin{cases}
-        \dot{x} = Ax + Bu \\
-        y = Cx + Du \\
-    \end{cases},
-\]
-где:
 
-\[ 
-    A = \begin{bmatrix}
-        0 &  -9 \\
-        1 &  -6 
-        \end{bmatrix};
-        B = \begin{bmatrix}
-            1 & 4 \\
-            3 & 5
-            \end{bmatrix};
-        C = \begin{bmatrix}
-            2 & 7 \\
-            4 & 6
-            \end{bmatrix};
-        D = \begin{bmatrix}
-            0
-            \end{bmatrix};
-\]
-
-\subsubsection{Программная реализация}
-\begin{minted}[linenos, fontsize=\footnotesize,numbersep=5pt, frame=lines, framesep=2mm]{python}
-# Создание системы из матриц В-С-В
-mimo_SS = control.ss(task5_A, task5_B, task5_C, 0)
-
-# Симуляция
-mimo_SS_y = control.forced_response(mimo_SS, U=mimo_Us, X0=[0, 0], T=ts).outputs
-\end{minted}
-
-\subsubsection{Результаты}
-
-
-\newpage
 \section{Заключение}
-В процессе работы была проведена симуляция в среде Python при помощи Python Control Systems Library для SISO и MIMO систем, данных в двух основных представлениях: TF и SS.
+В этой работе было проведенно исследование следующих вопросов:
+\begin{itemize}
+    \item Характер свободного поведения системы в зависимости от корней ее характеристического уравнения. 
+    \item Исследования границ зоны устойчивости конкретной системы. 
+    \item Создание автономного генератора для воссаздания поведения системы. 
+    \item Изучение фазовых портретов канонической управляемой формы.
+\end{itemize} 
 \subsection{Выводы}
 \begin{enumerate}
-   \item Проведено моделирование SISO и MIMO Transfer Function систем с различным ненулевым входным воздействием.
-   \item Проведено моделирование SISO и MIMO State Space систем с различным ненулевым входным воздействием.
-   \item Выход системы не зависит от формы представления.
-   \item Не strictly proper системы могу давать выход отличный от 0 в момент времени t = 0 при 0 начальных условиях из-за ненулевой матрицы связи~D. 
+   \item Проведено моделирование свободное движение систем с различным ненулевым входным воздействием.
+   \item На практике проверенно влияние мод на характер поведения системы.
+   \item На практике проверенна верность работы критерия Гурвица.
+   \item Создан генератор для воссоздания поведения функции.
+   \item Рассмотренно фазовые диаграмы системы. Проверенно, что вектор состояния соответсвует \(y\) и его производным. 
 \end{enumerate}
 
 \end{document}
