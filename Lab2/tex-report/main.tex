@@ -181,171 +181,111 @@ def task1_output(m1, m2, initial_value, ts, plot_name, save_name):
 
 
 \newpage
-\subsection{Задание 2. Переход от формы вход-выход к форме вход-состояние-выход.}
+\subsection{Задание 2. Область устойчивости. }
 \subsubsection{Теория}
-Представление системы можно выбрать другое -- в форме State Space. Система в форме SS имеет вид:
+Возьмем первый набор корней из первого задания \(\lambda_1 = -1\) и \(\lambda_2 = 1\).
+Представим соответсвующие им TF вида:
+\[W(p) = \frac{1}{Tp + 1}\]
+Получаем:
+\[W_1(p) = \frac{1}{T_1p + 1} = \frac{1}{-1T_1 + 1} \rightarrow T1 = 1\]
+\[W_2(p) = \frac{1}{T_2p + 1} = \frac{1}{1T_2 + 1} \rightarrow T2 = -1\]
 
-\[ 
+Так же по задание имеем:
+\[W_3(p) = \frac{1}{p}\]
+\[W_4(p) = K\]
+\[W_{feedback}(p) = -1\]
+
+Тогда получаем общую TF cистемы:
+\[W(p) = \frac{W_1(p)W_2(p)W_3(p)W_4(p)}{1 + W_1(p)W_2(p)W_3(p)W_4(p)} = \frac{K}{T_1T_2p^3 + (T_1+T_2)p^2+p+K}\]
+
+Для анализа устойчивости воспользуемся следствием из критерия Гурвица для однородного ДУ третьего порядка:
+
+\[
     \begin{cases}
-        \dot{x} = Ax + Bu \\
-        y = Cx + Du \\
+        \frac{K}{T_1T_2} > 0 \\
+        \frac{T_1+T_2}{T_1T_2} > 0\\ 
+        \frac{K}{T_1T_2} > 0\\ 
+        \frac{T_1+T_2}{(T_1T_2)^2} > \frac{K}{T_1T_2}
     \end{cases},
 \]
-где \( t \) -- непрерывное время, \(x(t) \in R^n\) -- вектор состояния; \(u(t) \in R^p\) -- вектор управления; \(y(t) \in R^l\) -- линейный выход системы.
-\( A \in R^{n \times n}\) -- матрица системы; \( B \in R^{n \times p}\) -- матрица управления; \( C \in R^{l \times n}\) -- матрица наблюдения; \( D \in R^{l \times m}\) -- матрица связи. \\
 
-В силу свободы выбора базиса в линейном пространстве состояний такая система может иметь бесконечное количество вариантов заполнения матриц. Для всеобщего удобства приняты три канонических формы представления:
-\begin{enumerate}
-    \item Управляемая \\
-    \[ A = \begin{bmatrix}
-        0 &  &  &  \\
-        0 &  & I &  \\
-        \vdots &  &  &  \\
-        \frac{-a_0}{a_n} & \frac{-a_1}{a_n} & \hdots & \frac{-a_{n - 1}}{a_n} 
-        \end{bmatrix}, 
-        B = \begin{bmatrix}
-            0 \\
-            0 \\
-            \vdots \\
-            1
-            \end{bmatrix}, 
-        C = \begin{bmatrix}
-            \frac{b_0}{a_n} & \frac{b_1}{a_n} & \hdots & \frac{b_{n-1}}{a_n}
-            \end{bmatrix}, 
-        D = \begin{bmatrix}
-            \frac{b_n}{a_n}
-            \end{bmatrix};
-    \]
-    \item Наблюдаемая
-    \[ A = \begin{bmatrix}
-        0 & 0 & \hdots & -\frac{a_0}{a_n} \\
-         &  &  &  -\frac{a_1}{a_n}\\
-         & I &  &  \vdots\\
-         &  &  & \frac{-a_{n - 1}}{a_n} 
-        \end{bmatrix},
-        B = \begin{bmatrix}
-            \frac{b_0}{a_n} \\
-            \frac{b_1}{a_n} \\
-            \vdots \\
-            \frac{b_{n-1}}{a_n}
-            \end{bmatrix},
-        C = \begin{bmatrix}
-            0 & 0 & \hdots & 1
-            \end{bmatrix},
-        D = \begin{bmatrix}
-            \frac{b_n}{a_n}
-            \end{bmatrix};
-    \]
-    \item Диагональная\\
-    Раскладываем TF на сумму простейших дробей
+\begin{itemize}
+    \item Зафиксируем значение \(T_2 = -1\)
+    
+    Тогда система принимает вид: 
     \[
-      W(p) = \sum_1^n\frac{c_i}{p - \lambda_i} = \sum_1^n\frac{\beta_i \times \gamma_i}{p - \lambda_i}, 
+    \begin{cases}
+        \frac{K}{T_1(-1)} > 0 \\
+        \frac{T_1+(-1)}{T_1(-1)} > 0\\ 
+        \frac{K}{T_1(-1)} > 0\\ 
+        \frac{T_1+(-1)}{(T_1(-1))^2} > \frac{K}{T_1(-1)}
+    \end{cases},
     \]
-    тогда матрицы имеют вид:
-    \[ A = \begin{bmatrix}
-        \lambda_1 & \hdots & \hdots & 0 \\
-        \vdots & \lambda_2 &  & \vdots  \\
-        \vdots &  & \ddots & \vdots  \\
-        0 & \hdots & \hdots & \lambda_n
-        \end{bmatrix},
-        B = \begin{bmatrix}
-            \beta_1 \\
-            \beta_2 \\
-            \vdots \\
-            \beta_n
-            \end{bmatrix},
-        C = \begin{bmatrix}
-            \gamma_1 & \gamma_2 & \hdots & \gamma_n
-            \end{bmatrix},
-        D = \begin{bmatrix}
-            \frac{b_n}{a_n}
-            \end{bmatrix};
+    решений у неё нет. Следовательно, система не может быть устойчивой с таким параметром \(T_2\).
+
+    \item Зафиксируем значение \(T_1 = 1\)
+    
+    Тогда система принимает вид: 
+    \[
+    \begin{cases}
+        \frac{K}{T_2} > 0 \\
+        \frac{T_2+1}{T_2} > 0\\ 
+        \frac{K}{T_2} > 0\\ 
+        \frac{T_2+1}{T_2^2} > \frac{K}{T_2}
+    \end{cases},
     \]
-\end{enumerate}
-В задании требуется каноническая управляемая форма, соответсвенно получаем:
-
-\[ A = \begin{bmatrix}
-    0 &  1 & 0 \\
-    0 &  0 & 1\\
-    -6 & -3 & -9 
-    \end{bmatrix},
-    B = \begin{bmatrix}
-        0 \\
-        0 \\
-        1
-        \end{bmatrix},
-    C = \begin{bmatrix}
-        7 & 7 & 12
-        \end{bmatrix},
-    D = \begin{bmatrix}
-        0
-        \end{bmatrix};
-\]
-
-\subsubsection{Программная реализация}
-Из любопытства были использованы как встроенные средства моделирования системы, так и <<ручное>> перемножение матриц с маленьким шагом по времени.
-\begin{minted}[linenos, fontsize=\footnotesize,numbersep=5pt, frame=lines, framesep=2mm]{python}
-# Задание начальных условий для ручного моделирования
-initial_state = np.array([[0, 0, 0]], dtype=np.float64).T
-stateSpaceManual_y = []
-
-# Ручное моделирование
-for t in ts:
-    initial_state += (desired_form.A @ initial_state + desired_form.B * 1) * dt
-    stateSpaceManual_y.append(desired_form.C @ initial_state)
-
-# Авто-моделирование
-stateSpaceAuto_y = control.forced_response(desired_form, U=1, X0=0, T=ts).outputs
-\end{minted}
+    у нее есть решения, представленные на графике ниже.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=\textwidth]{task2_T2_K}
+        \caption{Зависимость устойчивости от K и \(T_2\).}
+        \label{fig:fig4}
+    \end{figure}
+\end{itemize}
 
 \subsubsection{Результаты}
+По приведенным ниже графикам видно, что полученная выше зона устойчивости соответсвует действительности.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{task1_2}
-	\caption{Результаты второго задания.}
-	\label{fig:fig2}
+	\includegraphics[width=\textwidth]{task2_conservative}
+	\caption{Устойчивые по Ляпунову параметры.}
+	\label{fig:fig5}
 \end{figure}
-По графикам видно, что, независимо от формы представления, при одинаковом входе система выдает одинаковый выход.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{task2_stable}
+	\caption{Устойчивые ассимптотически параметры.}
+	\label{fig:fig6}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{task2_not_stable}
+	\caption{Неустойчивые параметры.}
+	\label{fig:fig7}
+\end{figure}
 
 \newpage
-\subsection{Задание 3. Многоканальная система в форме вход-выход.}
+\subsection{Задание 3. Автономный генератор.}
 \subsubsection{Теория}
-Рассмотрим MIMO систему:
-\[ 
-    A(p)y(t) = B(p)u(t)
-\]
-Для выражения y, перенесем матрицу \(A(p)\) в правую часть:
+Необходимо найти матрицы \(A\) и \(C\) такие, чтобы выход системы совпадал с функцией:
+\[y(t) = cos(5t) + e^t + e^{-5t}\]
+
+Из функции ясно видно, что модами будут:
+\(\lambda_1 = 1; \lambda_2 = -5; \lambda_3 = 5i; \lambda_4 = -5i.\)
+
+Напишем Жорданову матрицу:
 \[
-    y(t) = A(p)^{-1}B(p)u(t) = W(p)u(t),
-\]
-где \(W(p)\) - уже не просто TF-дробь, а матрица TF-дробей вида:
-\[
-    W(p) = \begin{bmatrix}
-        W_{11}(p) & W_{12}(p) & \hdots & W_{1p}(p)\\
-        W_{21}(p) & W_{22}(p) & \hdots & W_{2p}(p)\\
-        \vdots & \vdots & \ddots & \vdots \\
-        W_{l1}(p) & W_{l2}(p) & \hdots & W_{lp}(p)\\
-        \end{bmatrix};
-\]
-Подставив данные варианта, получаем:
-\[
-    W(p) = \frac{1}{12s+20}\begin{bmatrix}
-        2s - 1 & s - 4 \\
-        -2s + 53 & -s + 72
-        \end{bmatrix};
+    A = \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & -5 & 0 & 0 \\
+    0 & 0 & 0 & 5 \\
+    0 & 0 & -5 & 0 \\
+    \end{bmatrix},
 \]
 
 \subsubsection{Программная реализация}
 \begin{minted}[linenos, fontsize=\footnotesize,numbersep=5pt, frame=lines, framesep=2mm]{python}
-# Входы от времени
-u1 = np.zeros_like(ts) + 1
-u2 = 2 * np.sin(ts)
-mimo_Us = np.array([u1, u2])
 
-# Симуляция
-mimo_TF_y = control.forced_response(
-    mimo_TF, U=mimo_Us, X0=0, T=ts
-).outputs
 \end{minted}
 
 \subsubsection{Результаты}
@@ -413,12 +353,6 @@ siso_SS_y = control.forced_response(siso_SS, U=1, X0=[0, 0], T=small_ts).outputs
 \end{minted}
 
 \subsubsection{Результаты}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{task1_2}
-	\caption{Результаты четвертого задания.}
-	\label{fig:fig4}
-\end{figure}
 
 
 \newpage
@@ -461,12 +395,7 @@ mimo_SS_y = control.forced_response(mimo_SS, U=mimo_Us, X0=[0, 0], T=ts).outputs
 \end{minted}
 
 \subsubsection{Результаты}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=\textwidth]{task1_2}
-	\caption{Результаты пятого задания.}
-	\label{fig:fig5}
-\end{figure}
+
 
 \newpage
 \section{Заключение}
