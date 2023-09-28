@@ -242,10 +242,9 @@ def task1_output(m1, m2, initial_value, ts, plot_name, save_name):
         \label{fig:fig4}
     \end{figure}
 \end{itemize}
-
+\newpage
 \subsubsection{Результаты}
-По приведенным ниже графикам видно, что полученная выше зона устойчивости соответсвует действительности.
-\begin{figure}[H]
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{task2_conservative}
 	\caption{Устойчивые по Ляпунову параметры.}
@@ -263,7 +262,7 @@ def task1_output(m1, m2, initial_value, ts, plot_name, save_name):
 	\caption{Неустойчивые параметры.}
 	\label{fig:fig7}
 \end{figure}
-
+По приведенным выше графикам видно, что полученная зона устойчивости соответсвует действительности.
 \newpage
 \subsection{Задание 3. Автономный генератор.}
 \subsubsection{Теория}
@@ -273,7 +272,7 @@ def task1_output(m1, m2, initial_value, ts, plot_name, save_name):
 Из функции ясно видно, что модами будут:
 \(\lambda_1 = 1; \lambda_2 = -5; \lambda_3 = 5i; \lambda_4 = -5i.\)
 
-Напишем Жорданову матрицу:
+Запишем в вещественной жордановой форме:
 \[
     A = \begin{bmatrix}
     1 & 0 & 0 & 0 \\
@@ -283,35 +282,109 @@ def task1_output(m1, m2, initial_value, ts, plot_name, save_name):
     \end{bmatrix},
 \]
 
+Известно, что:
+\[ x_0(t) = e^{At}x(0)  \]
+\[ y_0(t) = Ce^{At}x(0) \]
+
+Вычислим матричную экспоненту: 
+\[
+    e^{At} = \begin{bmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & 1 \\
+        \end{bmatrix}
+        +
+        \begin{bmatrix}
+            t & 0 & 0 & 0 \\
+            0 & -5t & 0 & 0 \\
+            0 & 0 & 0 & 5t \\
+            0 & 0 & -5t & 0 \\
+        \end{bmatrix}
+        +
+        \begin{bmatrix}
+            t^2/2 & 0 & 0 & 0 \\
+            0 & 25t^2/2 & 0 & 0 \\
+            0 & 0 & -25t^2/2 & 0 \\
+            0 & 0 & 0 & -25t^2/2 \\
+        \end{bmatrix}
+        +
+        ...;
+\]
+После чего заметно, что результатами сложения отдельных ячеек являются ряды Тейлора, откуда получаем:
+\[
+    e^{At} = \begin{bmatrix}
+        e^t & 0 & 0 & 0 \\
+        0 & e^{-5t} & 0 & 0 \\
+        0 & 0 & cos(5t) & sin(5t) \\
+        0 & 0 & -sin(5t) & cos(5t) \\
+        \end{bmatrix}
+\]
+Зададим вектор начальных условий и матрицу \(C\):
+\[
+    x(0) = \begin{bmatrix}
+        a_1 \\ 
+        a_2 \\
+        a_3 \\
+        a_4
+        \end{bmatrix},
+    C = \begin{bmatrix}
+        c_1 \\ 
+        c_2 \\
+        c_3 \\
+        c_4
+        \end{bmatrix};
+\]
+тогда:
+\[
+    y_0(t) = Ce^{At}x(0) = a_1c_1e^t + a_2c_2e^{-5t} + (a_3c_3 + a_4c_4)cos(5t) + (-a_3c_4+a_4c_3)sin(5t)
+\]
+Отсюда, сопоставив с исходной функцией, получаем систему уравнений:
+\[
+    \begin{cases}
+        a_1c_1 = 1\\
+        a_2c_2 = 1\\ 
+        a_3c_3 + a_4c_4 = 1\\ 
+        -a_3c_4+a_4c_3 = 0
+    \end{cases},
+    \]
+Мы можем самостоятельно выбрать любой вектор начальных условий, что сводит систему уравнений к системе из 4 уравнений с 4 неизвестными, после чего получаем:
+\[
+    x(0) = \begin{bmatrix}
+        1 \\ 
+        1 \\
+        1 \\
+        1
+        \end{bmatrix},
+    C = \begin{bmatrix}
+        1 \\ 
+        1 \\
+        0.5 \\
+        0.5
+        \end{bmatrix},
+    A = \begin{bmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & -5 & 0 & 0 \\
+        0 & 0 & 0 & 5 \\
+        0 & 0 & -5 & 0 \\
+        \end{bmatrix};
+\]
 \subsubsection{Программная реализация}
 \begin{minted}[linenos, fontsize=\footnotesize,numbersep=5pt, frame=lines, framesep=2mm]{python}
-
+task3_ss = control.ss(task3_A, np.zeros((4, 1)), task3_C, 0)
+ss_response = control.forced_response(task3_ss, ts, X0=task3_initial)
 \end{minted}
+\newpage
 
 \subsubsection{Результаты}
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\textwidth]{task1_2}
+	\includegraphics[width=\textwidth]{task3}
 	\caption{Результаты третьего задания.}
-	\label{fig:fig3}
+	\label{fig:fig8}
 \end{figure}
-Видно, что графики выхода начинаются не в 0. Это связано с тем, что система не strictly-proper (то есть степени полиномов числителя и знаменятеля равны). Следствие этого заметно при переводе системы в формат SS: 
-\[ A = \begin{bmatrix}
-    -1.67
-    \end{bmatrix},
-    B = \begin{bmatrix}
-        -0.607 & -0.794
-        \end{bmatrix},
-    C = \begin{bmatrix}
-        0.594 \\
-        -7.73
-        \end{bmatrix},
-    D = \begin{bmatrix}
-        0.167 & 0.0833 \\
-        -0.167 & -0.0833
-        \end{bmatrix};
-\]
-Матрица связи D получается не нулевой, в связи с чем выход начинает зависеть не только от внутреннего состояния системы через матрицу наблюдения C, но и от входного взаимодействия через матрицу связи D.
+По графику видно, что генератор совпал с исходной функцией. В легедне указана получившаяся квадратичная ошибка, которая очень мала и просто является погрешностью вычисленний Python3.
+
 
 \newpage
 \subsection{Задание 4. Одноканальная система в форме вход-состояние-выход.}
