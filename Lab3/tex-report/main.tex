@@ -13,6 +13,7 @@
 \usepackage{microtype} 
 \usepackage{graphicx}
 \usepackage{natbib}
+\usepackage{mathrsfs}
 \usepackage{doi}
 \usepackage{mathtools}
 \usepackage{graphicx}
@@ -67,7 +68,7 @@ R33352\\
 \begin{itemize}
     \item Вынужденное движение системы в зависимости от корней ее характеристического уравнения. 
     \item Анализ зависимости качества переходных процессов от корней характеристического уравнения системы третьего порядка. 
-    \item Проверка свойства свертки произведения Лапласа. 
+    \item Проверка свойства свертки как произведения Лапласа. 
 \end{itemize} 
 
 \newpage
@@ -263,13 +264,56 @@ def task2_analyse(modes, T0 = 0, initial_values_T0 = [0, 0, 0]):
 \subsection{Задание 3. (Необязательное) Свертка, как произведение образов Лапласа.}
 В этом задании имея 
 \subsubsection{Теория}
+В этом задании проверим свойство свертки как преобразования Лапласа. Имеем систему, с:
+\[
+    W(s) = \frac{6}{(s+2)^4}, u(t) = 1.5 + 0.6t + sin(6t)
+\]
+Далее можем работать с этой системой тремя способами:
+\begin{enumerate}
+\item \(y_{i.r.} = \mathscr{L}^-1\{W\} \hookrightarrow y = (y_{i.r.} * u)(t)\) -- по свойству свертки;
+\item \(y(t) = W[u(t)]\) -- классическое моделирование системы через TF;
+\item \(U = \mathscr{L}\{u(t)\} \hookrightarrow y(t) = (WU)[u(t)]\) -- по свойству перемножения образов Лапласа;
+\end{enumerate}
 
 
 \subsubsection{Программная реализация}
+\begin{python}
+dt = 0.001
+ts = get_t(10, dt=0.001)
+u_f = lambda t: 4 * np.cos(2*t) +  0.5 * t
+u_sympy = 4 * sympy.cos(2*t) + 0.5 * t
+u_lambda = sympy.lambdify(t, u_sympy, 'numpy')
+U_sympy = sympy.laplace_transform(u_sympy, t, s)[0]
+W_s_denum_coeffs = sympy.Poly((s+2)**4, s).all_coeffs()
+W_s_denum_coeffs = list(map(float, W_s_denum_coeffs))
+W_sympy = 6 / sympy.Poly((s+2)**4, s)
+W_control = control.tf([6], W_s_denum_coeffs)
+#  Convolutin
+y_ir_sympy = sympy.inverse_laplace_transform(W_sympy, s, t)
+y_ir_lambda = sympy.lambdify(t, y_ir_sympy, 'numpy')
+y_full_convolution = np.convolve(y_ir_lambda(ts), u_f(ts)) * dt
+
+#  Forced response
+y_2 = control.forced_response(W_control, T=ts, U=u_lambda(ts)).outputs
+
+#  Multiplication of Laplace images
+U_sympy = U_sympy.simplify()
+Y_sympy = U_sympy * W_sympy 
+TF = Y_sympy.simplify()
+num_3 = list(map(float,sympy.Poly(sympy.fraction(TF)[0],s).all_coeffs()))
+denum_3 = list(map(float,sympy.Poly(sympy.fraction(TF)[1],s).all_coeffs()))
+tf_3_2=control.tf(num_3, denum_3)
+y_3 = control.impulse_response(tf_3_2, T=ts).outputs
+\end{python}
 
 \subsubsection{Результаты}
-
-
+Как видно по графику~\ref{fig:fig7}, результаты совпали. В очередной раз не получилось подловить математиков на обмане.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{task3}
+    \caption{Сравнение различных способов.}
+    \label{fig:fig7}
+\end{figure}
 
 \newpage
 \section{Заключение}
