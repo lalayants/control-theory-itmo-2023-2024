@@ -1,0 +1,332 @@
+\documentclass[16pt]{article}
+
+\usepackage{report}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[english, russian]{babel}
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage[colorlinks=true, linkcolor=black, citecolor=blue, urlcolor=blue]{hyperref}       % hyperlinks
+\usepackage{url}            
+\usepackage{booktabs}       
+\usepackage{amsfonts}       
+\usepackage{nicefrac}      
+\usepackage{microtype} 
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{mathrsfs}
+\usepackage{doi}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{pythonhighlight}
+\usepackage{mathtools}
+\graphicspath{ {./figs/} }
+
+
+\setcitestyle{aysep={,}}
+
+
+
+\title{ЛР \textnumero 3 <<Вынужденное движение>>}
+
+\author{
+Студент \\
+Кирилл Лалаянц\\
+R33352\\
+336700\\
+Вариант - 6\\
+\\
+Преподаватель\\
+Пашенко А.В. \\
+\\
+\\
+Факультет Систем Управления и Робототехники\\
+\\
+ИТМО\\
+}
+
+% Uncomment to remove the date
+\date{13.09.2023}
+
+% Uncomment to override  the `A preprint' in the header
+\renewcommand{\headeright}{ЛР \textnumero 3 <<Вынужденное движение>>}
+\renewcommand{\undertitle}{Отчет}
+\renewcommand{\shorttitle}{}
+
+
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+\setcounter{page}{1}
+\section{Вводные данные}
+\subsection{Цель работы}
+В этой работе будет проведенно исследование следующих вопросов:
+\begin{itemize}
+    \item Вынужденное движение системы в зависимости от корней ее характеристического уравнения. 
+    \item Анализ зависимости качества переходных процессов от корней характеристического уравнения системы третьего порядка. 
+    \item Проверка свойства свертки как произведения Лапласа. 
+\end{itemize} 
+
+\newpage
+\section{Выполнение работы}
+\label{sec:headings}
+
+
+\subsection{Задание 1. Свободное движение.}
+
+\subsubsection{Теория}
+Хотим получить ДУ системы вида:
+\[\ddot{y} + a_1\dot{y} + a_0y = u\]
+Cначала получим характеристическое уравнение для частного решения вида:
+\[\ddot{y} + a_1\dot{y} + a_0y = 0\]
+Имеем два корня -- \(\lambda_1\) и \(\lambda_2\). Тогда:
+\[ (p - \lambda_1)(p-\lambda_2) = p^2 - (\lambda_1 + \lambda_2)p + \lambda_1\lambda_2 = 0,\]
+умножив которое на \(y\) получаем:
+\[\ddot{y} - (\lambda_1 + \lambda_2)\dot{y} + \lambda_1\lambda_2y = 0.\]
+
+Для данного ДУ известно частичное решение:
+\[ y_{0}(t) = c_1 e^{\lambda_1 t} + c_2 e^{\lambda_2 t},\]
+параметры \(c_1\) и \(c_2\) которого вычисляются из начальных условий.
+\\
+Также подставим характеристическое уравнение в знаменатель TF \(W(p)\):
+\[W(p) = \frac{1}{p^2 - (\lambda_1 + \lambda_2)p + \lambda_1\lambda_2}\]
+Полученная TF соотвествует системе с желаемыми корнями характеристического уравнения.
+
+\subsubsection{Программная реализация}
+\begin{python}
+def task1_output(m1, m2, initial_values, us, ts, plot_name, save_name):
+    poly = sympy.simplify((p - m1) * (p - m2))
+    coeffs = sympy.Poly(poly, p).all_coeffs()
+    ss = control.tf2ss(control.tf(1, np.array(coeffs, dtype=np.float64)))
+    ss_reachable = control.canonical_form(ss, form="reachable")[0]
+    responses = {}
+    for key_u, u in us.items():
+        responses[key_u] = []
+        for initial_value in initial_values:
+            response = control.forced_response(ss_reachable, U=u(ts), X0=initial_value, T=ts)
+            responses[key_u].append((initial_value, response))
+    
+    plot_task1(responses, ts, plot_name, save_name)
+\end{python}
+\subsubsection{Результаты}
+Сначала было проведено исследования системы с двумя вещественными корнями.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{task1_1}
+    \caption{Результат двух устойчивых апереодических мод.}
+    \label{fig:fig1}
+\end{figure}
+
+
+По графигам на рисунке 1 видно, что устойчивая система при подаче константного воздействия -- стабилизируется; при неограниченно растущем -- уходит в бесконечность; при периодическом -- коллеблется.
+
+Исследование системы с нейтральным и устойчивым корнем дало следующие результаты.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{task1_3}
+    \caption{Результат нейтральной и устойчивой апереодических мод.}
+    \label{fig:fig2}
+\end{figure}
+Видно, что системы стабильна только при переодическом воздействии. Такое поведение легко объясняется решением ДУ аналитически.
+
+Последняя исследованная система имела два неустойчивых колебательных корня.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{task1_8}
+    \caption{Результат двух неустойчивых колебательных мод.}
+    \label{fig:fig3}
+\end{figure}
+Результат, ожидаемо, крайне неустойчив.
+
+\pagebreak
+\subsection{Задание 2. Качество переходных процессов.}
+\subsubsection{Теория}
+В этом задании TF получается аналогично первому заданию. После этого определяется два параметра для оценки переходного процесса:
+\itemize
+\item \(T_{5\%} : \forall t > T_{5\%} \hookrightarrow \frac{|y(t) - y(T_{5\%})|}{y(T_{5\%})} < 0.05\) -- время переходного процесса;
+\item \(\Delta\sigma = |\frac{y_{max} - y_\infty}{y_\infty}|\) -- перерегулирование;
+
+
+\subsubsection{Программная реализация}
+\begin{python}
+    y = sympy.Function("y")
+t = sympy.Symbol("t")
+
+def get_ss_reachable(modes):
+    poly = 1
+    for mode in modes:
+        poly = sympy.simplify(poly * (p - mode))
+    coeffs = sympy.Poly(poly, p).all_coeffs()
+    
+    ss = control.tf2ss(control.tf(1, np.array(coeffs, dtype=np.float64)))
+    ss_reachable = control.canonical_form(ss, form="reachable")[0]
+    return ss_reachable
+
+
+def get_state_limit(ss_reachable, T0, initial_values_T0):
+    params = np.concatenate((ss_reachable.A[0, :], ss_reachable.B[0, :]))
+    a2, a1, a0, b0 = map(float, -params)
+    b0 = -b0
+    
+    ics={y(T0): initial_values_T0[0], y(t).diff(t, 1).subs(t, T0): initial_values_T0[1], y(t).diff(t, 2).subs(t, T0): initial_values_T0[2]}
+    ode_sympy = sympy.dsolve(y(t).diff(t, 3) + a2 * y(t).diff(t, 2) + a1 * y(t).diff(t, 1) + a0*y(t) - 1, X0=0, ics=ics)
+    time_of_limit = 10**10
+    state_limit = ode_sympy.subs(t, time_of_limit).rhs
+    while abs(1 - state_limit/ode_sympy.subs(t, time_of_limit * 10).rhs) > 0.001:
+        time_of_limit *= 10
+        state_limit = ode_sympy.subs(t, time_of_limit).rhs
+    return state_limit
+
+def model_until_5percent_band(ss_reachable, initial_values, state_limit):
+    percent5_interval = state_limit * 0.05
+    t_max = 10
+    while True:
+        ts = get_t(t_max)
+        response = control.forced_response(ss_reachable, U=1, X0=initial_values[::-1], T=ts)
+
+        t_5_percent = 0
+        for i in range(len(ts)):
+            if abs(response.outputs[i] - state_limit) > percent5_interval:
+                t_5_percent = ts[i]
+                t_5_percent_i = i
+                y_5_percent = response.outputs[i]
+        if t_5_percent <= t_max*0.8:
+            ts = get_t(t_max)
+
+            response = control.forced_response(ss_reachable, U=1, X0=initial_values[::-1], T=ts)
+            
+            return (ts, response.outputs, t_5_percent, y_5_percent, t_5_percent_i * 2)
+        t_max *= 1.5
+    
+def get_overshooting(response_outputs, ts, state_limit):
+    overshooting_values = response_outputs - state_limit
+    if overshooting_values[0] > 0:
+        overshooting_values *= -1
+    overshooting_counter = 0
+    while overshooting_values[overshooting_counter] < overshooting_values[overshooting_counter + 1]:
+        overshooting_counter += 1
+        if overshooting_counter >= len(overshooting_values) - 1:
+            break
+    
+    absolute_overshooting = overshooting_values[overshooting_counter]
+    relative_overshooting = overshooting_values[overshooting_counter] / state_limit
+    y_overshooting = response_outputs[overshooting_counter]
+    t_overshooting = ts[overshooting_counter]
+    return (t_overshooting, y_overshooting, relative_overshooting, absolute_overshooting)
+    
+    
+
+def task2_analyse(modes, T0 = 0, initial_values_T0 = [0, 0, 0]):
+    results = {}
+    for title, mode in modes.items():
+        ss_reachable = get_ss_reachable(mode)
+        ss_limit = get_state_limit(ss_reachable, T0, initial_values_T0)
+        ts, ss_y, t_5p, y_5p, _ = model_until_5percent_band(ss_reachable, initial_values_T0, ss_limit)
+        t_os, y_os, os_rel, _ = get_overshooting(ss_y, ts, ss_limit)
+        results[title] = [mode, ts, ss_y, ss_limit, t_5p, y_5p, t_os, y_os, os_rel]
+    return results
+\end{python}
+\pagebreak
+\subsubsection{Результаты}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task2_diff_real_with_I}
+    \caption{Зависимость от мнимой части комплексных корней.}
+    \label{fig:fig5}
+\end{figure}
+Сначала было проведенно исследование зависимости от мнимой части комплексных корней (рис. \ref{fig:fig5}).
+Можно заметить, что при ее уменьшении, время переходного процесса и перерегулирование падают.
+
+Затем было проведено исследование зависимости от вещественной части мнимых корней (рис. \ref{fig:fig4}). Результат ожидаем -- чем меньше вещественная часть, тем быстрее сходимость и меньше перерегулирование.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task2_diff_I}
+    \caption{Зависимость от вещественной части комплексных корней.}
+    \label{fig:fig4}
+\end{figure}
+
+Последний эксперимент был нацелен на исследование чисто вещественных корней. 
+Результат (рис. \ref{fig:fig6}) вновь оказался предсказуем: чем меньше вещественная часть -- тем быстрее.
+
+В целом можно заметить, что время переходного процесса и величина перерегулирования во многом зависят от самого близкого к нулю по вещественной оси корня. Все остальные корни оказывают меньшее влияние.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task2_diff_real_no_I}
+    \caption{Зависимость от вещественных корней.}
+    \label{fig:fig6}
+\end{figure}
+
+\pagebreak
+\subsection{Задание 3. (Необязательное) Свертка, как произведение образов Лапласа.}
+\subsubsection{Теория}
+В этом задании проверим свойство свертки как преобразования Лапласа. Имеем систему:
+\[
+    W(s) = \frac{6}{(s+2)^4}, u(t) = 1.5 + 0.6t + sin(6t)
+\]
+Далее можем работать с этой системой тремя способами:
+\begin{enumerate}
+\item \(y_{i.r.} = \mathscr{L}^-1\{W\} \hookrightarrow y = (y_{i.r.} * u)(t)\) -- по свойству свертки;
+\item \(y(t) = W[u(t)]\) -- классическое моделирование системы через TF;
+\item \(U = \mathscr{L}\{u(t)\} \hookrightarrow y(t) = (WU)[\delta(0)]\) -- по свойству перемножения образов Лапласа;
+\end{enumerate}
+
+
+\subsubsection{Программная реализация}
+\begin{python}
+dt = 0.001
+ts = get_t(10, dt=0.001)
+u_f = lambda t: 4 * np.cos(2*t) +  0.5 * t
+u_sympy = 4 * sympy.cos(2*t) + 0.5 * t
+u_lambda = sympy.lambdify(t, u_sympy, 'numpy')
+U_sympy = sympy.laplace_transform(u_sympy, t, s)[0]
+W_s_denum_coeffs = sympy.Poly((s+2)**4, s).all_coeffs()
+W_s_denum_coeffs = list(map(float, W_s_denum_coeffs))
+W_sympy = 6 / sympy.Poly((s+2)**4, s)
+W_control = control.tf([6], W_s_denum_coeffs)
+#  Convolutin
+y_ir_sympy = sympy.inverse_laplace_transform(W_sympy, s, t)
+y_ir_lambda = sympy.lambdify(t, y_ir_sympy, 'numpy')
+y_full_convolution = np.convolve(y_ir_lambda(ts), u_f(ts)) * dt
+
+#  Forced response
+y_2 = control.forced_response(W_control, T=ts, U=u_lambda(ts)).outputs
+
+#  Multiplication of Laplace images
+U_sympy = U_sympy.simplify()
+Y_sympy = U_sympy * W_sympy 
+TF = Y_sympy.simplify()
+num_3 = list(map(float,sympy.Poly(sympy.fraction(TF)[0],s).all_coeffs()))
+denum_3 = list(map(float,sympy.Poly(sympy.fraction(TF)[1],s).all_coeffs()))
+tf_3_2=control.tf(num_3, denum_3)
+y_3 = control.impulse_response(tf_3_2, T=ts).outputs
+\end{python}
+
+\subsubsection{Результаты}
+Как видно по рисунку~\ref{fig:fig7}, результаты совпали. В очередной раз не получилось подловить математиков на обмане.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\textwidth]{task3}
+    \caption{Сравнение различных способов.}
+    \label{fig:fig7}
+\end{figure}
+
+\newpage
+\section{Заключение}
+В этой работе было проведенно исследование следующих вопросов:
+\begin{itemize}
+    \item Вынужденное движение системы в зависимости от корней ее характеристического уравнения. 
+    \item Анализ зависимости качества переходных процессов от корней характеристического уравнения системы третьего порядка. 
+    \item Проверка свойства свертки оригиналов преобразования Лапласа. 
+\end{itemize} 
+\subsection{Выводы}
+\begin{enumerate}
+   \item Проведено моделирование вынужденного движение систем с различным ненулевым входным воздействием.
+   \item На практике проверенно влияние мод на характер поведения системы.
+   \item Наглядно проверенно, что свертка оригиналов равносильна перемножению образов Лапласа.
+\end{enumerate}
+
+\end{document}
