@@ -1,0 +1,113 @@
+\documentclass[16pt]{article}
+
+\usepackage{report}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[english, russian]{babel}
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage[colorlinks=true, linkcolor=black, citecolor=blue, urlcolor=blue]{hyperref}       % hyperlinks
+\usepackage{url}            
+\usepackage{booktabs}       
+\usepackage{amsfonts}       
+\usepackage{nicefrac}      
+\usepackage{microtype} 
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{mathrsfs}
+\usepackage{doi}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{pythonhighlight}
+\usepackage{mathtools}
+\graphicspath{ {./figs/} }
+
+
+\setcitestyle{aysep={,}}
+
+
+
+\title{ЛР \textnumero 5 <<Типовые динамические звенья>>}
+
+\author{
+Студент \\
+Кирилл Лалаянц\\
+R33352\\
+336700\\
+Вариант - 6\\
+\\
+Преподаватель\\
+Пашенко А.В. \\
+\\
+\\
+Факультет Систем Управления и Робототехники\\
+\\
+ИТМО\\
+}
+
+% Uncomment to remove the date
+\date{13.11.2023}
+
+% Uncomment to override  the `A preprint' in the header
+\renewcommand{\headeright}{ЛР \textnumero 5 <<Типовые динамические звенья>>}
+\renewcommand{\undertitle}{Отчет}
+\renewcommand{\shorttitle}{}
+
+
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+\setcounter{page}{1}
+\section{Вводные данные}
+\subsection{Цель работы}
+В этой работе будет проведенно исследование следующих вопросов:
+\begin{itemize}
+    \item Типовые физические звенья.
+    \item Принцип внутренней модели.
+    \item Идеальное и реальное дифференцирующие звенья
+\end{itemize} 
+
+\subsection{Воспроизведение результатов}
+Все результаты можно воспроизвести с помощью \href{https://github.com/lalayants/control-theory-itmo-2023}{репозитория}.
+
+\newpage
+\section{Выполнение работы}
+\label{sec:headings}
+
+
+\subsection{Задание 1. Задача стабилизации с идеальным дифференцирующим звеном.}
+
+\subsubsection{Теория}
+
+
+\subsubsection{Результаты}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task1}
+    \caption{Результат выполнения первого задания.}
+    \label{fig:fig1}
+\end{figure}
+
+
+\newpage
+\section{Заключение}
+В этой работе было проведенно исследование следующих вопросов:
+\begin{itemize}
+    \item Астатизмы.
+    \item Принцип внутренней модели.
+    \item Идеальное и реальное дифференцирующие звенья
+\end{itemize} 
+\subsection{Выводы}
+\begin{enumerate}
+   \item На практике изучено реальное и идеальное ДЗ.
+   \item Проверена работа систем с разными степенями астатизмов. 
+   \item Проверено влияние коэффициентов регулятора на поведение системы.
+   \item Синтезирован регулятор методом замкнутой модели.
+\end{enumerate}
+
+\end{document}
