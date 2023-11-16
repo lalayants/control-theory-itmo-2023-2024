@@ -20,6 +20,7 @@
 \usepackage{listings}
 \usepackage{pythonhighlight}
 \usepackage{mathtools}
+\usepackage{amsmath}
 \graphicspath{ {./figs/} }
 
 
@@ -67,31 +68,410 @@ R33352\\
 В этой работе будет проведенно исследование следующих вопросов:
 \begin{itemize}
     \item Типовые физические звенья.
-    \item Принцип внутренней модели.
-    \item Идеальное и реальное дифференцирующие звенья
+    \item АЧХ, ЛЧХ, ФЛЧХ.
 \end{itemize} 
 
 \subsection{Воспроизведение результатов}
 Все результаты можно воспроизвести с помощью \href{https://github.com/lalayants/control-theory-itmo-2023}{репозитория}.
+
+\subsection{Обозначения}
+Здесь и далее \(\theta(t)\) -- функция Хэвисайда.
 
 \newpage
 \section{Выполнение работы}
 \label{sec:headings}
 
 
-\subsection{Задание 1. Задача стабилизации с идеальным дифференцирующим звеном.}
+\subsection{Brushed DC motor 2.0.}
 
 \subsubsection{Теория}
+Даны уравнения двигателя постоянного тока независимого возбуждения:
+\[J\dot{w} = M, M = k_mI, I = \frac{U + \varepsilon}{R}, \varepsilon = \varepsilon_i + \varepsilon_s, \varepsilon_i = -k_ew, \varepsilon_s=-L\dot{I}.\]
 
+Путем несложных преобразований получаем:
+\begin{align}
+    \begin{bmatrix}
+        \dot{w} \\
+        \dot{M}
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+        0 & \frac{1}{ J} \\
+        -\frac{k_mk_e}{ L} & -\frac{R}{L}
+    \end{bmatrix}
+    \begin{bmatrix}
+        w \\
+        M
+    \end{bmatrix}
+    + 
+    \begin{bmatrix}
+        0 \\
+        \frac{k_m}{L}
+    \end{bmatrix}
+    U
+\end{align}
+\begin{align}
+    w 
+    = 
+    \begin{bmatrix}
+        1 & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        w \\
+        M
+    \end{bmatrix}
+    + 
+    \begin{bmatrix}
+        0
+    \end{bmatrix}
+    U
+\end{align}
+Откуда получаем TF:
+\[
+    W(s) = \frac{k_m}{JLs^2 + JRs + k_ek_m}
+\]
+Тогда ДУ:
+\[
+    JL\ddot{w} + JR\dot{w} + k_ek_mw = k_mU
+\]
+\[
+    \ddot{w} + \frac{R}{L}\dot{w} + \frac{k_ek_m}{JL}w = \frac{k_m}{JL}U
+\]
+\[
+    \ddot{w} + 3.908\dot{w} + 48.81w = 134.2U
+\]
+\[
+    3.908^2 - 4*48.81 < 0 \Rightarrow \text{колебательное звено второго порядка}.
+\]
+Для частотных характеристик подставим в ТF \(s = iw\):
+\[
+    W(w) = \frac{k_m}{-JLw^2 + JRiw + k_ek_m}
+\]
 
+Применив обратное преобразование Лапласса для \(W\) получаем:
+\[w_{i.r.} = \frac{2 k_{m} e^{- \frac{R t}{2 L}} \sin{\left(\frac{t \sqrt{\frac{- \frac{R^{2}}{L} + \frac{4 k_{e} k_{m}}{J}}{L}}}{2} \right)} \theta\left(t\right)}{J L \sqrt{\frac{- \frac{R^{2}}{L} + \frac{4 k_{e} k_{m}}{J}}{L}}}\]
+\[w_{i.r.} = 20 e^{- 1.95 t} \sin{\left(6.7 t \right)} \theta\left(t\right)\]
+Применив обратное преобразование Лапласса для \(W / s\) получаем:
+\[w_{s.r.} = k_{m} \left(\left(- \frac{e^{- \frac{R t}{2 L}} \cos{\left(\frac{t \sqrt{- \frac{J R^{2} - 4 L k_{e} k_{m}}{J}}}{2 L} \right)}}{k_{e} k_{m}} - \frac{R e^{- \frac{R t}{2 L}} \sin{\left(\frac{t \sqrt{\frac{- \frac{R^{2}}{L} + \frac{4 k_{e} k_{m}}{J}}{L}}}{2} \right)}}{L k_{e} k_{m} \sqrt{\frac{- \frac{R^{2}}{L} + \frac{4 k_{e} k_{m}}{J}}{L}}}\right) \theta\left(t\right) + \frac{\theta\left(t\right)}{k_{e} k_{m}}\right)\]
+\[w_{s.r.} = 0.36 \left(- 2.2 e^{- 1.95 t} \sin{\left(6.7 t \right)} - 7.56 e^{- 1.95 t} \cos{\left(6.7 t \right)}\right) \theta\left(t\right) + 2.75 \theta\left(t\right)\]
 \subsubsection{Результаты}
-
+На графике (Рис. \ref*{fig:fig1}) представлен результат выполнения задания. Как видно, практический результат совпал с теоретическим.
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=\textwidth]{task1}
-    \caption{Результат выполнения первого задания.}
+    \includegraphics[width=\textwidth]{1_2}
+    \caption{Результат выполнения задания.}
     \label{fig:fig1}
 \end{figure}
+
+\subsection{Конденсируй. Интегрируй. Умножай.}
+
+\subsubsection{Теория}
+Дано уравнение конденсатора:
+\[I = C\frac{dU}{dt}.\]
+
+Путем несложных преобразований получаем:
+\begin{align}
+    \begin{bmatrix}
+        \dot{U}
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+        0 
+    \end{bmatrix}
+    \begin{bmatrix}
+        U
+    \end{bmatrix}
+    + 
+    \begin{bmatrix}
+        \frac{1}{C}
+    \end{bmatrix}
+    I
+\end{align}
+\begin{align}
+    U
+    = 
+    \begin{bmatrix}
+        1
+    \end{bmatrix}
+    \begin{bmatrix}
+        U
+    \end{bmatrix}
+    + 
+    \begin{bmatrix}
+        0
+    \end{bmatrix}
+    I
+\end{align}
+Откуда получаем TF:
+\[
+    W(s) = \frac{1}{C s}
+\]
+Тогда ДУ:
+\[
+    C \dot{U} = I
+\]
+\[
+    \dot{U} = \frac{I}{C}
+\]
+\[
+    \dot{U} = 3484I \Rightarrow \text{идеальное интегрирующее звено}.
+\]
+Для частотных характеристик подставим в ТF \(s = iw\):
+\[
+    W(w) = \frac{1}{C iw}
+\]
+
+Применив обратное преобразование Лапласса для \(W\) получаем:
+\[U_{i.r.} = \frac{\theta\left(t\right)}{C}\]
+\[U_{i.r.} = 3484.3 \theta\left(t\right)\]
+Применив обратное преобразование Лапласса для \(W / s\) получаем:
+\[U_{s.r.} = \frac{t \theta\left(t\right)}{C}\]
+\[U_{s.r.} = 3484.3 t \theta\left(t\right)\]
+\subsubsection{Результаты}
+На графике (Рис. \ref*{fig:fig2}) представлен результат выполнения задания. Как видно, практический результат совпал с теоретическим.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{1_3}
+    \caption{Результат выполнения задания.}
+    \label{fig:fig2}
+\end{figure}
+
+\newpage
+\subsection{ Доп. Brushed DC motor.}
+
+\subsubsection{Теория}
+Даны уравнения двигателя постоянного тока независимого возбуждения:
+\[J\dot{w} = M, M = k_mI, I = \frac{U + \varepsilon}{R}, \varepsilon = \varepsilon_i, \varepsilon_i = -k_ew.\]
+
+Путем несложных преобразований получаем:
+\begin{align}
+    \begin{bmatrix}
+        \dot{w}
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+        -\frac{k_mk_e}{JR} 
+    \end{bmatrix}
+    \begin{bmatrix}
+        w
+    \end{bmatrix}
+    + 
+    \begin{bmatrix}
+        \frac{k_m}{JR}
+    \end{bmatrix}
+    U
+\end{align}
+\begin{align}
+    w 
+    = 
+    \begin{bmatrix}
+        1
+    \end{bmatrix}
+    \begin{bmatrix}
+        w
+    \end{bmatrix}
+    + 
+    \begin{bmatrix}
+        0
+    \end{bmatrix}
+    U
+\end{align}
+Откуда получаем TF:
+\[
+    W(s) = \frac{k_{m}}{J R \left(s + \frac{k_{e} k_{m}}{J R}\right)}
+\]
+Тогда ДУ:
+\[
+    JR\dot{w} + k_ek_mw = k_mU
+\]
+\[
+    \dot{w} + \frac{k_ek_m}{JR}w = \frac{k_m}{JR}U
+\]
+\[
+    \dot{w} + 8.909w = 24.67U \Rightarrow \text{апериодическое звено первого порядка}.
+\]
+
+Для частотных характеристик подставим в ТF \(s = iw\):
+\[
+    W(w) = \frac{k_{m}}{J R \left(iw + \frac{k_{e} k_{m}}{J R}\right)}
+\]
+
+Применив обратное преобразование Лапласса для \(W\) получаем:
+\[w_{i.r.} = \frac{k_{m} e^{- \frac{k_{e} k_{m} t}{J R}} \theta\left(t\right)}{J R}\]
+\[w_{i.r.} = 24.6 e^{- 8.9 t} \theta\left(t\right)\]
+Применив обратное преобразование Лапласса для \(W / s\) получаем:
+\[w_{s.r.} = \frac{k_{m} \left(\frac{J R \theta\left(t\right)}{k_{e} k_{m}} - \frac{J R e^{- \frac{k_{e} k_{m} t}{J R}} \theta\left(t\right)}{k_{e} k_{m}}\right)}{J R}\]
+\[w_{s.r.} = 2.7 \theta\left(t\right) - 2.7 e^{- 8.9 t} \theta\left(t\right)\]
+\subsubsection{Результаты}
+На графике (Рис. \ref*{fig:fig3}) представлен результат выполнения задания. Как видно, практический результат совпал с теоретическим.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{2_1}
+    \caption{Результат выполнения задания.}
+    \label{fig:fig3}
+\end{figure}
+
+
+\newpage
+\subsection{ Доп. Tachogenerator.}
+
+\subsubsection{Теория}
+Даны уравнения тахогенератора постоянного тока:
+\[I = \frac{\varepsilon - U_{out}}{R}, \varepsilon = \varepsilon_i + \varepsilon_s, \varepsilon_i = -k_e\dot{\theta}, e_s = -L\dot{I}, I = \frac{U_{out}}{r}.\]
+
+Путем несложных преобразований получаем:
+\begin{align}
+    \begin{bmatrix}
+        \dot{U}_{out}
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+        \frac{R_L + R}{L}
+    \end{bmatrix}
+    \begin{bmatrix}
+        U_{out}
+    \end{bmatrix}
+    + 
+    \begin{bmatrix}
+        k_e
+    \end{bmatrix}
+    w
+\end{align}
+\begin{align}
+    U_{out} 
+    = 
+    \begin{bmatrix}
+        1
+    \end{bmatrix}
+    \begin{bmatrix}
+        U_{out}
+    \end{bmatrix}
+    + 
+    \begin{bmatrix}
+        0
+    \end{bmatrix}
+    w
+\end{align}
+Откуда получаем TF:
+\[
+    W(s) = \frac{k_{e}}{s + \frac{R}{L} + \frac{R_{l}}{L}}
+\]
+Тогда ДУ:
+\[
+    \dot{U}_{out} + \frac{R_L + R}{L}U_{out} = k_mw
+\]
+\[
+    \dot{U}_{out} + 586U_{out} = 0.3427w \Rightarrow \text{апериодическое звено первого порядка}.
+\]
+
+Для частотных характеристик подставим в ТF \(s = iw\):
+\[
+    W(w) = \frac{k_{e}}{iw + \frac{R}{L} + \frac{R_{l}}{L}}
+\]
+
+Применив обратное преобразование Лапласса для \(W\) получаем:
+\[w_{i.r.} = k_{e} e^{- \frac{t \left(R + R_{l}\right)}{L}} \theta\left(t\right)\]
+\[w_{i.r.} = 0.3427 e^{- 586 t} \theta\left(t\right)\]
+Применив обратное преобразование Лапласса для \(W / s\) получаем:
+\[w_{s.r.} = k_{e} \left(- \frac{L^{2} e^{- \frac{t \left(R^{2} + 2 R R_{l} + R_{l}^{2}\right)}{L R + L R_{l}}} \theta\left(t\right)}{L R + L R_{l}} + \frac{L \theta\left(t\right)}{R + R_{l}}\right)\]
+\[w_{s.r.} = 0.00058 \theta\left(t\right) - 0.00058 e^{- 586 t} \theta\left(t\right)\]
+\subsubsection{Результаты}
+На графике (Рис. \ref*{fig:fig4}) представлен результат выполнения задания. Как видно, практический результат совпал с теоретическим.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{2_4}
+    \caption{Результат выполнения задания.}
+    \label{fig:fig4}
+\end{figure}
+
+
+\newpage
+\subsection{Доп. Spring-mass system.}
+
+\subsubsection{Теория}
+Даны уравнения пружинного маятника:
+\[F_\text{упр} = -kx, F = F_{ext} + F_\text{упр}, F = ma.\]
+
+Путем несложных преобразований получаем:
+\begin{align}
+    \begin{bmatrix}
+        \dot{x} \\
+        \ddot{x}
+    \end{bmatrix}
+    = 
+    \begin{bmatrix}
+        0 & 1\\
+        -\frac{k}{m} & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        x \\
+        \dot{x}
+    \end{bmatrix}
+    + 
+    \begin{bmatrix}
+        0 \\
+        \frac{1}{m}
+    \end{bmatrix}
+    F_{ext}
+\end{align}
+\begin{align}
+    x
+    = 
+    \begin{bmatrix}
+        1 & 0
+    \end{bmatrix}
+    \begin{bmatrix}
+        x \\
+        \dot{x}
+    \end{bmatrix}
+    + 
+    \begin{bmatrix}
+        0
+    \end{bmatrix}
+    F_{ext}
+\end{align}
+Откуда получаем TF:
+\[
+    W(s) = \frac{1}{m \left(\frac{k}{m} + s^{2}\right)}
+\]
+Тогда ДУ:
+\[
+    m\ddot{x} + kx = F_{ext}
+\]
+\[
+    \ddot{x} + \frac{k}{m}x = \frac{1}{m}F_{ext}
+\]
+\[
+    \ddot{x} + 9.257x = 0.02857U \Rightarrow \text{консервативное звено второго порядка}.
+\]
+
+Для частотных характеристик подставим в ТF \(s = iw\):
+\[
+    W(w) = \frac{1}{m \left(\frac{k}{m} - w^{2}\right)}
+\]
+
+Применив обратное преобразование Лапласса для \(W\) получаем:
+\[w_{i.r.} = \frac{\sin{\left(t \sqrt{\frac{k}{m}} \right)} \theta\left(t\right)}{m \sqrt{\frac{k}{m}}}\]
+\[w_{i.r.} = \frac{\sqrt{35} \sin{\left(\frac{18 \sqrt{35} t}{35} \right)} \theta\left(t\right)}{630}\]
+Применив обратное преобразование Лапласса для \(W / s\) получаем:
+\[w_{s.r.} = \frac{- \frac{m \cos{\left(t \sqrt{\frac{k}{m}} \right)} \theta\left(t\right)}{k} + \frac{m \theta\left(t\right)}{k}}{m}\]
+\[w_{s.r.} =  - \frac{\cos{\left(\frac{18 \sqrt{35} t}{35} \right)} \theta\left(t\right)}{324} + \frac{\theta\left(t\right)}{324}\]
+\subsubsection{Результаты}
+На графике (Рис. \ref*{fig:fig5}) представлен результат выполнения задания. Как видно, практический результат совпал с теоретическим. Разница в ФЧХ обусловлена работой функции atan2: ее результат принадлежит полуинтервалу \((-\pi, \pi]\), из-за чего отставание по фазе на \(\pi\) интерпретируется как опережение на \(\pi\).
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{2_5}
+    \caption{Результат выполнения задания.}
+    \label{fig:fig5}
+\end{figure}
+
+
+
+
+
+
+
+
 
 
 \newpage
