@@ -1,0 +1,113 @@
+\documentclass[16pt]{article}
+
+\usepackage{report}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[english, russian]{babel}
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage[colorlinks=true, linkcolor=black, citecolor=blue, urlcolor=blue]{hyperref}       % hyperlinks
+\usepackage{url}            
+\usepackage{booktabs}       
+\usepackage{amsfonts}       
+\usepackage{nicefrac}      
+\usepackage{microtype} 
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{mathrsfs}
+\usepackage{doi}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{pythonhighlight}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\graphicspath{ {./figs/} }
+
+
+\setcitestyle{aysep={,}}
+
+
+
+\title{ЛР \textnumero 6 <<Критерий Найквиста и системы с запаздыванием>>}
+
+\author{
+Студент \\
+Кирилл Лалаянц\\
+R33352\\
+336700\\
+Вариант - 6\\
+\\
+Преподаватель\\
+Пашенко А.В. \\
+\\
+\\
+Факультет Систем Управления и Робототехники\\
+\\
+ИТМО\\
+}
+
+% Uncomment to remove the date
+\date{20.11.2023}
+
+% Uncomment to override  the `A preprint' in the header
+\renewcommand{\headeright}{ЛР \textnumero 6 <<Критерий Найквиста и системы с запаздыванием>>}
+\renewcommand{\undertitle}{Отчет}
+\renewcommand{\shorttitle}{}
+
+
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+\setcounter{page}{1}
+
+\section{Вводные данные}
+\subsection{Цель работы}
+В этой работе будет проведенно исследование следующих вопросов:
+\begin{itemize}
+    \item Типовые динамические звенья.
+    \item АЧХ, ЛЧХ, ФЛЧХ.
+\end{itemize} 
+
+\subsection{Воспроизведение результатов}
+Все результаты можно воспроизвести с помощью \href{https://github.com/lalayants/control-theory-itmo-2023}{репозитория}.
+
+\subsection{Обозначения}
+Здесь и далее \(\theta(t)\) -- функция Хэвисайда.
+
+\newpage
+\section{Выполнение работы}
+\label{sec:headings}
+
+
+\subsection{Brushed DC motor 2.0.}
+
+\subsubsection{Теория}
+\subsubsection{Результаты}
+На графике (Рис. \ref*{fig:fig1}) представлен результат выполнения задания. Как видно, практический результат совпал с теоретическим.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{1_2}
+    \caption{Результат выполнения задания.}
+    \label{fig:fig1}
+\end{figure}
+
+
+
+
+\newpage
+\section{Заключение}
+В этой работе было проведенно исследование следующих вопросов:
+\begin{itemize}
+    \item Типовые динамические звенья.
+    \item АЧХ, ЛЧХ, ФЛЧХ.
+\end{itemize} 
+\subsection{Выводы}
+\begin{enumerate}
+   \item На примерах разных систем изучены типовые динамические звенья. Теоретические результаты сошлись с практическими.
+\end{enumerate}
+
+\end{document}
