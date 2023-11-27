@@ -1,0 +1,455 @@
+\documentclass[16pt]{article}
+
+\usepackage{report}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[english, russian]{babel}
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage[colorlinks=true, linkcolor=black, citecolor=blue, urlcolor=blue]{hyperref}       % hyperlinks
+\usepackage{url}            
+\usepackage{booktabs}       
+\usepackage{amsfonts}       
+\usepackage{nicefrac}      
+\usepackage{microtype} 
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{mathrsfs}
+\usepackage{doi}
+\usepackage{mathtools}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{pythonhighlight}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\graphicspath{ {./figs/} }
+
+
+\setcitestyle{aysep={,}}
+
+
+
+\title{ЛР \textnumero 6 <<Критерий Найквиста и системы с запаздыванием>>}
+
+\author{
+Студент \\
+Кирилл Лалаянц\\
+R33352\\
+336700\\
+Вариант - 6\\
+\\
+Преподаватель\\
+Пашенко А.В. \\
+\\
+\\
+Факультет Систем Управления и Робототехники\\
+\\
+ИТМО\\
+}
+
+% Uncomment to remove the date
+\date{20.11.2023}
+
+% Uncomment to override  the `A preprint' in the header
+\renewcommand{\headeright}{ЛР \textnumero 6 <<Критерий Найквиста и системы с запаздыванием>>}
+\renewcommand{\undertitle}{Отчет}
+\renewcommand{\shorttitle}{}
+
+
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+\setcounter{page}{1}
+
+\section{Вводные данные}
+\subsection{Цель работы}
+В этой работе будет проведенно исследование следующих вопросов:
+\begin{itemize}
+    \item Критерий Найквиста.
+    \item Системы с запаздыванием.
+    \item Зависимость устойчивости от запаздывания и усиления.
+\end{itemize} 
+
+\subsection{Воспроизведение результатов}
+Все результаты можно воспроизвести с помощью \href{https://github.com/lalayants/control-theory-itmo-2023}{репозитория}.
+
+
+\newpage
+\section{Выполнение работы}
+\label{sec:headings}
+
+
+\subsection{Задание 1. Годограф Найквиста.}
+
+\subsubsection{Теория}
+В этом задании надо придумать TF k степени с n неустойчивых полюсов, чтобы при замыкании у получившейся системы было m нейустойчивых. В общем виде получение такой передаточной функции происходит в несколько простых действий. Пусть \(W_{open} = \frac{N_{open}}{D_{open}}\). Тогда:
+\begin{enumerate}
+    \item \(\forall (i \in N) \leq k \rightarrow \ D_{open}(\lambda_{open \ i}) = 0 \Rightarrow D_{open} = \prod\limits_{i=1}^k(s - \lambda_{open \ i});\)
+    \item \(\forall (i \in N) \leq k \rightarrow \ D_{closed}(\lambda_{closed \ i}) = 0 \Rightarrow D_{closed} = \prod\limits_{i=1}^k(s - \lambda_{closed \ i});\)
+    \item \(W_{closed} = \frac{W_{open}}{1+W_{open}} = \frac{N_{open}}{N_{open} + D_{open}} = \frac{N_{open}}{D_{closed}} \Rightarrow N_{open} = D_{closed} - D_{open}\)
+\end{enumerate} 
+После этого можно наглядно проверить выполнения критерий Найквиста. Изменения количества устойчивых полюсов должно совпадать с количеством оборотов вокрук точки \((-1, 0)\).
+
+\subsubsection{Результаты}
+
+На графике (Рис. \ref*{fig:fig1}) представлен АФЧХ для системы c 4 неустойчивыми полюсами:
+\[
+    W_{open} = \frac{3.0 s^{2} - 31.0 s + 74.0}{1.0 s^{3} - 10.0 s^{2} + 33.0 s - 34.0}
+    \]
+\[
+    W_{closed} =\frac{3.0 s^{2} - 31.0 s + 74.0}{1.0 s^{3} - 7.0 s^{2} + 2.0 s + 40.0}
+    \]
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task1_1_nyquist}
+    \caption{Критерий Найквиста 1.}
+    \label{fig:fig1}
+\end{figure}
+
+По критерию Найквиста, у замкнутой должно быть 3 неустойчивых, что совпадает с действительностью. Результат преобразования корней видно ниже (Рис. \ref*{fig:fig2}).
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task1_1_roots}
+    \caption{Корни систем 1.}
+    \label{fig:fig2}
+\end{figure}
+
+Выход систем представлен на рис. \ref*{fig:fig3}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task1_1_steps}
+    \caption{Step response 1.}
+    \label{fig:fig3}
+\end{figure}
+
+\newpage
+
+На графике (Рис. \ref*{fig:fig4}) представлен АФЧХ для системы c 0 неустойчивыми полюсами:
+\[
+    W_{open} =\frac{- 23.0 s^{2} + 6.0 s - 111.0}{1.0 s^{3} + 11.0 s^{2} + 41.0 s + 51.0}
+    \]
+\[
+    W_{closed} =\frac{23.0 s^{2} - 6.0 s + 111.0}{- 1.0 s^{3} + 12.0 s^{2} - 47.0 s + 60.0}
+    \]
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task1_2_nyquist}
+    \caption{Критерий Найквиста 2.}
+    \label{fig:fig4}
+\end{figure}
+
+По критерию Найквиста, у замкнутой должно быть 3 неустойчивых, что совпадает с действительностью. Результат преобразования корней видно ниже (Рис. \ref*{fig:fig5}).
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task1_2_roots}
+    \caption{Корни систем 2.}
+    \label{fig:fig5}
+\end{figure}
+
+Выход систем представлен на рис. \ref*{fig:fig6}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task1_2_steps}
+    \caption{Step response 2.}
+    \label{fig:fig6}
+\end{figure}
+
+\newpage
+
+На графике (Рис. \ref*{fig:fig7}) представлен АФЧХ для системы c 4 неустойчивыми полюсами:
+\[
+    W_{open} =\frac{27.0 s^{3} + 8.0 s^{2} + 287.0 s + 18.0}{1.0 s^{4} - 13.0 s^{3} + 63.0 s^{2} - 133.0 s + 102.0}
+    \]
+\[
+    W_{closed} =\frac{27.0 s^{3} + 8.0 s^{2} + 287.0 s + 18.0}{1.0 s^{4} + 14.0 s^{3} + 71.0 s^{2} + 154.0 s + 120.0}
+    \]
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task1_3_nyquist}
+    \caption{Критерий Найквиста 3.}
+    \label{fig:fig7}
+\end{figure}
+
+По критерию Найквиста, у замкнутой должно быть 0 неустойчивых, что совпадает с действительностью. Результат преобразования корней видно ниже (Рис. \ref*{fig:fig8}).
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task1_3_roots}
+    \caption{Корни систем 3.}
+    \label{fig:fig8}
+\end{figure}
+
+Выход систем представлен на рис. \ref*{fig:fig9}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task1_3_steps}
+    \caption{Step response 3.}
+    \label{fig:fig9}
+\end{figure}
+
+\newpage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Задание 2. Коэффициент усиления.}
+\subsubsection{Теория}
+Для нахождения граничного коэффициента усиления на ФЧХ находится частота, соответсвующая усилению 1. После этого находится амплитуда, соответсвующая этой частоте, на АЧХ. Граничный коэффициент усиления обратен этому значению.
+
+
+\subsubsection{Результаты}
+\[W_1 = \frac{s-2}{s^2+3s+9}\]
+Для системы \(W_1\) имеем годограф (рис. \ref*{fig:fig20}). Запас по амплитуде K -- 4.5.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task2_1_k 1.00.jpg}
+    \caption{Годограф 1, K = 1}
+    \label{fig:fig10}
+\end{figure}
+
+Ниже приведены графики с разными K (рис. \ref*{fig:fig21} -- \ref*{fig:fig23})
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task2_1_k 0.45.jpg}
+    \caption{Годограф 1, K = 0.45.}
+    \label{fig:fig21}
+\end{figure}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task2_1_k 2.98.jpg}
+    \caption{Годограф 1, K = 2.98.}
+    \label{fig:fig22}
+\end{figure}
+Как видно, годограф при превышении граничного значения начинает делать поворот по часовой вокруг точки -1, что добавляет системе неустойчивый полюс.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task2_1_k 5.50.jpg}
+    \caption{Годограф 1, K = 5.5.}
+    \label{fig:fig23}
+\end{figure}
+
+Ниже приведен пример моделирования системы с разными К. Как видно, при значении больше граничного годограф начинает делать оборот вокруг точки -1, что добавляет неуйстойчивый полюс.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task3_1_steps.jpg}
+    \caption{Система 1, симуляция.}
+    \label{fig:fig24}
+\end{figure}
+
+\[W_2 = \frac{10s^2 + 10s + 3}{10s^3 - 10s^2}\]
+Для системы \(W_2\) имеем годограф (рис. \ref*{fig:fig25}). Запас по амплитуде -- 0.2.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task2_2_k 1.00.jpg}
+    \caption{Годограф 2, K = 1.}
+    \label{fig:fig25}
+\end{figure}
+
+Ниже приведены графики с разными K (рис. \ref*{fig:fig26} -- \ref*{fig:fig28})
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task2_2_k 0.02.jpg}
+    \caption{Годограф 2, K = 0.02.}
+    \label{fig:fig26}
+\end{figure}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task2_2_k 0.61.jpg}
+    \caption{Годограф 2, K = 0.61.}
+    \label{fig:fig27}
+\end{figure}
+Как видно, годограф при превышении граничного значения начинает делать поворот по часовой вокруг точки -1, что добавляет системе неустойчивый полюс.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task2_2_k 1.20.jpg}
+    \caption{Годограф 2, K = 1.2.}
+    \label{fig:fig28}
+\end{figure}
+
+Ниже приведен пример моделирования системы с разными К. Как видно, при значении меньше граничного система становится неуйстойчивой
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task2_2_steps.jpg}
+    \caption{Система 2, симуляция.}
+    \label{fig:fig29}
+\end{figure}
+
+\newpage
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Задание 3. Запаздывание.}
+\subsubsection{Теория}
+Для нахождения граничного коэффициента усиления на ФЧХ находится частота, соответсвующая усилению 1. После этого находится угол отставания, соответсвующая этой частоте, на ФЧХ. Граничный коэффициент запаздывания равен этой фазе + 180 разделить на частоту.
+
+
+\subsubsection{Результаты}
+\[W_1 = \frac{9s+2}{s^2+3s+5}\]
+Для системы \(W_1\) имеем годограф (рис. \ref*{fig:fig20}). Запас по фазе t -- 0.21.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task3_1_k 0.00.jpg}
+    \caption{Годограф 1, t = 0.}
+    \label{fig:fig20}
+\end{figure}
+
+Ниже приведены графики с разными t (рис. \ref*{fig:fig11} -- \ref*{fig:fig13})
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task3_1_k 0.21.jpg}
+    \caption{Годограф 1, t = 0.21.}
+    \label{fig:fig11}
+\end{figure}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task3_1_k 0.60.jpg}
+    \caption{Годограф 1, t = 0.6.}
+    \label{fig:fig12}
+\end{figure}
+Как видно, годограф при превышении граничного значения начинает делать поворот по часовой вокруг точки -1, что добавляет системе неустойчивый полюс.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task3_1_k 1.21.jpg}
+    \caption{Годограф 1, t = 1.21.}
+    \label{fig:fig13}
+\end{figure}
+
+Ниже приведен пример моделирования системы с разными t. Как видно, при значении больше граничного годограф начинает делать оборот вокруг точки -1, что добавляет неуйстойчивый полюс.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task3_1_steps.jpg}
+    \caption{Система 1, симуляция.}
+    \label{fig:fig14}
+\end{figure}
+
+\[W_2 = \frac{10s^2 - 6s + 11}{10s^3 - s^2 + 38s + 20}\]
+Для системы \(W_2\) имеем годограф (рис. \ref*{fig:fig15}). Запас по t -- 0.05.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task3_2_k 0.00.jpg}
+    \caption{Годограф 2, t = 0.}
+    \label{fig:fig15}
+\end{figure}
+
+Ниже приведены графики с разными K (рис. \ref*{fig:fig16} -- \ref*{fig:fig18})
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task3_2_k 0.06.jpg}
+    \caption{Годограф 2, t = 0.02.}
+    \label{fig:fig16}
+\end{figure}
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task3_2_k 0.50.jpg}
+    \caption{Годограф 2, t = 0.50.}
+    \label{fig:fig17}
+\end{figure}
+Как видно, годограф при превышении граничного значения начинает делать поворот по часовой вокруг точки -1, что добавляет системе неустойчивый полюс.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task3_2_k 1.06.jpg}
+    \caption{Годограф 2, t = 1.06.}
+    \label{fig:fig18}
+\end{figure}
+
+Ниже приведен пример моделирования системы с разными t. Как видно, при значении меньше граничного система становится неуйстойчивой
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{task3_2_steps.jpg}
+    \caption{Система 2, симуляция.}
+    \label{fig:fig19}
+\end{figure}
+\newpage
+\pagebreak
+\section{Заключение}
+В этой работе было проведенно исследование следующих вопросов:
+\begin{itemize}
+    \item Критерий Найквиста.
+    \item Системы с запаздыванием.
+    \item Зависимость устойчивости от запаздывания и усиления.
+\end{itemize} 
+\subsection{Выводы}
+\begin{enumerate}
+    \item Критерий Найквиста работает.
+   \item Для систем у которых амплитуду надо уменьшать, чтобы она попала в -1 -- поведение при изменнении коэфициента усиления обратное. 
+   \item Аналогично для задержек
+\end{enumerate}
+
+\end{document}
