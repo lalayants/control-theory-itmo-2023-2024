@@ -31,6 +31,7 @@ def follow(target, kp, t=8):
         u = kp * error
         file.write(f'{time.time() - start_time} {kp} {error}\n')
         motorA.run_direct(duty_cycle_sp=u)
+    file.close()
     motorA.run_direct(duty_cycle_sp=0)
     
 
