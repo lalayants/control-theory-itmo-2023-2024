@@ -13,15 +13,17 @@ os.makedirs(DATA_PATH)
 volts = PowerSupply()
 motorA = LargeMotor('outA')
     
-KPs = [0.0025, 0.005, 0.01]
-targets = [('const', lambda t: 0 * t + 1), ('linear', lambda t: 1 * t)]
+KPs = [0.5, 0.75, 1]
+targets = [('const', lambda t: 0 * t + 360), ('linear', lambda t: 360 + 360 * t)]
 
 
 def follow(target, kp, t=8):
     target_name, target_l = target
     start_time = time.time()
     start_pos = motorA.position
-    file = open(f'DATA_PATH/{target_name}_{kp}.txt', "a")
+    file_name = DATA_PATH + '/' + target_name + '_' + str(kp) + '.txt'
+    # file = open(f'{DATA_PATH}/{target_name}_{kp}.txt', "a")
+    file = open(file_name, 'a')
 
     while (time.time() - start_time) < t:
         time_from_start = time.time() - start_time
@@ -29,8 +31,14 @@ def follow(target, kp, t=8):
         target = target_l(time_from_start)
         error = target - pos
         u = kp * error
-        file.write(f'{time.time() - start_time} {kp} {error}\n')
+        u = 100 if u > 100 else u
+        u = -100 if u < -100 else u
+        print(error, target, u)
+        string = str(time.time() - start_time) + " " + str(kp) + " " + str(error) + ' ' + str(pos) + ' ' + str(target) + '\n'
+        # file.write(f'{time.time() - start_time} {kp} {error}\n')
+        file.write(string)
         motorA.run_direct(duty_cycle_sp=u)
+        time.sleep(0.01)
     file.close()
     motorA.run_direct(duty_cycle_sp=0)
     

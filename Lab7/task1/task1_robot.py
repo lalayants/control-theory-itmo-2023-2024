@@ -19,9 +19,12 @@ def step_response(U, t=4):
     start_time = time.time()
     start_pos = motorA.position
     motorA.run_direct(duty_cycle_sp=U)
-    file = open(f'{DATA_PATH}/{U}.txt', "a")
+    file_name = DATA_PATH + '/' + str(U) + '.txt'
+    file = open(file_name, "a")
     while (time.time() - start_time) < t:
-        file.write(f'{time.time() - start_time} {motorA.position - start_pos} {motorA.speed} {U} {volts.measured_volts}\n')
+        string = str(time.time() - start_time) + ' ' + str(motorA.position - start_pos) + ' ' + str(motorA.speed) + ' ' + str(U) + ' ' + str(volts.measured_volts) + '\n'
+        # file.write(f'{time.time() - start_time} {motorA.position - start_pos} {motorA.speed} {U} {volts.measured_volts}\n')
+        file.write(string)
     motorA.run_direct(duty_cycle_sp=0)
     file.close()
     
