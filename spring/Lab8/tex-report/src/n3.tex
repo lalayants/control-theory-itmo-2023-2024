@@ -1,6 +1,6 @@
 \subsection{Задание 3}
 
-\subsubsection{Результаты}
+\subsubsection{Теория}
 В этом задании выводится наблюдатель регулятор для системы:
 \[
         \begin{cases}
@@ -24,3 +24,56 @@
             \hat{y} = C \hat{x}
          \end{cases}
 \]
+Самое важное тут удачно угадать желаемые собственные числа и на забыть сделать их неуправляемыми/ненаблюдаемыми где надо.
+\subsubsection{Результаты}
+Для системы (полностью управляема и стабилизируема):
+\[
+    A = \begin{bmatrix}
+        5.00 & -5.00 & -9.00 &  3.00\\
+       -5.00 &  5.00 & -3.00 &  9.00\\
+       -9.00 & -3.00 &  5.00 &  5.00\\
+        3.00 &  9.00 &  5.00 &  5.00
+      \end{bmatrix};
+    B = \begin{bmatrix}
+        16.00\\
+        12.00\\
+        12.00\\
+        12.00
+      \end{bmatrix};
+    C = \begin{bmatrix}
+        3.00 & -1.00 &  1.00 &  3.00\\
+       -2.00 &  2.00 &  2.00 &  2.00
+      \end{bmatrix}
+\],
+получены следующие матрицы:
+\[
+    K = \begin{bmatrix}
+        11.09 & -3.47 & -11.35 & -3.65
+      \end{bmatrix};
+    L = \begin{bmatrix}
+        36.20 &  36.20\\
+        6.46 &  6.46\\
+       -36.74 & -36.74\\
+        5.91 &  5.91
+      \end{bmatrix}
+\]
+
+Это позволило стабилизировать систему, результаты приведены на графиках ниже на рисунках \ref{fig:task3_y} - \ref{fig:task3_states}.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_y.jpg}
+    \caption{Результаты моделирования выхода системы и наблюдателя.}
+    \label{fig:task3_y}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_u.jpg}
+    \caption{Результаты моделирования регулятора.}
+    \label{fig:task3_u}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_states.jpg}
+    \caption{Результаты моделирования состояний системы.}
+    \label{fig:task3_states}
+\end{figure}
