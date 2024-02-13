@@ -1,3 +1,26 @@
 \subsection{Задание 3}
 
 \subsubsection{Результаты}
+В этом задании выводится наблюдатель регулятор для системы:
+\[
+        \begin{cases}
+                \dot{x} = A x + B u\\
+                y = C x \\
+                \dot{\hat{x}} = A \hat{x} + B u + L(\hat{y} - y) \\
+                \hat{y} = C \hat{x} \\
+                u = K \hat{x}
+        \end{cases} \xrightarrow{\text{очевидно...}}
+        \begin{cases}
+            \begin{bmatrix} 
+                \dot{x} \\
+                \dot{e}
+            \end{bmatrix} = 
+            \begin{bmatrix} 
+                A + BK & -BK\\
+                0 & A + LC
+            \end{bmatrix}\\
+            \hat{x} = x - e \\
+            y = Cx \\
+            \hat{y} = C \hat{x}
+         \end{cases}
+\]
