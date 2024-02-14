@@ -1,0 +1,81 @@
+\subsection{Задание 1}
+\subsubsection{Теория}
+В этом задании выводится модальный регулятор для системы:
+\[
+        \begin{cases}
+                \text{Объект управления: }\dot{x} = A x + Bu \\
+                \text{Регулятор: }u = K x \\
+        \end{cases} \rightarrow
+        \dot{x} = A x + BKx = (A+BK)x
+\]
+По сути, целью данного регулятора является изменение управляемых собственных чисел так\footnote{Что делать с неуправляемыми -- пока непонятно. Видимо надо смириться.}, чтобы \(\forall \lambda \in \sigma(A): Re{\lambda} \leq 0\). Для этого подбирается матрица \(\Gamma \in \mathds{R}^{n \times n}\) с желаемыми собственными числами и матрица \(\mathds{Y} \in \mathds{R}^{m \times n}\), такая что пара \((\mathds{Y}, \Gamma)\) наблюдаема. После чего по подобию:
+\[A+BK = P \Gamma P^{-1} \rightarrow
+        \begin{cases}
+                AP - P\Gamma = BY \\
+                K = -YP^{-1} \\
+        \end{cases}
+\]
+На практике, довольно часто \(P\) -- необратима. Приходится использовать псевдообратную.
+
+\subsubsection{Результаты}
+Дана система:
+\[A = \begin{bmatrix}
+        -4.00 &  0.00 &  0.00 &  0.00\\
+         0.00 &  1.00 &  0.00 &  0.00\\
+         0.00 &  0.00 &  1.00 &  5.00\\
+         0.00 &  0.00 & -5.00 &  1.00
+       \end{bmatrix},
+       B = \begin{bmatrix}
+        0.00\\
+        2.00\\
+        0.00\\
+        9.00
+      \end{bmatrix},
+      x_0 = \begin{bmatrix}
+        1.00 &  1.00 &  1.00 &  1.00
+      \end{bmatrix}
+       \]
+У матрицы А только одно неуправляемое собственное число -- -4. Оно меньше 0, поэтому проблем возникнуть не должно\footnote{Нет, должно, надо подбирать матрицы так, чтобы в паре \((\mathds{Y}, \Gamma)\) оно было ненаблюдаемо. Иначе полученный спектр будет немного отличаться от желаемого.}, система стабилизируема.
+
+Для каждой строки желаемых собственных чисел:
+\[\begin{bmatrix}
+        -4.00 + 0.00j & -4.00 + 0.00j & -4.00 + 0.00j & -4.00 + 0.00j\\
+        -4.00 + 0.00j & -40.00 + 0.00j & -400.00 + 0.00j & -400.00 + 0.00j\\
+        -4.00 + 0.00j & -8.00 + 0.00j &  0.00 + 5.00j &  -0.00 + -5.00j\\
+        -4.00 + 0.00j & -8.00 + 0.00j & -1.00 + 5.00j & -1.00 + -5.00j
+       \end{bmatrix},
+\]
+необходимо синтезировать регулятор.
+
+На рисунках \ref{fig:task1_1} - \ref{fig:task1_4} видны результаты работы получившихся регуляторов. 
+
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task1_0.jpg}
+        \caption{Результаты моделирования задания 1 для первого набора собственных чисел. \(K = \begin{bmatrix} -0.00 & -2.50 & -1.11 & -1.11 \end{bmatrix}\)}
+        \label{fig:task1_1}
+\end{figure}
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task1_1.jpg}
+        \caption{Результаты моделирования задания 1 для второго набора собственных чисел. \(K = \begin{bmatrix} 0.00 & -131856.82 & -4303.51 &  29207.85 \end{bmatrix}\) }
+        \label{fig:task1_2}
+\end{figure}
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task1_2.jpg}
+        \caption{Результаты моделирования задания 1 для третьего набора собственных чисел. \(K = \begin{bmatrix} 0.00 & -4.68 & -0.42 & -0.18 \end{bmatrix}\)}
+        \label{fig:task1_3}
+\end{figure}
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task1_3.jpg}
+        \caption{Результаты моделирования задания 1 для четвертого набора собственных чисел. \(K = \begin{bmatrix} 0.00 & -5.22 & -0.89 & -0.28 \end{bmatrix}\)}
+        \label{fig:task1_4}
+\end{figure}
+
+% \begin{cases}
+%     \dot{x} = P J P^{-1} x + Bu \\
+%     y = Cx + Du \\
+% \end{cases},
+\FloatBarrier

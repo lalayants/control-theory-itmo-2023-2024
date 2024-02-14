@@ -1,0 +1,87 @@
+\subsection{Задание 2}
+\subsubsection{Теория}
+В этом задании выводится наблюдатель состояния для системы:
+\[
+        \begin{cases}
+                \dot{x} = A x \\
+                y = C x \\
+                \dot{\hat{x}} = A \hat{x} + L(\hat{y} - y) \\
+                \hat{y} = C \hat{x}
+        \end{cases} \rightarrow
+        \begin{cases}
+            \dot{\hat{x}} = A \hat{x} + L(C \hat{x} - y) = (A + LC )\hat{x} - Ly \\
+            \dot{e} = (A + LC)e
+            
+    \end{cases}
+\]
+
+Для синтеза наблюдателя подбирается матрица \(\Gamma \in \mathds{R}^{n \times n}\) с желаемыми собственными числами и матрица \(\mathds{Y} \in \mathds{R}^{n \times k}\), такая что пара \((\Gamma, \mathds{Y})\) управляема. После чего:
+\[
+    \begin{cases}
+        \Gamma Q - QA = YC \\
+        L = Q^{-1}Y \\
+    \end{cases}
+\]
+
+
+
+
+\subsubsection{Результаты}
+Результаты представленны на рисунках \ref{fig:task2_states_1} - \ref{fig:task2_y_4}. У системы все собственные числа наблюдаемы, поэтому любое можно изменить и система наблюдаема. Стоит отметить, что из-за мод набора 3, ошибка в этом случае не может сойтись к 0 и бесконечно колеблется.
+
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_states_0.jpg}
+    \caption{Результаты моделирования состояний системы и наблюдателя для первого набора собственных чисел. \(L^T = \begin{bmatrix} 0.00 & -7.31 & -2.79 & -1.78 \end{bmatrix}\)}
+    \label{fig:task2_states_1}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_states_1.jpg}
+    \caption{Результаты моделирования состояний системы и наблюдателя для второго набора собственных чисел. \(L^T = \begin{bmatrix} 204414.17 &  160532.11 &  126147.31 & -113657.21 \end{bmatrix}\)}
+    \label{fig:task2_states_2}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_states_2.jpg}
+    \caption{Результаты моделирования состояний системы и наблюдателя для третьего набора собственных чисел. \(L^T = \begin{bmatrix} 3.09 &  1.03 &  1.95 & -3.05 \end{bmatrix}\)}
+    \label{fig:task2_states_3}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_states_3.jpg}
+    \caption{Результаты моделирования состояний системы и наблюдателя для четвертого набора собственных чисел. \(L^T = \begin{bmatrix} 4.34 & -1.60 &  0.93 & -3.97 \end{bmatrix}\)}
+    \label{fig:task2_states_4}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_y_0.jpg}
+    \caption{Результаты моделирования выхода системы и наблюдателя для первого набора собственных чисел. \(L^T = \begin{bmatrix} 0.00 & -7.31 & -2.79 & -1.78 \end{bmatrix}\)}
+    \label{fig:task2_y_1}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_y_1.jpg}
+    \caption{Результаты моделирования выхода системы и наблюдателя для второго набора собственных чисел. \(L^T = \begin{bmatrix} 204414.17 &  160532.11 &  126147.31 & -113657.21 \end{bmatrix}\)}
+    \label{fig:task2_y_2}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_y_2.jpg}
+    \caption{Результаты моделирования выхода системы и наблюдателя для третьего набора собственных чисел. \(L^T = \begin{bmatrix} 3.09 &  1.03 &  1.95 & -3.05 \end{bmatrix}\)}
+    \label{fig:task2_y_3}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_y_3.jpg}
+    \caption{Результаты моделирования выхода системы и наблюдателя для четвертого набора собственных чисел. \(L^T = \begin{bmatrix} 4.34 & -1.60 &  0.93 & -3.97 \end{bmatrix}\)}
+    \label{fig:task2_y_4}
+\end{figure}
+% \begin{cases}
+%     \dot{x} = P J P^{-1} x + Bu \\
+%     y = Cx + Du \\
+% \end{cases},
+
+\FloatBarrier
