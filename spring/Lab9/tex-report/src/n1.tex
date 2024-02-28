@@ -1,6 +1,6 @@
 \subsection{Задание 1}
 \subsubsection{Теория}
-В этом задании выводится модальный регулятор для системы:
+В этом задании выводится модальный регулято заданной степени устойчивости для системы:
 \[
         \begin{cases}
                 \text{Объект управления: }\dot{x} = A x + Bu \\
@@ -8,13 +8,43 @@
         \end{cases} \rightarrow
         \dot{x} = A x + BKx = (A+BK)x
 \]
-По сути, целью данного регулятора является изменение управляемых собственных чисел так\footnote{Что делать с неуправляемыми -- пока непонятно. Видимо надо смириться.}, чтобы \(\forall \lambda \in \sigma(A): Re{\lambda} \leq 0\). Для этого подбирается матрица \(\Gamma \in \mathds{R}^{n \times n}\) с желаемыми собственными числами и матрица \(\mathds{Y} \in \mathds{R}^{m \times n}\), такая что пара \((\mathds{Y}, \Gamma)\) наблюдаема. После чего по подобию:
-\[A+BK = P \Gamma P^{-1} \rightarrow
-        \begin{cases}
-                AP - P\Gamma = BY \\
-                K = -YP^{-1} \\
-        \end{cases}
+По сути, целью данного регулятора является изменение управляемых собственных чисел так, чтобы \(\forall \lambda \in \sigma(A): Re{\lambda} \leq \alpha\), где \(\alpha\) -- степень устойчивости.
+Для этого используется LMI критерий экспоненциальной устойчивости:
+\[ \exists Q \succ 0 , \alpha > 0 :  A^TQ + QA + 2 \alpha Q \preccurlyeq 0 \rightarrow
+\begin{cases}
+    \text{\(\forall x(0)\) А ассимптотически устойчива}\\
+    \exists c :  ||x(t)|| \le  c e^{-\alpha t} ||x(0)|| \\
+\end{cases}
 \]
+
+\[      \begin{cases}
+                Q \succ 0\\
+                A^TQ + QA + 2 \alpha Q \preccurlyeq 0 \\
+        \end{cases} \xleftrightarrow{Q = P^{-1}}
+        \begin{cases}
+                P \succ 0\\
+                PA^T + AP + 2 \alpha P \preccurlyeq 0\\
+        \end{cases} 
+\]
+Подставим вместо матрицы \(A\) нашу систему:
+\[P(A+BK)^T + (A+BK)P + 2 \alpha P \preccurlyeq 0\]
+\[P A^T + P K^T B^T + AP + BKP + 2 \alpha P \preccurlyeq 0\]
+\[
+        \begin{cases}
+                Y = KP\\
+                PA^T + AP + 2 \alpha P + Y^T B^T + BY \preccurlyeq 0  \\
+        \end{cases} 
+\]
+
+Тогда для подбора матрицы \(K\), чтобы задать система степень устойчивости \(\alpha\), достаточно решить через библиотеку CVX следующую систему с двумя неизвестнями:
+\[
+        \begin{cases}
+                K = YP^{-1}\\
+                P \succ 0 \\
+                PA^T + AP + 2 \alpha P + Y^T B^T + BY \preccurlyeq 0  \\
+        \end{cases} 
+\]
+
 На практике, довольно часто \(P\) -- необратима. Приходится использовать псевдообратную.
 
 \subsubsection{Результаты}
@@ -35,44 +65,35 @@
         1.00 &  1.00 &  1.00 &  1.00
       \end{bmatrix}
        \]
-У матрицы А только одно неуправляемое собственное число -- -4. Оно меньше 0, поэтому проблем возникнуть не должно\footnote{Нет, должно, надо подбирать матрицы так, чтобы в паре \((\mathds{Y}, \Gamma)\) оно было ненаблюдаемо. Иначе полученный спектр будет немного отличаться от желаемого.}, система стабилизируема.
+У матрицы \(A\) одно неуправляемое собственное число -- -4.
+ Это наталкивает на мысль, что степень устойчивости больше 4 получить не получится, так как это собственное число подвинуть не получится. 
+ На деле так и есть, CVX решает систему для \(\forall \alpha < 4\).
 
-Для каждой строки желаемых собственных чисел:
-\[\begin{bmatrix}
-        -4.00 + 0.00j & -4.00 + 0.00j & -4.00 + 0.00j & -4.00 + 0.00j\\
-        -4.00 + 0.00j & -40.00 + 0.00j & -400.00 + 0.00j & -400.00 + 0.00j\\
-        -4.00 + 0.00j & -8.00 + 0.00j &  0.00 + 5.00j &  -0.00 + -5.00j\\
-        -4.00 + 0.00j & -8.00 + 0.00j & -1.00 + 5.00j & -1.00 + -5.00j
-       \end{bmatrix},
-\]
-необходимо синтезировать регулятор.
+ При рассмотрении собственных чисел получившихся систем видно, что передвигает собственные числа так, чтобы минимальное расстояние по вещественной оси от собственных чисел до 0 было с небольшим запасом больше степени устойчивости. 
+ На рисунках \ref{fig:task1_states} - \ref*{fig:task1_us} приведены полученные графики.
 
-На рисунках \ref{fig:task1_1} - \ref{fig:task1_4} видны результаты работы получившихся регуляторов. 
+Как можно заметить, действительно чем больше \(\alpha\), тем жестче управление и быстрее сходимость. Так же видно, что состояние 1 не меняется, так как собственное число неуправляемое.
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task1_states.jpg}
+        \caption{Результаты моделирования состояний для разных значений \(\alpha\).}
+        \label{fig:task1_states}
+\end{figure}
 
 \begin{figure}[ht!]
         \centering
-        \includegraphics[width=\textwidth]{src/figs/task1_0.jpg}
-        \caption{Результаты моделирования задания 1 для первого набора собственных чисел. \(K = \begin{bmatrix} -0.00 & -2.50 & -1.11 & -1.11 \end{bmatrix}\)}
-        \label{fig:task1_1}
+        \includegraphics[width=\textwidth]{src/figs/task1_us.jpg}
+        \caption{Результаты моделирования управления для разных значений \(\alpha\).}
+        \label{fig:task1_us}
 \end{figure}
-\begin{figure}[ht!]
-        \centering
-        \includegraphics[width=\textwidth]{src/figs/task1_1.jpg}
-        \caption{Результаты моделирования задания 1 для второго набора собственных чисел. \(K = \begin{bmatrix} 0.00 & -131856.82 & -4303.51 &  29207.85 \end{bmatrix}\) }
-        \label{fig:task1_2}
-\end{figure}
-\begin{figure}[ht!]
-        \centering
-        \includegraphics[width=\textwidth]{src/figs/task1_2.jpg}
-        \caption{Результаты моделирования задания 1 для третьего набора собственных чисел. \(K = \begin{bmatrix} 0.00 & -4.68 & -0.42 & -0.18 \end{bmatrix}\)}
-        \label{fig:task1_3}
-\end{figure}
-\begin{figure}[ht!]
-        \centering
-        \includegraphics[width=\textwidth]{src/figs/task1_3.jpg}
-        \caption{Результаты моделирования задания 1 для четвертого набора собственных чисел. \(K = \begin{bmatrix} 0.00 & -5.22 & -0.89 & -0.28 \end{bmatrix}\)}
-        \label{fig:task1_4}
-\end{figure}
+
+
+% \begin{figure}[ht!]
+%         \centering
+%         \includegraphics[width=\textwidth]{src/figs/task1_0.jpg}
+%         \caption{Результаты моделирования задания 1 для первого набора собственных чисел. \(K = \begin{bmatrix} -0.00 & -2.50 & -1.11 & -1.11 \end{bmatrix}\)}
+%         \label{fig:task1_1}
+% \end{figure}
 
 % \begin{cases}
 %     \dot{x} = P J P^{-1} x + Bu \\
