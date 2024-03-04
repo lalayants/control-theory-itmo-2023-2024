@@ -1,99 +1,44 @@
 \subsection{Задание 3}
 
 \subsubsection{Теория}
-В этом задании выводится наблюдатель регулятор для системы:
+
+В этом задании выводится наблюдатель заданной степени устойчивости для системы:
 \[
         \begin{cases}
-                \dot{x} = A x + B u\\
+                \dot{x} = A x \\
                 y = C x \\
-                \dot{\hat{x}} = A \hat{x} + B u + L(\hat{y} - y) \\
-                \hat{y} = C \hat{x} \\
-                u = K \hat{x}
-        \end{cases} \xrightarrow{\text{очевидно...}}
+                \dot{\hat{x}} = A \hat{x} + L(\hat{y} - y) \\
+                \hat{y} = C \hat{x}
+        \end{cases} \rightarrow
         \begin{cases}
-            \begin{bmatrix} 
-                \dot{x} \\
-                \dot{e}
-            \end{bmatrix} = 
-            \begin{bmatrix} 
-                A + BK & -BK\\
-                0 & A + LC
-            \end{bmatrix}\\
-            \hat{x} = x - e \\
-            y = Cx \\
-            \hat{y} = C \hat{x}
-         \end{cases}
+            \dot{\hat{x}} = A \hat{x} + L(C \hat{x} - y) = (A + LC )\hat{x} - Ly \\
+            \dot{e} = (A + LC)e
+            
+    \end{cases}
 \]
-Самое важное тут удачно угадать желаемые собственные числа и на забыть сделать их неуправляемыми/ненаблюдаемыми где надо.
+
+Для этого достаточно решить систему:
+\[
+        \begin{cases}
+                L = Q^{-1}Y\\
+                Q \succ 0 \\
+                A^TQ + QA + 2 \alpha Q + C^T Y^T + YC \preccurlyeq 0  \\
+        \end{cases} 
+\]
 \subsubsection{Результаты}
-Для системы (полностью управляема и стабилизируема):
-\[
-    A = \begin{bmatrix}
-        5.00 & -5.00 & -9.00 &  3.00\\
-       -5.00 &  5.00 & -3.00 &  9.00\\
-       -9.00 & -3.00 &  5.00 &  5.00\\
-        3.00 &  9.00 &  5.00 &  5.00
-      \end{bmatrix};
-    B = \begin{bmatrix}
-        16.00\\
-        12.00\\
-        12.00\\
-        12.00
-      \end{bmatrix};
-    C = \begin{bmatrix}
-        3.00 & -1.00 &  1.00 &  3.00\\
-       -2.00 &  2.00 &  2.00 &  2.00
-      \end{bmatrix}
-\]
-\[n = 4; m = 1; k = 2\]
-
-\(\sigma A = [12, 4, 16, 12]\). Все собственные числа управляемы, но -12 -- ненаблюдаемо, следовательно система полностью управляема и обнаруживаема. Это необходимо учесть при выборе пары матриц \((\Gamma, \mathds{Y_L})\) так, чтобы -12 было неуправляемо. 
-
-Пусть, \(\sigma \Gamma = [-12, -3, -2, -1]\), тогда \(\Gamma\) -- просто диагональная матрица. Для подбора матриц K, чтобы сделать все числа наблюдаемыми у пары матриц \((\Gamma, \mathds{Y}_K)\) по Жорданову критерию, возьмем \(\mathds{Y}_K \in \mathds{R}^{n \times m}\):
-\[\mathds{Y}_K = \begin{bmatrix}
-    1\\
-    1\\
-    1\\
-    1
-  \end{bmatrix},\]
-
-а для выбора L, чтобы сделать 12 -- неуправляемым в паре \((\Gamma, \mathds{Y}_L)\), возьмем \(\mathds{Y}_L \in \mathds{R}^{n \times k}\):
-\[\mathds{Y}_L = \begin{bmatrix}
-    0 & 0\\
-    1 & 1\\
-    1 & 1\\
-    1 & 1
-  \end{bmatrix}\]
-
-Далее, выполняя по отдельности действия задания 1 и 2, получены следующие матрицы:
-
-\[
-    K = \begin{bmatrix}
-        11.09 & -3.47 & -11.35 & -3.65
-      \end{bmatrix};
-    L = \begin{bmatrix}
-        36.20 &  36.20\\
-        6.46 &  6.46\\
-       -36.74 & -36.74\\
-        5.91 &  5.91
-      \end{bmatrix}
-\]
-К и L были подставлены в формулы из теоретической части. Это позволило стабилизировать систему, результаты приведены ниже на рисунках~\ref{fig:task3_y}~-~\ref{fig:task3_states}.
+У полученных наблюдателей, собственные числа всегда находятся с небольшим запасом левее \(\alpha\). На рис. \ref{fig:task3_states} видна динамика систем покомпонентно, а на рис. \ref{fig:task3_errors} покомпонентная динамика ошибок.
 \begin{figure}[ht!]
-    \centering
-    \includegraphics[width=\textwidth]{src/figs/task3_y.jpg}
-    \caption{Результаты моделирования выхода системы и наблюдателя.}
-    \label{fig:task3_y}
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task3_states.jpg}
+  \caption{Динамика наблюдателя и системы.}
+  \label{fig:task3_states}
 \end{figure}
 \begin{figure}[ht!]
-    \centering
-    \includegraphics[width=\textwidth]{src/figs/task3_u.jpg}
-    \caption{Результаты моделирования регулятора.}
-    \label{fig:task3_u}
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task3_errors.jpg}
+  \caption{Динамика ошибки.}
+  \label{fig:task3_errors}
 \end{figure}
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=\textwidth]{src/figs/task3_states.jpg}
-    \caption{Результаты моделирования состояний системы.}
-    \label{fig:task3_states}
-\end{figure}
+\FloatBarrier
+
+Как видно, наблюдатели с большой степень устойчивости сходятся быстрее, но при этом имеют большую начальную ошибку.

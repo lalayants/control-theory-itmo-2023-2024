@@ -102,29 +102,3 @@
     \caption{Результаты моделирования состояний системы.}
     \label{fig:task3_states}
 \end{figure}
-
-\subsubsection{Теория2}
-Оказалось, что я сделал не совсем по заданию. Исправляем.
-
-\[
-  \begin{cases}
-    \dot{x} = A x + B u\\
-    y = C x \\
-    \dot{\hat{x}} = A \hat{x} + B u + L(\hat{y} - y) \\
-    \hat{y} = C \hat{x} \\
-    u = K \hat{x}
-\end{cases}
-\]
-\[
-\begin{cases}
-    \dot{x} = A x + B K \hat{x}\\
-    \dot{\hat{x}} = A \hat{x} + B K \hat{x} + L(C \hat{x} - y) \\
-\end{cases}
-\]
-\[
-\begin{cases}
-    \dot{x} = A x + B K \hat{x}\\
-    y = Cx \\
-    \dot{\hat{x}} = (A + B K + LC) \hat{x} - Ly \\
-\end{cases}
-\]

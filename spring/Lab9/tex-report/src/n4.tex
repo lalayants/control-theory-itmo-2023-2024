@@ -1,0 +1,48 @@
+\subsection{Задание 3}
+
+\subsubsection{Теория}
+В этом задании выводится наблюдатель регулятор для системы:
+\[
+        \begin{cases}
+                \dot{x} = A x + B u\\
+                y = C x \\
+                \dot{\hat{x}} = A \hat{x} + B u + L(\hat{y} - y) \\
+                \hat{y} = C \hat{x} \\
+                u = K \hat{x}
+        \end{cases} \rightarrow
+        \begin{cases}
+            \begin{bmatrix} 
+                \dot{x} \\
+                \dot{e}
+            \end{bmatrix} = 
+            \begin{bmatrix} 
+                A + BK & -BK\\
+                0 & A + LC
+            \end{bmatrix}
+            \begin{bmatrix} 
+              x \\
+              e
+          \end{bmatrix} 
+            \\
+            \hat{x} = x - e \\
+            y = Cx \\
+            \hat{y} = C \hat{x}
+         \end{cases}
+\]
+Это объединяет задания 1 и 3, описанные выше.
+
+\subsubsection{Результаты}
+По результат (рис. \ref{fig:task4}) явно видно, что чем больше \(\alpha\), тем быстрее сходится система. При этом, максимальное значение ошибки -- растет.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_states.jpg}
+    \caption{Результаты моделирования.}
+    \label{fig:task4}
+\end{figure}
+
+
+
+
+\FloatBarrier
+
