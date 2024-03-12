@@ -1,0 +1,6 @@
+cvxpy[CVXOPT]
+control
+sympy
+numpy
+array_to_latex
+scipy

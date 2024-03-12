@@ -1,0 +1,93 @@
+\subsection{Задание 3}
+
+\subsubsection{Теория}
+
+В этом задании выводится наблюдатель заданной степени устойчивости для системы:
+\[
+        \begin{cases}
+                \dot{x} = A x \\
+                y = C x \\
+                \dot{\hat{x}} = A \hat{x} + L(\hat{y} - y) \\
+                \hat{y} = C \hat{x}
+        \end{cases} \rightarrow
+        \begin{cases}
+            \dot{\hat{x}} = A \hat{x} + L(C \hat{x} - y) = (A + LC )\hat{x} - Ly \\
+            \dot{e} = (A + LC)e
+            
+    \end{cases}
+\]
+
+Для этого достаточно решить систему:
+\[
+        \begin{cases}
+                L = Q^{-1}Y\\
+                Q \succ 0 \\
+                A^TQ + QA + 2 \alpha Q + C^T Y^T + YC \preccurlyeq 0  \\
+        \end{cases} 
+\]
+\subsubsection{Результаты}
+У полученных наблюдателей, собственные числа всегда находятся с небольшим запасом левее \(\alpha\). На рис. \ref{fig:task3_states} видна динамика систем покомпонентно, а на рис. \ref{fig:task3_errors} покомпонентная динамика ошибок.
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task3_states.jpg}
+  \caption{Динамика наблюдателя и системы.}
+  \label{fig:task3_states}
+\end{figure}
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task3_errors.jpg}
+  \caption{Динамика ошибки.}
+  \label{fig:task3_errors}
+\end{figure}
+
+\[
+\alpha = 0.1; 
+L = \begin{bmatrix}
+ -0.05\\
+ -0.03\\
+  0.01\\
+ -0.03
+\end{bmatrix};
+\sigma(A+LC) = \begin{bmatrix}
+ -0.14 + 4.05j\\
+ -0.14 + -4.05j\\
+ -0.12 + 3.07j\\
+ -0.12 + -3.07j
+\end{bmatrix};
+\]
+\[
+\alpha = 1.0; 
+L = \begin{bmatrix}
+  2.40\\
+ -3.04\\
+ -0.38\\
+ -2.35
+\end{bmatrix};
+\sigma(A+LC) = \begin{bmatrix}
+ -2.64 + 6.01j\\
+ -2.64 + -6.01j\\
+ -1.92 + 2.93j\\
+ -1.92 + -2.93j
+\end{bmatrix};
+\]
+\[
+\alpha = 4.0; 
+L = \begin{bmatrix}
+  53.19\\
+  7.93\\
+  17.02\\
+ -31.83
+\end{bmatrix};
+\sigma(A+LC) = \begin{bmatrix}
+ -5.37 + 12.68j\\
+ -5.37 + -12.68j\\
+ -4.87 + 2.89j\\
+ -4.87 + -2.89j
+\end{bmatrix};
+\]
+
+\FloatBarrier
+
+
+
+Как видно, наблюдатели с большой степень устойчивости сходятся быстрее, но при этом имеют большую начальную ошибку.
