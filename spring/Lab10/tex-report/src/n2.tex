@@ -1,118 +1,26 @@
-\subsection{Задание 2}
+\subsection{Задание 2. LQR vs LMI.}
 \subsubsection{Теория}
-В этом задании выводится ограничение на управление \(||u(t)|| \leq \mu\). Тогда система уравнений принимает вид: 
-\[
-        \begin{cases}
-                \begin{bmatrix}
-                    P &  x_0\\
-                    x_0^T &  1 \\
-                \end{bmatrix} \succ 0 \\
-                \\
-                \begin{bmatrix}
-                    P &  Y^T\\
-                    Y &  \mu^2I \\
-                \end{bmatrix} \succ 0 \\
-                P \succ 0 \\
-                PA^T + AP + 2 \alpha P + Y^T B^T + BY \preccurlyeq 0  \\
-                K = YP^{-1}\\
-        \end{cases} 
-\]
-
-
-
+В этом задании будет сравнение LQR с LMI \(\alpha = 1\).
 
 \subsubsection{Результаты}
-Сначала проведено исследование влияния ограничения для \(alpha = 1\).  На рисунках \ref{fig:task2_1_states} -- \ref{fig:task2_1_us}.
+Сначала проведено исследование влияния ограничения для \(alpha = 1\).  На рисунках \ref{fig:task2_states} -- \ref{fig:task2_us}.
 
-При минимальном \(\mu\) система имеет собственные числа \( \begin{bmatrix}
-    -1.00 + 5.50j & -1.00 + -5.50j & -1.00 + 0.00j & -4.00 + 0.00j
-   \end{bmatrix} \), максимально прижавшись к необходимой степени устойчивости всеми управляемыми числами. По мере ослабления ограничения, числа начинают отдаляться от границы.
+
+
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=\textwidth]{src/figs/task2_1_states.jpg}
-    \caption{Результаты моделирования состояний системы для \(\alpha = 1\) при различных ограничениях.}
-    \label{fig:task2_1_states}
+    \includegraphics[width=\textwidth]{src/figs/task2_states.jpg}
+    \caption{Результаты моделирования состояний системы.}
+    \label{fig:task2_states}
 \end{figure}
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=\textwidth]{src/figs/task2_1_us.jpg}
-    \caption{Результаты моделирования управления системой для \(\alpha = 1\) при различных ограничениях.}
-    \label{fig:task2_1_us}
-\end{figure}
-
-Для всех остальных степеней устойчивости результат аналогичен. Все управляемы собственные числа принимают значение степени устойчивости.
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=\textwidth]{src/figs/task2_2_states.jpg}
-    \caption{Результаты моделирования состояний системы для различных \(\alpha\) с минимизированным управлением.}
-    \label{fig:task2_2_states}
+    \includegraphics[width=\textwidth]{src/figs/task2_us.jpg}
+    \caption{Результаты моделирования состояний системы.}
+    \label{fig:task2_us}
 \end{figure}
 % \begin{cases}
 %     \dot{x} = P J P^{-1} x + Bu \\
 %     y = Cx + Du \\
 % \end{cases},
-
-\[
-\alpha = 0.1; 
-K = \begin{bmatrix}
-  0.00\\
- -0.61\\
- -0.11\\
- -0.23
-\end{bmatrix};
-\sigma(A+BK) = \begin{bmatrix}
- -0.10 + 5.15j\\
- -0.10 + -5.15j\\
- -0.10 + 0.00j\\
- -4.00 + 0.00j
-\end{bmatrix};
-\]
-\[
-\alpha = 1.0; 
-K = \begin{bmatrix}
-  0.00\\
- -1.37\\
- -0.38\\
- -0.36
-\end{bmatrix};
-\sigma(A+BK) = \begin{bmatrix}
- -1.00 + 5.50j\\
- -1.00 + -5.50j\\
- -1.00 + 0.00j\\
- -4.00 + 0.00j
-\end{bmatrix};
-\]
-\[
-\alpha = 2.0; 
-K = \begin{bmatrix}
-  0.00\\
- -2.80\\
- -0.88\\
- -0.38
-\end{bmatrix};
-\sigma(A+BK) = \begin{bmatrix}
- -2.00 + 6.13j\\
- -2.00 + -6.13j\\
- -2.00 + 0.00j\\
- -4.00 + 0.00j
-\end{bmatrix};
-\]
-\[
-\alpha = 3.0; 
-K = \begin{bmatrix}
-  0.00\\
- -5.13\\
- -1.58\\
- -0.19
-\end{bmatrix};
-\sigma(A+BK) = \begin{bmatrix}
- -3.00 + 6.94j\\
- -3.00 + -6.94j\\
- -3.00 + 0.00j\\
- -4.00 + 0.00j
-\end{bmatrix};
-\]
-
-
-
 \FloatBarrier
