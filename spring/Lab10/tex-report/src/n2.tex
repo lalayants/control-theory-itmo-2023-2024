@@ -1,9 +1,31 @@
 \subsection{Задание 2. LQR vs LMI.}
 \subsubsection{Теория}
-В этом задании будет сравнение LQR с LMI \(\alpha = 1\).
+В этом задании будет сравнение LQR с LMI \(\alpha = 0\).
 
 \subsubsection{Результаты}
-Сначала проведено исследование влияния ограничения для \(alpha = 1\).  На рисунках \ref{fig:task2_states} -- \ref{fig:task2_us}.
+Как видно, LQR действительно сходится чуть дольше, но зато имеет управления напорядок меньше.
+\[spec(A+BK_{LMI}) = \begin{bmatrix}
+    -161.92 + 0.00j & -0.29 + 2.63j & -0.29 + -2.63j & -2.31 + 0.00j
+   \end{bmatrix}
+\]
+\[spec(A-BK_{LQR}) = 
+\begin{bmatrix}
+    -0.29 + 2.68j & -0.29 + -2.68j & -3.90 + 0.00j & -6.70 + 0.00j
+   \end{bmatrix}
+\]
+Несмотря на \(\alpha = 0\), у LMI все равно почему-то появился сильно отрицательный корень, который и вызывает всплеск управления.
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{| l | l | l | l |} 
+        \hline
+        $J_{theory}$ & $J_{LQR}$ & $J_{LMI}$ \\  
+        \hline
+        $24.5$ & $24.52$ & 212.4  \\   
+        \hline
+    \end{tabular}
+    \caption{Критерии качества}
+    \label{table:task2}
+\end{table}
 
 
 
@@ -19,6 +41,7 @@
     \caption{Результаты моделирования состояний системы.}
     \label{fig:task2_us}
 \end{figure}
+
 % \begin{cases}
 %     \dot{x} = P J P^{-1} x + Bu \\
 %     y = Cx + Du \\
