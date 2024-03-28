@@ -19,6 +19,12 @@
 \]
 \subsubsection{Результаты}
 \subsubsubsection{Разные шумы для одного наблюдателя}
+\[Q = 1; R = 1; L = \begin{bmatrix}
+        -12.29 & -0.54\\
+         3.19 & -1.35\\
+        -7.98 &  0.26\\
+         4.65 & -1.33
+       \end{bmatrix}\]
 
 На графиках ниже видно, что наблюдатели отрабатывают как надо.
 \begin{figure}[ht!]
@@ -39,15 +45,29 @@
 \caption{Сумма ошибок.}
 \label{fig:task3_3}
 \end{figure}
-% \begin{figure}[ht!]
-%   \centering
-%   \includegraphics[width=\textwidth]{src/figs/task3_errors.jpg}
-%   \caption{Динамика ошибки.}
-%   \label{fig:task3_errors}
-% \end{figure}
-\subsubsubsection{Разные наблюдатели для одного шума}
 
-На графиках ниже видно, что наблюдатели отрабатывают как надо. Действительно матрицы \(Q\) и \(R\) совпадающие с дисперсией шума лучше наблюдают.
+
+\subsubsubsection{Разные наблюдатели для одного шума}
+\[Q = 1; R = 10; L = \begin{bmatrix}
+        -1.33 & -0.08\\
+         0.09 & -0.22\\
+        -0.89 &  0.08\\
+         0.04 & -0.22
+       \end{bmatrix}\]
+       \[Q = 10; R = 1; L = \begin{bmatrix}
+        -108.11 & -27.74\\
+         31.97 & -10.01\\
+        -72.07 & -17.20\\
+         46.43 & -6.82
+       \end{bmatrix}\]
+       \[Q = 1; R = 1; L = \begin{bmatrix}
+        -12.29 & -0.54\\
+         3.19 & -1.35\\
+        -7.98 &  0.26\\
+         4.65 & -1.33
+       \end{bmatrix}\]
+
+На графиках ниже видно, что наблюдатели отрабатывают как надо. Действительно, матрицы \(Q\) и \(R\), совпадающие с дисперсией шума, дают лучший наблюдатель.
 \begin{figure}[ht!]
   \centering
   \includegraphics[width=\textwidth]{src/figs/task3_1_1_diff_qr.jpg}
