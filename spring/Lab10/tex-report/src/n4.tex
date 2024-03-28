@@ -1,38 +1,46 @@
-\subsection{Задание 4}
+\subsection{Задание 4. Синтез LQG}
 
 \subsubsection{Теория}
 В этом задании выводится наблюдатель регулятор для системы:
 \[
         \begin{cases}
-                \dot{x} = A x + B u\\
-                y = C x \\
-                \dot{\hat{x}} = A \hat{x} + B u + L(\hat{y} - y) \\
-                \hat{y} = C \hat{x} \\
-                u = K \hat{x}
+                \dot{x} = A x + B  K \hat{x} + f \\
+                y = Cx + DK\hat{x} + \xi \\
+                \dot{\hat{x}} = A \hat{x} + B  K \hat{x} + L(\hat{y} - y) \\
+                \hat{y} = C \hat{x} + D K \hat{x} \\
+                \hat{x} = x - e \\
         \end{cases} \rightarrow
         \begin{cases}
             \begin{bmatrix} 
                 \dot{x} \\
                 \dot{e}
             \end{bmatrix} = 
-            \begin{bmatrix} 
-                A + BK & -BK\\
-                0 & A + LC
-            \end{bmatrix}
+            A_{new}
             \begin{bmatrix} 
               x \\
               e
+            \end{bmatrix} 
+          + B_{new} 
+          \begin{bmatrix} 
+            f \\
+            \xi
           \end{bmatrix} 
             \\
-            \hat{x} = x - e \\
-            y = Cx \\
-            \hat{y} = C \hat{x}
+            A_{new} = 
+            \begin{bmatrix} 
+                A + BK & -BK\\
+                0 & A + LC
+            \end{bmatrix} \\
+            B_{new} = 
+            \begin{bmatrix} 
+                I & 0\\
+                I & L
+            \end{bmatrix} \in R^{2n \times (n + m)}
          \end{cases}
 \]
-Это объединяет задания 1 и 3, описанные выше.
 
 \subsubsection{Результаты}
-По результат (рис. \ref{fig:task4}) явно видно, что чем больше \(\alpha\), тем быстрее сходится система. При этом, максимальное значение ошибки -- растет.
+По результат (рис. \ref{fig:task4}) явно видно, что все сработало как надо.
 
 \begin{figure}[ht!]
     \centering
