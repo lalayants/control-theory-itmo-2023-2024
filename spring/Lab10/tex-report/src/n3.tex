@@ -1,0 +1,90 @@
+\subsection{Задание 3. Исследование LQE (фильтра Калмана)}
+
+\subsubsection{Теория}
+\[      
+        \text{Объект управления: }
+        \begin{cases}
+                \dot{x} = A x + Bu + f, \text{ \(f\) -- внешнее возмущение}\\
+                y = Cx + \xi, \text{ \(\xi\) -- помеха измерений}
+        \end{cases} 
+\]
+Матрицы \(Q\) и \(R\) обозначают, насколько сильно мы оцениваем влиянию \(f\) и \(\xi\).
+
+\(L\) получается решением следующих уравнений:
+\[
+\begin{cases}
+    A P + P A^T + Q - PC^TR^{-1}CP = 0\\
+    K = -P C^T R^{-1}\\
+\end{cases}
+\]
+\subsubsection{Результаты}
+\subsubsubsection{Разные шумы для одного наблюдателя}
+\[Q = 1; R = 1; L = \begin{bmatrix}
+        -12.29 & -0.54\\
+         3.19 & -1.35\\
+        -7.98 &  0.26\\
+         4.65 & -1.33
+       \end{bmatrix}\]
+
+На графиках ниже видно, что наблюдатели отрабатывают как надо.
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task3_1_1_diff_noises.jpg}
+  \caption{Сумма ошибок.}
+  \label{fig:task3_1}
+\end{figure}
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_1_10_diff_noises.jpg}
+        \caption{Сумма ошибок.}
+        \label{fig:task3_2}
+\end{figure}
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=\textwidth]{src/figs/task3_10_1_diff_noises.jpg}
+\caption{Сумма ошибок.}
+\label{fig:task3_3}
+\end{figure}
+
+
+\subsubsubsection{Разные наблюдатели для одного шума}
+\[Q = 1; R = 10; L = \begin{bmatrix}
+        -1.33 & -0.08\\
+         0.09 & -0.22\\
+        -0.89 &  0.08\\
+         0.04 & -0.22
+       \end{bmatrix}\]
+       \[Q = 10; R = 1; L = \begin{bmatrix}
+        -108.11 & -27.74\\
+         31.97 & -10.01\\
+        -72.07 & -17.20\\
+         46.43 & -6.82
+       \end{bmatrix}\]
+       \[Q = 1; R = 1; L = \begin{bmatrix}
+        -12.29 & -0.54\\
+         3.19 & -1.35\\
+        -7.98 &  0.26\\
+         4.65 & -1.33
+       \end{bmatrix}\]
+
+На графиках ниже видно, что наблюдатели отрабатывают как надо. Действительно, матрицы \(Q\) и \(R\), совпадающие с дисперсией шума, дают лучший наблюдатель.
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task3_1_1_diff_qr.jpg}
+  \caption{Сумма ошибок.}
+  \label{fig:task3_4}
+\end{figure}
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_1_10_diff_qr.jpg}
+        \caption{Сумма ошибок.}
+        \label{fig:task3_5}
+\end{figure}
+\begin{figure}[ht!]
+\centering
+\includegraphics[width=\textwidth]{src/figs/task3_10_1_diff_qr.jpg}
+\caption{Сумма ошибок.}
+\label{fig:task3_6}
+\end{figure}
+
+\FloatBarrier
