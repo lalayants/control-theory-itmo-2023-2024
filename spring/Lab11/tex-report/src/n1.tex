@@ -1,0 +1,50 @@
+\subsection{Синтез H2-регулятора по состоянию.}
+\subsubsection{Теория}
+\[
+        \begin{cases}
+                \dot{x} = A x + B_1 w + B_2 u \\
+                z = C_2x + D_2 u  
+        \end{cases}
+\]
+Принято, что \(C_2^T D_2 = 0\).
+Можем синтезировать $H_2$-регулятор по состоянию ($u=Kx$) следующим образом:
+\[
+    \begin{cases}
+        A^TQ + QA + C_2^TC_2 - QB_2(D_2^TD_2)^{-1}B_2^TQ=0 \\
+        K = -(D_2^TD_2)^{-1}B_2^TQ
+    \end{cases}
+\]
+\[||W(s)_{w \rightarrow z}||_{H_2} = \sqrt{trace(B_1^T Q B_1)}\]
+
+Пусть \(w = [\sin \sin \cos]^T\), 
+\[B_1 = \begin{bmatrix}
+    1 & 0 \\ 
+    0 & 1
+  \end{bmatrix};
+  B_2 = \begin{bmatrix}
+    0 \\ 
+    1
+  \end{bmatrix};\]
+
+\subsubsubsection{Вариант 1}
+\[C_2 = \begin{bmatrix}
+    1.00 &  1.00\\
+    0.00 &  1.00\\
+    0.00 &  0.00
+  \end{bmatrix}; D_2 = \begin{bmatrix}
+    0.00\\
+    0.00\\
+    1.00
+  \end{bmatrix};\]
+  \[C_2^T D_2 = 0: True\]
+  \[D_2^T D_2 \text{ обратима}: True\]
+  \[spec(A-B_2 K) = \begin{bmatrix}
+   -1.00 + 0.00j & -1.00 + -0.00j
+  \end{bmatrix}\]
+  \[Q = \begin{bmatrix}
+    1.00 &  1.00\\
+    1.00 &  2.00
+  \end{bmatrix}\]
+  
+
+\FloatBarrier
