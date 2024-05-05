@@ -1,0 +1,105 @@
+\subsection{Синтез \(H_\infty\)-регулятора по состоянию.}
+Уравнения ниже позволяют синтезировать такой регулятор.
+\begin{equation}
+    \begin{cases}
+        A^TQ + QA +C_2^TC_2 - QB_2(D_2^TD_2)^{-1}B_2^TQ + \gamma^{-2}QB_1B_1^TQ=0 \\
+        K = -(D_2^TD_2)^{-1}B_2^TQ
+    \end{cases}
+\end{equation}
+
+
+\subsubsubsection{gamma = 1.4}
+\[spec(A-B_2 K) = [-0.64 -3.96]\]
+\[K = \begin{bmatrix}
+  2.54 &  4.61
+\end{bmatrix}\]
+\[W = \left[\begin{matrix}\frac{1.0 i \omega + 2}{- 1.0 \omega^{2} + 4.6 i \omega + 2.5} & \frac{1.0 i \omega + 1.0}{- 1.0 \omega^{2} + 4.6 i \omega + 2.5} & 0\\- \frac{2.5}{- 1.0 \omega^{2} + 4.61 i \omega + 2.5} & \frac{1.0 i \omega}{- 1.0 \omega^{2} + 4.61 i \omega + 2.5} & 0\\- \frac{2.5 i \omega}{- 1.0 \omega^{2} + 4.6 i \omega + 2.5} & \frac{- 4.61 i \omega - 2.5}{- 1.0 \omega^{2} + 4.6 i \omega + 2.5} & 0\end{matrix}\right]\]
+\[||W||_{H_2} = 2.026622146045859\]
+\[||W||_{H_\infty} = 1.359310155325042 \]
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_0_amps.jpg}
+    \caption{АЧХ системы.}
+    \label{fig:task3_0_amps}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_0_zs.jpg}
+    \caption{Регулируемый выход системы.}
+    \label{fig:task3_0_zs}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_0_sing.jpg}
+    \caption{Сингулярные числы.}
+    \label{fig:task3_0_sing}
+  \end{figure}
+
+\FloatBarrier
+
+\subsubsubsection{gamma = 2}
+\[spec(A-B_2 K) = [-0.71 -1.92]\]
+\[K = \begin{bmatrix}
+  1.37 &  2.63
+\end{bmatrix}\]
+\[ W = \left[\begin{matrix}\frac{1.0 i \omega + 1.2}{- 1.0 \omega^{2} + 2.6 i \omega + 1.3} & \frac{1.0 i \omega + 1.0}{- 1.0 \omega^{2} + 2.6 i \omega + 1.3} & 0\\- \frac{1.3}{- 1.0 \omega^{2} + 2.6 i \omega + 1.3} & \frac{1.0 i \omega}{- 1.0 \omega^{2} + 2.6 i \omega + 1.3} & 0\\- \frac{1.3 i \omega}{- 1.0 \omega^{2} + 2.6 i \omega + 1.3} & \frac{- 2.6 i \omega - 1.3}{- 1.0 \omega^{2} + 2.6 i \omega + 1.3} & 0\end{matrix}\right]\]
+\[||W||_{H_2} = 1.7668518255958938\]
+\[||W||_{H_\infty} = 1.5881438250859183 \]
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_1_amps.jpg}
+    \caption{АЧХ системы.}
+    \label{fig:task3_1_amps}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_1_zs.jpg}
+    \caption{Регулируемый выход системы.}
+    \label{fig:task3_1_zs}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_1_sing.jpg}
+    \caption{Сингулярные числы.}
+    \label{fig:task3_1_sing}
+  \end{figure}
+
+\FloatBarrier
+
+\subsubsubsection{gamma = 10}
+\[spec(A-B_2 K) = [-0.92 -1.1 ]\]
+\[K = \begin{bmatrix}
+  1.01 &  2.02
+\end{bmatrix}\]
+\[W = \left[\begin{matrix}\frac{1.0 i \omega + 1}{- 1.0 \omega^{2} + 2 i \omega + 1} & \frac{1.0 i \omega + 1.0}{- 1.0 \omega^{2} + 2 i \omega + 1} & 0\\- \frac{1}{- 1.0 \omega^{2} + 2 i \omega + 1} & \frac{1.0 i \omega}{- 1.0 \omega^{2} + 2 i \omega + 1} & 0\\- \frac{1 i \omega}{- 1.0 \omega^{2} + 2 i \omega + 1} & \frac{- 2 i \omega - 1}{- 1.0 \omega^{2} + 2 i \omega + 1} & 0\end{matrix}\right]\]
+\[||W||_{H_2} = 1.7320883081147758\]
+\[||W||_{H_\infty} = 1.79431913434723 \]
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_2_amps.jpg}
+    \caption{АЧХ системы.}
+    \label{fig:task3_2_amps}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_2_zs.jpg}
+    \caption{Регулируемый выход системы.}
+    \label{fig:task3_2_zs}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_2_sing.jpg}
+    \caption{Сингулярные числы.}
+    \label{fig:task3_2_sing}
+  \end{figure}
+
+\FloatBarrier

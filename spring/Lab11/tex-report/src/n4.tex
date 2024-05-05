@@ -1,0 +1,153 @@
+\subsection{Синтез \(H_\infty\)-регулятора по выходу.}
+\begin{equation}
+    \begin{cases}
+        AP + PA^T + B_1B_1^T - PC_1^T(D_1D_1^T)^{-1}C_1P = 0 \\
+        L = - PC_1^T(D_1^TD_1)^{-1} \\
+        A^TQ + QA + C_2^TC_2 - QB_2(D_2^TD_2)^{-1}B_2^TQ = 0 \\
+        K = -(D_2^TD_2)^{-1}B_2^TQ
+    \end{cases}
+\end{equation}
+
+Представим систему в виде:
+\begin{equation}
+    \begin{cases}
+        \begin{bmatrix}
+            \dot{x} \\ \dot{e}
+        \end{bmatrix} =
+        \begin{bmatrix}
+            A + B_2K & -B_2K \\
+            -(LD_1B_1)\gamma^{-2}B_1^TQ & A + LC_1 + (LD_1B_1)\gamma^{-2}B_1^TQ
+        \end{bmatrix} \begin{bmatrix}
+            x \\ e
+        \end{bmatrix} +
+        \begin{bmatrix}
+            B_1 \\
+            LD_1 + B_1
+        \end{bmatrix}w \\
+        z = \begin{bmatrix}
+            C_2 +D_2K & -D_2K
+        \end{bmatrix}\begin{bmatrix}
+            x \\ e
+        \end{bmatrix}
+    \end{cases}
+\end{equation}
+
+
+\subsubsubsection{gamma = 1.4}
+\[spec(A-B_2 K) = [-0.42  2.43]\]
+\[K = \begin{bmatrix}
+ -1.01 & -2.02
+\end{bmatrix}\]
+\[Q = \begin{bmatrix}
+  1.01 &  1.01\\
+  1.01 &  2.02
+\end{bmatrix}\]
+\[L = \begin{bmatrix}
+    -1.89\\
+    -1.16
+   \end{bmatrix}\]
+\[ W = \left[\begin{matrix}\frac{- 1.0 i \omega^{3} - 3.8 \omega^{2} + 1.6 i \omega - 1.1}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{- 0.9 i \omega^{3} - 4.8 \omega^{2} + 9.81 i \omega + 5.9}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{4.2 \omega^{2} - 5.4 i \omega - 1.1}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1}\\\frac{- 4.2 i \omega - 1.1}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{- 1.0 i \omega^{3} - 3.8 \omega^{2} + 5.9 i \omega}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{4.2 \omega^{2} - 1.1 i \omega}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1}\\\frac{4.2 \omega^{2} - 1.1 i \omega}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{- 4.2 i \omega - 1.1}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{4.2 i \omega^{3} + 1.1 \omega^{2}}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1}\end{matrix}\right] \]
+\[||W||_{H_2} = 3.9739213167564933\]
+\[||W||_{H_\infty} = 5.4385479975362845 \]
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_0_amps.jpg}
+    \caption{АЧХ системы.}
+    \label{fig:task4_0_amps}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_0_zs.jpg}
+    \caption{Регулируемый выход системы.}
+    \label{fig:task4_0_zs}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_0_sing.jpg}
+    \caption{Сингулярные числы.}
+    \label{fig:task4_0_sing}
+  \end{figure}
+
+  \FloatBarrier
+  \subsubsubsection{gamma = 2}
+\[spec(A-B_2 K) = [-0.42  2.43]\]
+\[K = \begin{bmatrix}
+ -1.01 & -2.02
+\end{bmatrix}\]
+\[Q = \begin{bmatrix}
+  1.01 &  1.01\\
+  1.01 &  2.02
+\end{bmatrix}\]
+\[L = \begin{bmatrix}
+ -1.89\\
+ -1.16
+\end{bmatrix}\]
+\[ W = \left[\begin{matrix}\frac{- 1.0 i \omega^{3} - 3.8 \omega^{2} + 1.6 i \omega - 1.1}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{- i \omega^{3} - 4.8 \omega^{2} + 9.8 i \omega + 5.9}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{4.2 \omega^{2} - 5.4 i \omega - 1.1}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1}\\\frac{- 4.2 i \omega - 1.1}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{- 1.0 i \omega^{3} - 3.8 \omega^{2} + 5.9 i \omega}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{4.2 \omega^{2} - 1.1 i \omega}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1}\\\frac{4.2 \omega^{2} - 1.1 i \omega}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{- 4.2 i \omega - 1.1}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{4.2 i \omega^{3} + 1.1 \omega^{2}}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1}\end{matrix}\right]\]
+\[||W||_{H_2} = 3.9739213167564933\]
+\[||W||_{H_\infty} = 5.4385479975362845 \]
+
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_1_amps.jpg}
+    \caption{АЧХ системы.}
+    \label{fig:task4_1_amps}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_1_zs.jpg}
+    \caption{Регулируемый выход системы.}
+    \label{fig:task4_1_zs}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_1_sing.jpg}
+    \caption{Сингулярные числы.}
+    \label{fig:task4_1_sing}
+  \end{figure}
+
+  \FloatBarrier
+
+  \subsubsubsection{gamma = 10}
+\[spec(A-B_2 K) = [-0.42  2.43]\]
+\[K = \begin{bmatrix}
+ -1.01 & -2.02
+\end{bmatrix}\]
+\[Q = \begin{bmatrix}
+  1.01 &  1.01\\
+  1.01 &  2.02
+\end{bmatrix}\]
+\[L = \begin{bmatrix}
+ -1.89\\
+ -1.16
+\end{bmatrix}\]
+\[ W = \left[\begin{matrix}\frac{- 1.0 i \omega^{3} - 3.8 \omega^{2} + 1.6 i \omega - 1.1}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{- i \omega^{3} - 4.8 \omega^{2} + 9.8 i \omega + 5.9}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{4.2 \omega^{2} - 5.4 i \omega - 1.1}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1}\\\frac{- 4.2 i \omega - 1.1}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{- 1.0 i \omega^{3} - 3.8 \omega^{2} + 5.9 i \omega}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{4.2 \omega^{2} - 1.1 i \omega}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1}\\\frac{4.2 \omega^{2} - 1.1 i \omega}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{- 4.2 i \omega - 1.1}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1} & \frac{4.2 i \omega^{3} + 1.1 \omega^{2}}{1.0 \omega^{4} - 3.8 i \omega^{3} - 5.9 \omega^{2} + 4.2 i \omega + 1.1}\end{matrix}\right] \]
+\[||W||_{H_2} = 3.9739213167564933\]
+\[||W||_{H_\infty} = 5.4385479975362845 \]
+
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_2_amps.jpg}
+    \caption{АЧХ системы.}
+    \label{fig:task4_2_amps}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_2_zs.jpg}
+    \caption{Регулируемый выход системы.}
+    \label{fig:task4_2_zs}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_2_sing.jpg}
+    \caption{Сингулярные числы.}
+    \label{fig:task4_2_sing}
+  \end{figure}
+
+  \FloatBarrier

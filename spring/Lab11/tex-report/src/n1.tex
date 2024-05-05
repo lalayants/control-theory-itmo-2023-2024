@@ -17,34 +17,94 @@
 \[||W(s)_{w \rightarrow z}||_{H_2} = \sqrt{trace(B_1^T Q B_1)}\]
 
 Пусть \(w = [\sin \sin \cos]^T\), 
-\[B_1 = \begin{bmatrix}
-    1 & 0 \\ 
-    0 & 1
-  \end{bmatrix};
-  B_2 = \begin{bmatrix}
-    0 \\ 
-    1
-  \end{bmatrix};\]
 
 \subsubsubsection{Вариант 1}
 \[C_2 = \begin{bmatrix}
-    1.00 &  1.00\\
-    0.00 &  1.00\\
-    0.00 &  0.00
-  \end{bmatrix}; D_2 = \begin{bmatrix}
-    0.00\\
-    0.00\\
-    1.00
-  \end{bmatrix};\]
-  \[C_2^T D_2 = 0: True\]
-  \[D_2^T D_2 \text{ обратима}: True\]
-  \[spec(A-B_2 K) = \begin{bmatrix}
-   -1.00 + 0.00j & -1.00 + -0.00j
-  \end{bmatrix}\]
-  \[Q = \begin{bmatrix}
-    1.00 &  1.00\\
-    1.00 &  2.00
-  \end{bmatrix}\]
-  
+  1.00 &  1.00\\
+  0.00 &  1.00\\
+  0.00 &  0.00
+\end{bmatrix}; D_2 = \begin{bmatrix}
+  0.00\\
+  0.00\\
+  1.00
+\end{bmatrix};\]
+\[C_2^T D_2 = 0: True\]
+\[D_2^T D_2 \text{ обратима}: True\]
+\[spec(A-B_2 K) = \begin{bmatrix}
+ -1.00 + 0.00j & -1.00 + -0.00j
+\end{bmatrix}\]
+\[K = \begin{bmatrix}
+  1.00 &  2.00
+\end{bmatrix}\]
+\[ W = \left[\begin{matrix}\frac{1.0 i \omega}{- 1.0 \omega^{2} + 1.0 i \omega} & \frac{1.0 i \omega}{- 1.0 \omega^{2} + 1.0 i \omega} & 0\\- \frac{1.0}{- 1.0 \omega^{2} + 2.0 i \omega + 1.0} & \frac{1.0 i \omega}{- 1.0 \omega^{2} + 2.0 i \omega + 1.0} & 0\\- \frac{1.0 i \omega}{- 1.0 \omega^{2} + 2.0 i \omega + 1.0} & \frac{- 2.0 i \omega - 1.0}{- 1.0 \omega^{2} + 2.0 i \omega + 1.0} & 0\end{matrix}\right]\]
+\[||W||_{H_2} = 1.7320508075688776\]
+\[||W||_{H_\infty} = 1.8027749569092566 \]
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task1_0_amps.jpg}
+  \caption{АЧХ системы.}
+  \label{fig:task1_0_amps}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task1_0_zs.jpg}
+  \caption{Регулируемый выход системы.}
+  \label{fig:task1_0_zs}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task1_0_sing.jpg}
+  \caption{Сингулярные числы.}
+  \label{fig:task1_0_sing}
+\end{figure}
+
+
+\FloatBarrier
+\subsubsubsection{Вариант 2}
+\[C_2 = \begin{bmatrix}
+  0.00 &  0.00\\
+  1.00 &  0.00\\
+  0.00 &  0.00
+\end{bmatrix}; D_2 = \begin{bmatrix}
+  1.00\\
+  0.00\\
+  1.00
+\end{bmatrix};\]
+\[C_2^T D_2 = 0: True\]
+\[D_2^T D_2 \text{ обратима}: True\]
+\[spec(A-B_2 K) = \begin{bmatrix}
+ -0.59 + 0.59j & -0.59 + -0.59j
+\end{bmatrix}\]
+
+\[K = \begin{bmatrix}
+  0.71 &  1.19
+\end{bmatrix}\]
+\[ W = \left[\begin{matrix}- \frac{0.707106781186547 i \omega}{- 1.0 \omega^{2} + 1.18920711500272 i \omega + 0.707106781186547} & \frac{- 1.18920711500272 i \omega - 0.707106781186547}{- 1.0 \omega^{2} + 1.18920711500272 i \omega + 0.707106781186547} & 0\\\frac{1.0 i \omega + 1.18920711500272}{- 1.0 \omega^{2} + 1.18920711500272 i \omega + 0.707106781186547} & \frac{1.0}{- 1.0 \omega^{2} + 1.18920711500272 i \omega + 0.707106781186547} & 0\\- \frac{0.707106781186547 i \omega}{- 1.0 \omega^{2} + 1.18920711500272 i \omega + 0.707106781186547} & \frac{- 1.18920711500272 i \omega - 0.707106781186547}{- 1.0 \omega^{2} + 1.18920711500272 i \omega + 0.707106781186547} & 0\end{matrix}\right]\]
+\[||W||_{H_2} = 2.014995548509443\]
+\[||W||_{H_\infty} = 2.759749617001796 \]
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task1_1_amps.jpg}
+  \caption{АЧХ системы.}
+  \label{fig:task1_1_amps}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task1_1_zs.jpg}
+  \caption{Регулируемый выход системы.}
+  \label{fig:task1_1_zs}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task1_1_sing.jpg}
+  \caption{Сингулярные числы.}
+  \label{fig:task1_1_sing}
+\end{figure}
 
 \FloatBarrier
