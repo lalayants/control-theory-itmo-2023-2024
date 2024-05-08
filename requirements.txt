@@ -1,5 +1,7 @@
 cvxpy[CVXOPT]
 control
+# sudo apt install libblas3 liblapack3 liblapack-dev libblas-dev gfortran -y
+slycot
 sympy
 numpy
 array_to_latex

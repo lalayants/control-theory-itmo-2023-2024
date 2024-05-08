@@ -1,0 +1,104 @@
+\documentclass[16pt]{article}
+
+\usepackage{report}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[english, russian]{babel}
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage[colorlinks=true, linkcolor=black, citecolor=blue, urlcolor=blue]{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage{doi}
+\usepackage{mathtools}
+\usepackage{minted}
+\usepackage{ dsfont }
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{ amssymb }
+\graphicspath{ {./figs/} }
+
+\setcitestyle{aysep={,}}
+
+
+
+\title{ЛР \textnumero 11 <<\(H_2\) и \(H_\infty\)>>}
+
+\author{
+Студент \\
+Кирилл Лалаянц\\
+R33352\\
+336700\\
+Вариант - 11\\
+\\
+Преподаватель\\
+Пашенко А.В. \\
+\\
+\\
+\\
+Факультет Систем Управления и Робототехники\\
+\\
+ИТМО\\
+}
+
+% Uncomment to remove the date
+\date{24.04.2024}
+
+% Uncomment to override  the `A preprint' in the header
+\renewcommand{\headeright}{ЛР \textnumero 11 <<\(H_2\) и \(H_\infty\)>>}
+\renewcommand{\undertitle}{Отчет}
+\renewcommand{\shorttitle}{}
+
+
+\begin{document}
+\maketitle
+\newpage
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+\setcounter{page}{1}
+\section{Вводные данные}
+\subsection{Цель работы}
+В этой работе пройдет изучение \(H_2\) и \(H_\infty\) регуляторов.
+
+\subsubsection{Программная реализация}
+C исходным кодом можно ознакомиться \href{https://github.com/lalayants/control-theory-itmo-2023-2024}{в репозитории на Github.}
+
+
+\newpage
+\section{Основная часть}
+\input{src/n0}
+\FloatBarrier
+
+\input{src/n1}
+\FloatBarrier
+
+\input{src/n2}
+\FloatBarrier
+
+\input{src/n3}
+\FloatBarrier
+
+\input{src/n4}
+\FloatBarrier
+
+\newpage
+\section{Заключение}
+В этой работе пройдет изучение \(H_2\) и \(H_\infty\) регуляторов.
+\subsection{Выводы}
+\begin{enumerate}
+   \item cделаны различные наблюдатели.
+   \item сделаны различные регуляторы по состоянию.
+   \item сделаны различные регуляторы по выходу.
+   \item \(H_2\) делает коэффициенты больше для регуляторов, \(H_\infty\) для наблюдателей.
+   \item Две нормы взаимоисключают друг друга, при падении одной растет вторая. 
+   \item При моделировании систем удалось добиться колебаний ошибки в окрестности 0. 
+   \item Было интересно.
+\end{enumerate}
+
+\end{document}

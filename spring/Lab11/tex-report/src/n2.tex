@@ -1,0 +1,136 @@
+\subsection{Синтез $H_2$-регулятора по выходу}
+
+Дополним систему наблюдателем:
+
+\begin{equation}
+    \begin{cases}
+        \dot{\hat{x}} = A\hat{x} + B_2u + L(\hat{y} - y)\\
+        \hat{y} = C_1\hat{x} \\
+        \hat{z} = C_2\hat{x}
+    \end{cases}
+\end{equation}
+
+Можем синтезировать $H_2$-наблюдатель следующим образом:
+\begin{equation}
+    \begin{cases}
+        AP + PA^T + B_1B_1^T - PC_1^T(D_1D_1^T)^{-1}C_1P = 0\\
+        L = -PC_1^T(D_1D_1^T)^{-1}
+    \end{cases}
+\end{equation}
+
+Представим систему в виде:
+\begin{equation}
+    \begin{cases}
+        \begin{bmatrix}
+            \dot{x} \\
+            \dot{\hat{x}}
+        \end{bmatrix} =
+        \begin{bmatrix}
+            A & B_2K \\
+            -LC_1 & A + B_2K + LC_1
+        \end{bmatrix}
+        \begin{bmatrix}
+            x \\
+            \hat{x}
+        \end{bmatrix} +
+        \begin{bmatrix}
+            B_1 \\ -LD_1 
+        \end{bmatrix}w \\
+
+        z = \begin{bmatrix}
+            C_2 & -D_2K
+        \end{bmatrix}
+        \begin{bmatrix}
+            x \\
+            \hat{x}
+        \end{bmatrix}
+    \end{cases}
+\end{equation}
+
+\subsubsubsection{Вариант 1}
+
+\[C_2 = \begin{bmatrix}
+    1.00 &  1.00\\
+    0.00 &  1.00\\
+    0.00 &  0.00
+  \end{bmatrix}; D_2 = \begin{bmatrix}
+    0.00\\
+    0.00\\
+    1.00
+  \end{bmatrix};\]
+  \[K = \begin{bmatrix}
+   -1.00 & -2.00
+  \end{bmatrix}\]
+  \[L = \begin{bmatrix}
+   -1.73\\
+   -1.00
+  \end{bmatrix}\]
+  \[W = \left[\begin{matrix}\frac{- 1.0 i \omega^{3} - 2.7 \omega^{2} - 1.0 i \omega}{1.0 \omega^{4} - 2.7 i \omega^{3} - 2.7 \omega^{2} + 1.0 i \omega} & \frac{- 1.0 i \omega^{3} - 3.7 \omega^{2} + 5.4 i \omega}{1.0 \omega^{4} - 2.7 i \omega^{3} - 2.7 \omega^{2} + 1.0 i \omega} & \frac{3.7 \omega^{2} - 0.9 i \omega}{1.0 \omega^{4} - 2.7 i \omega^{3} - 2.7 \omega^{2} + 1.0 i \omega}\\\frac{- 3.7 i \omega - 1.0}{1.0 \omega^{4} - 3.7 i \omega^{3} - 5.4 \omega^{2} + 3.7 i \omega + 1.0} & \frac{- 1.0 i \omega^{3} - 3.7 \omega^{2} + 5.4 i \omega}{1.0 \omega^{4} - 3.7 i \omega^{3} - 5.4 \omega^{2} + 3.7 i \omega + 1.0} & \frac{3.7 \omega^{2} - 1.0 i \omega}{1.0 \omega^{4} - 3.7 i \omega^{3} - 5.4 \omega^{2} + 3.7 i \omega + 1.0}\\\frac{- 3.7 \omega^{2} + 1.0 i \omega}{1.0 \omega^{4} - 3.7 i \omega^{3} - 5.4 \omega^{2} + 3.7 i \omega + 1.0} & \frac{3.7 i \omega + 1.0}{1.0 \omega^{4} - 3.7 i \omega^{3} - 5.4 \omega^{2} + 3.7 i \omega + 1.0} & \frac{- 3.7 i \omega^{3} - 1.0 \omega^{2}}{1.0 \omega^{4} - 3.7 i \omega^{3} - 5.4 \omega^{2} + 3.7 i \omega + 1.0}\end{matrix}\right]\]
+  \[||W||_{H_2} = 3.95730388495051\]
+  \[||W||_{H_\infty} = 5.793551436432305 \]
+
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_0_amps.jpg}
+    \caption{АЧХ системы.}
+    \label{fig:task2_0_amps}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_0_zs.jpg}
+    \caption{Регулируемый выход системы.}
+    \label{fig:task2_0_zs}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_0_sing.jpg}
+    \caption{Сингулярные числы.}
+    \label{fig:task2_0_sing}
+  \end{figure}
+  
+  \subsubsubsection{Вариант 2}
+
+  \[C_2 = \begin{bmatrix}
+    0.00 &  0.00\\
+    1.00 &  0.00\\
+    0.00 &  0.00
+  \end{bmatrix}; D_2 = \begin{bmatrix}
+    1.00\\
+    0.00\\
+    1.00
+  \end{bmatrix};\]
+  \[K = \begin{bmatrix}
+   -0.71 & -1.19
+  \end{bmatrix}\]
+  \[L = \begin{bmatrix}
+   -1.73\\
+   -1.00
+  \end{bmatrix}\]
+  \[W = \left[\begin{matrix}\frac{- 2.4 \omega^{2} + 0.7 i \omega}{1.0 \omega^{4} - 2.9 i \omega^{3} - 3.7 \omega^{2} + 2.4 i \omega + 0.7} & \frac{2.4 i \omega + 0.7}{1.0 \omega^{4} - 2.9 i \omega^{3} - 3.7 \omega^{2} + 2.4 i \omega + 0.7} & \frac{- 2.4 i \omega^{3} - 0.7 \omega^{2}}{1.0 \omega^{4} - 2.9 i \omega^{3} - 3.7 \omega^{2} + 2.4 i \omega + 0.7}\\\frac{- 1.0 i \omega^{3} - 2.9 \omega^{2} + 3.7 i \omega}{1.0 \omega^{4} - 2.9 i \omega^{3} - 3.7 \omega^{2} + 2.4 i \omega + 0.7} & \frac{- 1.0 \omega^{2} + 2.9 i \omega + 3.7}{1.0 \omega^{4} - 2.9 i \omega^{3} - 3.7 \omega^{2} + 2.4 i \omega + 0.7} & \frac{- 2.4 i \omega - 0.7}{1.0 \omega^{4} - 2.9 i \omega^{3} - 3.7 \omega^{2} + 2.4 i \omega + 0.7}\\\frac{- 2.4 \omega^{2} + 0.7 i \omega}{1.0 \omega^{4} - 2.9 i \omega^{3} - 3.7 \omega^{2} + 2.4 i \omega + 0.7} & \frac{2.4 i \omega + 0.7}{1.0 \omega^{4} - 2.9 i \omega^{3} - 3.7 \omega^{2} + 2.4 i \omega + 0.7} & \frac{- 2.4 i \omega^{3} - 0.7 \omega^{2}}{1.0 \omega^{4} - 2.9 i \omega^{3} - 3.7 \omega^{2} + 2.4 i \omega + 0.7}\end{matrix}\right]\]
+  \[||W||_{H_2} = 3.748976262216525\]
+  \[||W||_{H_\infty} = 5.863564643118213 \]
+
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_1_amps.jpg}
+    \caption{АЧХ системы.}
+    \label{fig:task2_1_amps}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_1_zs.jpg}
+    \caption{Регулируемый выход системы.}
+    \label{fig:task2_1_zs}
+  \end{figure}
+  
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task2_1_sing.jpg}
+    \caption{Сингулярные числы.}
+    \label{fig:task2_1_sing}
+  \end{figure}
+  
+  \FloatBarrier
