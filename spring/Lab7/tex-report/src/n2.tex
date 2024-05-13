@@ -1,12 +1,11 @@
-\subsection{Задание 2}
-\subsubsection{Принадлежность состояния управвляемому подпространству}
-В этом задании дополнительно лишь нужно знать, как проверить состояние на принадлежность управляемому подпространству.
+\subsection{Assignment 2}
+\subsubsection{Belonging of the State to the Controllable Subspace}
+In this assignment, it is additionally necessary to know how to check if the state belongs to the controllable subspace.
 
-Для этого необходимо сравнить \(rank(U)\) и \(rank(U | x_1)\). Если они совпали -- состояние принадлежит.
+To do this, it is necessary to compare \(rank(U)\) and \(rank(U | x_1)\). If they match -- the state belongs.
 
-
-\subsubsection{Результаты}
-Вариант задания:
+\subsubsection{Results}
+Assignment variant:
 \[ A = \begin{bmatrix}
         3 & 4 & -1 \\
         -10 & -11 & -4 \\
@@ -30,18 +29,18 @@
         t_1 = 3
 \]
 
-Матрица управляемости U:
+The controllability matrix \(U\):
 \[ U = \begin{bmatrix}
         2 & 11 & -102 \\
         1 & -27 & 79 \\
         -1 & 27 & -79 \\
         \end{bmatrix};
 \]
-\[rankU = 2 = n \rightarrow \text{система  неполностью управляема.}\]
+\[rankU = 2 = n \rightarrow \text{the system is incompletely controllable.}\]
 
-Получены собственные числа \(spec(A) = [-2+5j, -2 -5j, -1+0j]\). Третье из них неуправляемо.
+Eigenvalues obtained \(spec(A) = [-2+5j, -2 -5j, -1+0j]\). The third one is uncontrollable.
 
-Так же рассмотрим управляемость собственных чисел через форму Жордана:
+Let's also consider controllability of eigenvalues through Jordan form:
 \[
         J = \begin{bmatrix}
                 -1 & 0 & 0 \\
@@ -54,11 +53,11 @@
                 -1.5 - 1.5j \\
                 \end{bmatrix};
 \]
-Как видно, у первого числа соотвествующий элемент в векторе управления 0. Это еще раз подтверждает его неуправляемость.
+As can be seen, for the first eigenvalue, the corresponding element in the control vector is 0. This further confirms its uncontrollability.
 
-Из \(x_1'\) и \(x_1''\) только первое состояние принадлежит управляемому подпространству.
+Out of \(x_1'\) and \(x_1''\), only the first state belongs to the controllable subspace.
 
-Получен Грамиан управляемости:
+Controllability Gramian obtained:
 \[
         P(t_1) = \begin{bmatrix}
         2.05 & -1.63 & 1.63 \\
@@ -69,18 +68,12 @@
 \[
         spec(P(t_1)) = [0.74,  6.12, 0]
 \]
-Одно из собственных чисел Грамиана -- 0. Для нахождения програмного управления необходимо использовать псевдообратную матрицу.
+One of the eigenvalues of the Gramian is 0. To find the software control, it is necessary to use the pseudo-inverse matrix.
 
-На рисунке \ref{fig:task2} приведены результаты моделирования системы. Как видно, она приняла желаемо состояние за нужное время.
+Figure \ref{fig:task2} illustrates the results of the system's simulation. As observed, it reaches the desired state within the specified time.
 \begin{figure}[ht!]
         \centering
         \includegraphics[width=\textwidth]{src/figs/task2.jpg}
-        \caption{Результаты моделирования задания 2.}
+        % \caption{Simulation results of Assignment 2.}
         \label{fig:task2}
 \end{figure}
-
-
-% \begin{cases}
-%     \dot{x} = P J P^{-1} x + Bu \\
-%     y = Cx + Du \\
-% \end{cases},

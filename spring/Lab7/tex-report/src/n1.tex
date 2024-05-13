@@ -1,41 +1,42 @@
-\subsection{Задание 1}
-Имеем систему:
+\subsection{Assignment 1}
+Consider the system:
 \[\dot{x} = A x + Bu \]
 \[x(t_1) = \int_0^{t_1} B u(t) dt\]
-\subsubsection{Управляемость через матрицу управляемости}
-\(U = [B | AB | \hdots | A^{n-1}B]\) для \(A \in R^{n \times n}\) и \(B \in R^{n \times m}\) -- матрица управляемости системы. Если ее ранг равен \(n\) -- система управляема.
 
-\subsubsection{Управляемость и Грамиан управляемости}
+\subsubsection{Controllability through Controllability Matrix}
+\(U = [B | AB | \hdots | A^{n-1}B]\) for \(A \in R^{n \times n}\) and \(B \in R^{n \times m}\) -- the controllability matrix of the system. If its rank is equal to \(n\), the system is controllable.
+
+\subsubsection{Controllability and Controllability Gramian}
 \[P(t_1) = \int_0^{t_1} e^{At} B B^T e^{A^T t} dt\]
-У управляемой системы Грамиан управляемости положительно определен в любой момент t.
+For a controllable system, the controllability Gramian is positive definite at any time \(t\).
 
-\subsubsection{Управляемость через собственные числа матрицы системы}
-\[\forall \lambda \in spec(A): rank(A - \lambda I | B) = n \Longleftrightarrow \text{Матрица управляема} \]
+\subsubsection{Controllability through Eigenvalues of the System Matrix}
+\[\forall \lambda \in spec(A): rank(A - \lambda I | B) = n \Longleftrightarrow \text{The system is controllable} \]
 
-\subsubsection{Управляемость через Жорданову форму}
-Жорданова форма матрицы \(A = P J P^{-1}\):
+\subsubsection{Controllability through Jordan Form}
+The Jordan form of matrix \(A = P J P^{-1}\):
 \[
         \dot{x} = P J P^{-1} x + Bu 
 \]
 
-Пусть \(\hat{x} = P^{-1}x\), тогда получим Жорданову форму системы:
+Let \(\hat{x} = P^{-1}x\), then the system's Jordan form becomes:
 \[
         \dot{\hat{x}} = J\hat{x} + P^{-1}Bu = J\hat{x} + \hat{B}u  \\
 \]
 
-Система в Жордановой форме полностью управляема, если:
+The system in Jordan form is fully controllable if:
 \begin{itemize}
-    \item каждому собственному числу соответсвует только одна Жорданова клетка. 
-    \item элементы матрицы входного воздействия, соответсвующие последним строкам клеток -- не нулевые.
+    \item each eigenvalue corresponds to only one Jordan block.
+    \item the elements of the input matrix corresponding to the last rows of the blocks are nonzero.
 \end{itemize}
 
-\subsubsection{Програмное управление системой}
-Для вычисления управления, необходимого для достижения состояния \(x_1\) к моменту времени \(t_1\) достаточно рассчитать:
+\subsubsection{Software Control of the System}
+To compute the control necessary to reach the state \(x_1\) at time \(t_1\), it suffices to calculate:
 \[u(t) = B^T e^{A^T (t_1 - t)} (P(t_1))^{-1} x_1\]
 
 
-\subsubsection{Результаты}
-Вариант задания:
+\subsubsection{Results}
+Assignment variant:
 \[ A = \begin{bmatrix}
         3 & 4 & -1 \\
         -10 & -11 & -4 \\
@@ -54,18 +55,18 @@
         t_1 = 3
 \]
 
-Матрица управляемости U:
+The controllability matrix \(U\):
 \[ U = \begin{bmatrix}
         -2 & 17 & -62 \\
         5 & -23 & -1 \\
         -3 & 21 & 3 \\
         \end{bmatrix};
 \]
-\[rankU = 3 = n \rightarrow \text{система управляема.}\]
+\[rankU = 3 = n \rightarrow \text{the system is controllable.}\]
 
-Получены собственные числа \(spec(A) = [-2+5j, -2 -5j, -1+0j]\). Каждое из них удовлетворяет выражению\(rank(A - \lambda I | B) = n \) -- то есть управлямо.
+Eigenvalues obtained \(spec(A) = [-2+5j, -2 -5j, -1+0j]\). Each of them satisfies the expression \(rank(A - \lambda I | B) = n \) -- thus controllable.
 
-Так же рассмотрим управляемость собственных чисел через форму Жордана:
+Let's also consider controllability of eigenvalues through Jordan form:
 \[
         J = \begin{bmatrix}
                 -1 & 0 & 0 \\
@@ -78,11 +79,11 @@
                 -1.5 - 1.5j \\
                 \end{bmatrix};
 \]
-Как видно, условия выполнены -- еще одно подтверждение, что пара (А, B) управляема.
+As can be seen, the conditions are met -- another confirmation that the pair \((A, B)\) is controllable.
 
-Так как матрица полностью управляема, любая точка принадлежит управвляемому подпространству системы, в том числе и \(x_1\).
+Since the matrix is fully controllable, any point belongs to the controllable subspace of the system, including \(x_1\).
 
-Получен Грамиан управляемости:
+Controllability Gramian obtained:
 \[
         P(t_1) = \begin{bmatrix}
         1.20 & -1.34 & 0.23 \\
@@ -92,18 +93,12 @@
 \]
 \[
         spec(P(t_1)) = [4, 0.27, 1.15]
-\]Грамиан положительно определен, система полностью управляема.
+\]The Gramian is positive definite, indicating full controllability of the system.
 
-На рисунке \ref{fig:task1} приведены результаты моделирования системы. Как видно, она приняла желаемо состояние за нужное время.
+Figure \ref{fig:task1} illustrates the results of the system's simulation. As observed, it reaches the desired state within the specified time.
 \begin{figure}[ht!]
         \centering
         \includegraphics[width=\textwidth]{src/figs/task1.jpg}
-        \caption{Результаты моделирования задания 1.}
+        % \caption{Simulation results of Assignment 1.}
         \label{fig:task1}
 \end{figure}
-
-
-% \begin{cases}
-%     \dot{x} = P J P^{-1} x + Bu \\
-%     y = Cx + Du \\
-% \end{cases},

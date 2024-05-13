@@ -1,14 +1,13 @@
-\subsection{Задание 4}
-\subsubsection{Принадлежность состояния ненаблюдаемому подпространству}
-В этом задании дополнительно лишь нужно знать, как проверить состояние на принадлежность ненаблюдаемому подпространству.
+\subsection{Assignment 4}
+\subsubsection{Belonging to the Unobservable Subspace}
+In this assignment, it's additionally necessary to know how to check the state's belonging to the unobservable subspace.
 
-Для этого необходимо проверить равенство \(Vx = 0\). Если это так -- состояние ненаблюдаемое.
+To do this, it's required to verify the equality \(Vx = 0\). If this holds true, the state is unobservable.
 
-Соответсвенно, базис ненаблюдаемого подпространства равен \(Nullspace(V)\).
+Accordingly, the basis of the unobservable subspace is equal to \(Nullspace(V)\).
 
-
-\subsubsection{Результаты}
-Вариант задания:
+\subsubsection{Results}
+Assignment variant:
 \[ A = \begin{bmatrix}
         -21 & -38 & 6 \\
         8 & 13 & -4 \\
@@ -21,18 +20,18 @@
         t_1 = 3
 \]
 
-Матрица наблюдаемости V:
+The observability matrix \(V\):
 \[ V = \begin{bmatrix}
         7 & 14 & 0 \\
         -35 & -84 & -14 \\
         147 & 434 & 140 \\
         \end{bmatrix};
 \]
-\[rankV = 2 = n \rightarrow \text{система  неполностью наблюдаема.}\]
+\[rankV = 2 = n \rightarrow \text{the system is partially observable.}\]
 
-Получены собственные числа \(spec(A) = [-5+2j, -5 -2j, 1+0j]\). Третье из них ненаблюдаемо, что еще раз подчеркивает ненаблюдаемость системы.
+Eigenvalues obtained \(spec(A) = [-5+2j, -5 -2j, 1+0j]\). The third one is unobservable, which once again emphasizes the unobservability of the system.
 
-Так же рассмотрим наблюдаемость собственных чисел через форму Жордана:
+Let's also consider the observability of eigenvalues through the Jordan form:
 \[
         J = \begin{bmatrix}
                 1 & 0 & 0 \\
@@ -45,9 +44,9 @@
                 -3.5 - 3.5j \\
                 \end{bmatrix};
 \]
-Как видно, у первого числа соотвествующий элемент в векторе наблюдения 0. Это еще раз подтверждает его ненаблюдаемость.
+As can be seen, the conditions are met -- another confirmation that the pair \((A, C)\) is unobservable.
 
-Получен Грамиан управляемости:
+The observability Gramian obtained:
 \[
         P(t_1) = \begin{bmatrix}
         4.56 & 8.27 & -0.84 \\
@@ -58,26 +57,21 @@
 \[
         spec(P(t_1)) = [19.8,  0.25, 0]
 \]
-Одно из собственных чисел Грамиана -- 0, поэтому он не положительно определен, а значит пара ненаблюдаема.
+One of the eigenvalues of the Gramian is 0, indicating that it's not positive definite, hence the pair is unobservable.
 
-На рисунке \ref{fig:task4} приведены результаты моделирования системы. Как видно, при моделировании она действительно пришла в нужный вектор наблюдения за отведенное время.
+Figure \ref{fig:task4} illustrates the results of the system's simulation. As observed, during the simulation, it indeed arrives at the desired observation vector within the specified time.
 \begin{figure}[ht!]
         \centering
         \includegraphics[width=\textwidth]{src/figs/task4.jpg}
-        \caption{Результаты моделирования задания 4.}
+        % \caption{Simulation results of Assignment 4.}
         \label{fig:task4}
 \end{figure}
 
-Так как система не полностью наблюдаема, могут быть иные начальные состояний, приводящие к такому же наблюдению. Для их нахождения найдем базис \(Nullspace(V)\). Так как, ранг матрицы наблюдения 2, а размерность матрицы системы 3, базис нулевого подпространства будет представлять из себя прямую, задаваемую одним вектором \([-0.81, 0.41, -0.41]\).
-На рисунке \ref{fig:task4_null} видно, что несмотря на различные начальные условия и поведение состояний, наблюдения полностью совпадают.
+Since the system is only partially observable, there might be other initial states leading to the same observation. To find them, let's find the basis of \(Nullspace(V)\). Since the rank of the observability matrix is 2, and the dimension of the system matrix is 3, the basis of the null space will represent a line, defined by one vector \([-0.81, 0.41, -0.41]\).
+As shown in Figure \ref{fig:task4_null}, despite different initial conditions and state behaviors, the observations completely coincide.
 \begin{figure}[ht!]
         \centering
         \includegraphics[width=\textwidth]{src/figs/task4_nullspace.jpg}
-        \caption{Результаты моделирования ненаблюдаемого подпространства задания 4.}
+        % \caption{Simulation results of the unobservable subspace of Assignment 4.}
         \label{fig:task4_null}
 \end{figure}
-
-% \begin{cases}
-%     \dot{x} = P J P^{-1} x + Bu \\
-%     y = Cx + Du \\
-% \end{cases},

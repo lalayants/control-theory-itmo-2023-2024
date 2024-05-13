@@ -1,5 +1,5 @@
-\subsection{Задание 3}
-Имеем систему:
+\subsection{Assignment 3}
+We have the system:
 \[
 \begin{cases}
     \dot{x} = A x \\
@@ -9,21 +9,21 @@
 \[
         y(t) = C e^{At} x(0)
 \]
-\subsubsection{Наблюдаемость через матрицу наблюдаемости}
-\(V = [C | CA | \hdots | CA^{n-1}]^T\) для \(A \in R^{n \times n}\) и \(C \in R^{k \times n}\) -- матрица наблюдаемости системы. Если ее ранг равен \(n\) -- система наблюдаема.
+\subsubsection{Observability through Observability Matrix}
+\(V = [C | CA | \hdots | CA^{n-1}]^T\) for \(A \in R^{n \times n}\) and \(C \in R^{k \times n}\) -- the observability matrix of the system. If its rank is equal to \(n\), the system is observable.
 
-\subsubsection{Наблюдаемость и Грамиан наблюдаемости}
+\subsubsection{Observability and Observability Gramian}
 \[Q(t_1) = \int_0^{t_1} e^{A^T t} C^T C e^{A t} dt\]
-У наблюдаемой системы Грамиан наблюдаемости положительно определен в любой момент t.
+For an observable system, the observability Gramian is positive definite at any time \(t\).
 
-\subsubsection{Управляемость через собственные числа матрицы системы}
+\subsubsection{Observability through Eigenvalues of the System Matrix}
 \[\forall \lambda \in spec(A): rank(\begin{bmatrix}
         A - \lambda I  \\
         C \\
-        \end{bmatrix}) = n \Longleftrightarrow \text{Матрица наблюдаема} \]
+        \end{bmatrix}) = n \Longleftrightarrow \text{The system is observable} \]
 
-\subsubsection{Управляемость через Жорданову форму}
-Жорданова форма матрицы \(A = P J P^{-1}\):
+\subsubsection{Observability through Jordan Form}
+The Jordan form of matrix \(A = P J P^{-1}\):
 \[
         \begin{cases}
                 \dot{x} = P J P^{-1} x \\
@@ -31,7 +31,7 @@
         \end{cases}
 \]
 
-Пусть \(\hat{x} = P^{-1}x\), тогда получим Жорданову форму системы:
+Let \(\hat{x} = P^{-1}x\), then the system's Jordan form becomes:
 \[
         \begin{cases}
                 \dot{\hat{x}} = J\hat{x} \\
@@ -39,19 +39,19 @@
         \end{cases}
 \]
 
-Система в Жордановой форме полностью наблюдаема, если:
+The system in Jordan form is fully observable if:
 \begin{itemize}
-    \item каждому собственному числу соответсвует только одна Жорданова клетка. 
-    \item элементы матрицы выходов, соответсвующие первым столбцам клеток -- не нулевые.
+    \item each eigenvalue corresponds to only one Jordan block.
+    \item the elements of the output matrix corresponding to the first columns of the blocks are nonzero.
 \end{itemize}
 
-\subsubsection{Начальные условия системы}
-Для вычисления начальных условий системы, достаточно рассчитать:
+\subsubsection{Initial Conditions of the System}
+To compute the initial conditions of the system, it suffices to calculate:
 \[x(0) = (P(t_1))^{-1} \int_{0}^{t_1} e^{A^T t} C^T y(t) dt\]
 
 
-\subsubsection{Результаты}
-Вариант задания:
+\subsubsection{Results}
+Assignment variant:
 \[ A = \begin{bmatrix}
         -21 & -38 & 6 \\
         8 & 13 & -4 \\
@@ -64,18 +64,18 @@
         t_1 = 3
 \]
 
-Матрица наблюдаемости V:
+The observability matrix \(V\):
 \[ V = \begin{bmatrix}
         9 & 18 & -2 \\
         -33 & -80 & -16 \\
         149 & 438 & 138 \\
         \end{bmatrix};
 \]
-\[rankU = V = n \rightarrow \text{система наблюдаема.}\]
+\[rankU = V = n \rightarrow \text{the system is observable.}\]
 
-Получены собственные числа \(spec(A) = [-5 + 2j, -5 - 2j, 1+0j]\). Каждое из них наблюдаемо, что еще раз показывает наблюдаемость системы.
+Eigenvalues obtained \(spec(A) = [-5 + 2j, -5 - 2j, 1+0j]\). Each of them is observable, which further demonstrates the observability of the system.
 
-Так же рассмотрим наблюдаемость собственных чисел через форму Жордана:
+Let's also consider observability of eigenvalues through Jordan form:
 \[
         J = \begin{bmatrix}
                 1 & 0 & 0 \\
@@ -88,9 +88,9 @@
                 7 \\
                 \end{bmatrix};
 \]
-Как видно, условия выполнены -- еще одно подтверждение, что пара (A, C) наблюдаема.
+As can be seen, the conditions are met -- another confirmation that the pair \((A, C)\) is observable.
 
-Получен Грамиан наблюдаемости:
+The observability Gramian obtained:
 \[
         Q(t_1) = \begin{bmatrix}
         815 & 1627 & -809\\
@@ -100,13 +100,13 @@
 \]
 \[
         spec(P(t_1)) = [4872, 0.057, 2.37]
-\]Грамиан положительно определен, система полностью наблюдаема.
+\]The Gramian is positive definite, indicating full observability of the system.
 
-На рисунке \ref{fig:task3} приведены результаты моделирования системы. Как видно, при моделировании она действительно пришла в нужный вектор наблюдения за отведенное время.
+Figure \ref{fig:task3} illustrates the results of the system's simulation. As observed, during the simulation, it indeed arrives at the desired observation vector within the specified time.
 \begin{figure}[ht!]
         \centering
         \includegraphics[width=\textwidth]{src/figs/task3.jpg}
-        \caption{Результаты моделирования задания 3.}
+        % \caption{Simulation results of Assignment 3.}
         \label{fig:task3}
 \end{figure}
-Так как система полностью наблюдаема, иных начальных состояние быть не может. Размерность \(Nullspace(V) = dimV - rankV = 0\). 
+Since the system is fully observable, there can't be any other initial states. The dimension of \(Nullspace(V) = dimV - rankV = 0\).
