@@ -26,7 +26,7 @@
 
 
 
-\title{ЛР \textnumero 11 <<\(H_2\) и \(H_\infty\)>>}
+\title{ЛР \textnumero 12 <<Слежение и компенсация>>}
 
 \author{
 Студент \\
@@ -46,10 +46,10 @@ R33352\\
 }
 
 % Uncomment to remove the date
-\date{24.04.2024}
+\date{14.05.2024}
 
 % Uncomment to override  the `A preprint' in the header
-\renewcommand{\headeright}{ЛР \textnumero 11 <<\(H_2\) и \(H_\infty\)>>}
+\renewcommand{\headeright}{ЛР \textnumero 12 <<Слежение и компенсация>>}
 \renewcommand{\undertitle}{Отчет}
 \renewcommand{\shorttitle}{}
 
@@ -64,7 +64,7 @@ R33352\\
 \setcounter{page}{1}
 \section{Вводные данные}
 \subsection{Цель работы}
-В этой работе пройдет изучение \(H_2\) и \(H_\infty\) регуляторов.
+В этой работе пройдет изучение слежения и компенсации.
 
 \subsubsection{Программная реализация}
 C исходным кодом можно ознакомиться \href{https://github.com/lalayants/control-theory-itmo-2023-2024}{в репозитории на Github.}
@@ -75,24 +75,26 @@ C исходным кодом можно ознакомиться \href{https://
 \input{src/n0}
 \FloatBarrier
 
-% \input{src/n1}
-% \FloatBarrier
+\input{src/n1}
+\FloatBarrier
 
-% \input{src/n2}
-% \FloatBarrier
+\input{src/n2}
+\FloatBarrier
 
-% \input{src/n3}
-% \FloatBarrier
+\input{src/n3}
+\FloatBarrier
 
 % \input{src/n4}
 % \FloatBarrier
 
 \newpage
 \section{Заключение}
-В этой работе пройдет изучение \(H_2\) и \(H_\infty\) регуляторов.
+В этой работе прошло изучение слежения и компенсации.
 \subsection{Выводы}
 \begin{enumerate}
-   \item 
+   \item был синтезирован следящий регулятор по состоянию
+   \item был синтезирован компенсирующий регулятор по состоянию
+   \item регулятор по выходу при совпадении регулируемого и измеряемого выхода включает в себя собственные числа генератора
 \end{enumerate}
 
 \end{document}
