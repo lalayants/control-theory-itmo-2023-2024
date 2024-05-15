@@ -1,0 +1,26 @@
+\section{ГЛАВА 3. СТАБИЛИЗАЦИЯ МАЯТНИКА: МОДАЛЬНОЕ УПРАВЛЕНИЕ}
+
+\subsection{Синтез регулятора по состоянию}
+В этом задании выводится модальный регулятор для системы:
+\[
+        \begin{cases}
+                \text{Объект управления: }\dot{x} = A x + Bu \\
+                \text{Регулятор: }u = K x \\
+        \end{cases} \rightarrow
+        \dot{x} = A x + BKx = (A+BK)x
+\]
+Для этого подбирается матрица \(\Gamma \in \mathds{R}^{n \times n}\) с желаемыми собственными числами и матрица \(\mathds{Y} \in \mathds{R}^{m \times n}\), такая что пара \((\mathds{Y}, \Gamma)\) наблюдаема. После чего по подобию:
+\[A+BK = P \Gamma P^{-1} \rightarrow
+        \begin{cases}
+                AP - P\Gamma = BY \\
+                K = -YP^{-1} \\
+        \end{cases}
+\]
+
+% \begin{figure}[ht!]
+%   \centering
+%   \includegraphics[width=\textwidth]{src/figs/task2_4_0_0_0_0.01.jpg}
+%   \caption{Динамика системы.}
+%   \label{fig:task2_4_0_0_0_0.01}
+% \end{figure}
+\FloatBarrier
