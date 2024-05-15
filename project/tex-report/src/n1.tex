@@ -1,0 +1,171 @@
+\section{ГЛАВА 1. ПОСТРОЕНИЕ МАТЕМАТИЧЕСКОЙ МОДЕЛИ ОБЪЕКТА}
+
+\subsection{Вывод уравнений}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=300px]{src/figs/pendulum.png}
+  \caption{\label{fig:task1_1}Перевернутый маятник на тележке.}
+\end{figure}
+
+Рассмотрим систему перевернутого маятника на тележке (рис. \ref{fig:task1_1}). Введем следущие обозначения физических величин:
+\begin{itemize}
+  \item $x$ -- линейная координата тележки;
+  \item $\dot{x}$ -- линейная скорость тележки;
+  \item $\varphi$ -- угол отклонения маятника от вертикали;
+  \item $\dot{\varphi}$ -- угловая скорость маятника;
+  \item $f$ -- вращающий внешний момент, действующий на маятник;
+  \item $u$ -- сила действующая на тележку;
+  \item $M, m$ --  массы тележки и маятника соответственно;
+  \item $l$ -- длина маятника.
+\end{itemize}
+
+В качестве вектора состояния \(s = \begin{bmatrix} x & \dot{x} & \varphi & \dot{\varphi}\end{bmatrix}^T\). 
+В роли управляющего воздействия примем $u$, в роли внешнего возмущения -- $f$.
+
+Измеряемыми сигналами \(y = \begin{bmatrix} x & \varphi \end{bmatrix}^T\).
+
+Для вывода математической модели данной физической системы воспользуемся уравнениями Лагранжа:
+\begin{equation} \label{eq:2}
+  \begin{cases}
+      \frac{d}{dt}\frac{\partial T}{\partial \dot{x}} - \frac{\partial T}{\partial x} = u \\
+      \frac{d}{dt}\frac{\partial T}{\partial \dot{\varphi}} - \frac{\partial T}{\partial \varphi} = f + mgl\sin(\varphi)
+  \end{cases},
+\end{equation}
+где $T$ -- кинетическая энергия системы.
+
+\begin{equation} \label{eq:3}
+  T(t) = M\frac{\dot{x}^2}{2} + m\frac{(\frac{d}{dt}(l\cos(\varphi)))^2 + (-\frac{d}{dt}(l\sin(\varphi)) + \dot{x})^2}{2}=
+  (M+m)\frac{\dot{x}^2}{2} + \frac{ml^2\dot{\varphi}^2}{2} - ml\cos(\varphi)\dot{x}\dot{\varphi}
+\end{equation}
+
+Подставив выражение для $T$ в уравнения \ref{eq:2}, получим уравнения математической модели системы:
+\begin{equation} \label{eq:4}
+  \begin{cases}
+      (M+m)\ddot{x} + ml(\sin(\varphi)\dot{\varphi}^2 - \cos(\varphi)\ddot{\varphi}) = u \\
+      ml^2\ddot{\varphi} - ml\ddot{x}\cos{\varphi} = f + mgl\sin(\varphi)
+  \end{cases}
+\end{equation}
+
+Тогда, выразив $\ddot{a}$ и $\ddot{\varphi}$:
+\begin{equation} \label{eq:5}
+  \begin{cases}
+      \ddot x = -\frac{ml}{M+m}\sin(\varphi)\dot{\varphi}^2 + \frac{ml}{M+m}\cos(\varphi)\ddot{\varphi} + \frac{1}{M+m}u \\
+      \ddot \varphi = \frac{1}{l}\ddot x \cos(\varphi) + \frac{g}{l}\sin(\varphi) + \frac{1}{ml^2}f
+  \end{cases}
+\end{equation}
+Решив данную систему уравнений \ref{eq:5} относительно $\ddot a$ и $\ddot \varphi$:
+\begin{equation} \label{eq:6}
+  \begin{cases}
+      \ddot x = \frac{1}{M + m\sin(\varphi)^2}( -ml\sin(\varphi)\dot{\varphi}^2 + mg\cos(\varphi)\sin(\varphi) + \frac{\cos(\varphi)}{l}f + u ) \\
+      \ddot \varphi = \frac{1}{M + m\sin(\varphi)^2}( -m\sin(\varphi)\cos(\varphi)\dot{\varphi}^2 + \frac{(M+m)g}{l}\sin(\varphi) + \frac{M+m}{ml^2}f + \frac{\cos(\varphi)}{l}u )
+  \end{cases}
+\end{equation}
+
+Представим математическую модель в терминах вектора состояния:
+\begin{equation} \label{eq:7}
+  \begin{cases}
+      \dot x = \dot x \\
+      \ddot x = \frac{1}{M + m\sin(\varphi)^2}( -ml\sin(\varphi)\dot{\varphi}^2 + mg\cos(\varphi)\sin(\varphi) + \frac{\cos(\varphi)}{l}f + u ) \\
+      \dot \varphi = \dot \varphi \\
+      \ddot \varphi= \frac{1}{M + m\sin(\varphi)^2}( -m\sin(\varphi)\cos(\varphi)\dot{\varphi}^2 + \frac{(M+m)g}{l}\sin(\varphi) + \frac{M+m}{ml^2}f + \frac{\cos(\varphi)}{l}u ) \\
+      y_1 = x \\
+      y_2 = \varphi
+  \end{cases}
+\end{equation}
+
+\FloatBarrier
+\subsection{Точки равновесия}
+В точках равновесия все компоненты производной вектора \(s\) по времени равны $0$ при отсутсвии внешних возмущений и управления.
+\[
+  \begin{cases}
+    f = 0 \\
+    u = 0 \\
+    \dot x = 0\\
+    \frac{1}{M + m\sin(\varphi)^2}( -ml\sin(\varphi)\dot{\varphi}^2 + mg\cos(\varphi)\sin(\varphi) + \frac{\cos(\varphi)}{l}f + u ) = 0\\
+    \dot \varphi = 0\\
+    \frac{1}{M + m\sin(\varphi)^2}( -m\sin(\varphi)\cos(\varphi)\dot{\varphi}^2 + \frac{(M+m)g}{l}\sin(\varphi) + \frac{M+m}{ml^2}f + \frac{\cos(\varphi)}{l}u ) = 0\\
+  \end{cases}
+\]
+Упростим выражения, подставив известное
+\[
+  \begin{cases}
+    f = 0 \\
+    u = 0 \\
+    \dot x = 0\\
+    \dot \varphi = 0\\
+    \frac{1}{M + m\sin(\varphi)^2}(mg\cos(\varphi)\sin(\varphi)) = 0\\
+    \frac{1}{M + m\sin(\varphi)^2}(\frac{(M+m)g}{l}\sin(\varphi)) = 0\\
+  \end{cases} \rightarrow
+  \begin{cases}
+    x \in \mathds{R} \\
+    \dot x = 0\\
+    \varphi = \pi n, n \in \mathds{Z}\\
+    \dot \varphi = 0\\
+  \end{cases}
+\]
+Соответственно, система стабильна, когда маятник замер в верхнем или нижнем положении, а тележка стоит на месте в любой точке.
+
+\subsection{Линеаризация}
+Рассматривается тележка с маятником сверху (\(\varphi \approx 0; \dot \varphi \approx 0\)), тогда можно считать: \(\sin(\varphi) = \varphi; \cos(\varphi) = 1; \varphi ^ 2 \ll \varphi; \dot \varphi ^ 2 \ll \dot \varphi\).
+\begin{equation} \label{eq:8}
+  \begin{cases}
+      \dot x = \dot x \\
+      \ddot x = \frac{1}{M}( mg\varphi + \frac{1}{l}f + u ) \\
+      \dot \varphi = \dot \varphi \\
+      \ddot \varphi= \frac{1}{M}(\frac{(M+m)g}{l}\varphi + \frac{M+m}{ml^2}f + \frac{1}{l}u ) \\
+      y_1 = x \\
+      y_2 = \varphi
+  \end{cases}
+\end{equation}
+Можем представить линеаризованную систему в матричном виде:
+\begin{equation} \label{eq:9}
+    \begin{cases}
+        \dot s = As + Bu + Df \\
+        y = Cs
+    \end{cases}
+\end{equation}
+\begin{equation*}
+    A = \begin{bmatrix}
+        0 & 1 & 0 & 0 \\
+        0 & 0 & \frac{mg}{M} & 0 \\
+        0 & 0 & 0 & 1 \\
+        0 & 0 & \frac{(M+m)g}{Ml} & 0
+    \end{bmatrix},
+    B = \begin{bmatrix}
+        0 \\ \frac{1}{M} \\ 0 \\ \frac{1}{Ml}
+    \end{bmatrix},
+    D = \begin{bmatrix}
+        0 \\ \frac{1}{Ml} \\ 0 \\ \frac{M+m}{Mml^2}
+    \end{bmatrix},
+    C = \begin{bmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 0 & 1 & 0
+    \end{bmatrix}
+\end{equation*}
+
+\FloatBarrier
+\subsection{Параметры системы}
+Далее принимается, что:
+\begin{equation*}
+  M = 1, m = 0.1, l = 1, g = 10
+\end{equation*}
+\[A = \begin{bmatrix}
+  0  &  1  &  0  &  0 \\
+  0  &  0  &  1  &  0 \\
+  0  &  0  &  0  &  1 \\
+  0  &  0  &  11  &  0 
+\end{bmatrix}; B = \begin{bmatrix}
+  0 \\
+  1 \\
+  0 \\
+  1 
+\end{bmatrix}; D = \begin{bmatrix}
+  0 \\
+  1 \\
+  0 \\
+  11 
+\end{bmatrix}; C = \begin{bmatrix}
+  1  &  0  &  0  &  0 \\
+  0  &  0  &  1  &  0 
+\end{bmatrix}\]
