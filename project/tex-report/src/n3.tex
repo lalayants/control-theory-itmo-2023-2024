@@ -17,10 +17,37 @@
         \end{cases}
 \]
 
-% \begin{figure}[ht!]
-%   \centering
-%   \includegraphics[width=\textwidth]{src/figs/task2_4_0_0_0_0.01.jpg}
-%   \caption{Динамика системы.}
-%   \label{fig:task2_4_0_0_0_0.01}
-% \end{figure}
+Получен регулятор:
+\[K = \begin{bmatrix}
+        2.40 &  5.00 & -48.40 & -15.00
+      \end{bmatrix}\]
+\[spec(A + B K) = \begin{bmatrix}
+-4.00 & -3.00 & -2.00 & -1.00
+\end{bmatrix}\]
+
+Он подходит для нелинейной системой, если \(\varphi\) близко к 0. Чем дальше от 0 -- тем хуже справляется. Угловое ускорение такое сильное влияние не оказывает.
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task3_1_0_0_0_1.jpg}
+  \caption{Динамика системы.}
+  \label{fig:task3_1_0_0_0_1.jpg}
+\end{figure}
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_1_0_0_0_2.jpg}
+        \caption{Динамика системы.}
+        \label{fig:task3_1_0_0_0_2.jpg}
+\end{figure}
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_1_0_0_1_0.jpg}
+        \caption{Динамика системы.}
+        \label{fig:task3_1_0_0_1_0.jpg}
+\end{figure}
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_1_0_0_2_0.jpg}
+        \caption{Динамика системы.}
+        \label{fig:task3_1_0_0_2_0.jpg}
+\end{figure}
 \FloatBarrier

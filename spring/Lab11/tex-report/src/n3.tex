@@ -1,4 +1,6 @@
 \subsection{Синтез \(H_\infty\)-регулятора по состоянию.}
+Пусть \(||W||_{H_\infty} < \gamma\)
+
 Уравнения ниже позволяют синтезировать такой регулятор.
 \begin{equation}
     \begin{cases}
@@ -6,9 +8,16 @@
         K = -(D_2^TD_2)^{-1}B_2^TQ
     \end{cases}
 \end{equation}
+Существует \(P > 0\) решение уравнения Рикатти, если:
+\begin{enumerate}
+  \item \(C_2^TD_2 = 0\) (\(C_1C_1^T = Q; D_2D_2^T = Q;\))
+  \item \(D_2D_2^T\) -- обратима
+  \item \((C_2, A)\) -- обнаруживаема
+  \item \((A, B_2)\) -- стабилизируема
+\end{enumerate}
 
 
-\subsubsubsection{gamma = 1.4}
+\subsubsubsection{\(\gamma\) = 1.4}
 \[spec(A-B_2 K) = [-0.64 -3.96]\]
 \[K = \begin{bmatrix}
   2.54 &  4.61
@@ -40,7 +49,7 @@
 
 \FloatBarrier
 
-\subsubsubsection{gamma = 2}
+\subsubsubsection{\(\gamma\) = 2}
 \[spec(A-B_2 K) = [-0.71 -1.92]\]
 \[K = \begin{bmatrix}
   1.37 &  2.63
@@ -72,7 +81,7 @@
 
 \FloatBarrier
 
-\subsubsubsection{gamma = 10}
+\subsubsubsection{\(\gamma\) = 10}
 \[spec(A-B_2 K) = [-0.92 -1.1 ]\]
 \[K = \begin{bmatrix}
   1.01 &  2.02

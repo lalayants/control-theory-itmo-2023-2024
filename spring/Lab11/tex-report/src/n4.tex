@@ -1,4 +1,20 @@
 \subsection{Синтез \(H_\infty\)-регулятора по выходу.}
+\[
+        \begin{cases}
+                \dot{x} = A x + B_1 w + B_2 u \\
+                y = C_1x + D_1 u  \\
+                z = C_2x + D_2 u  
+        \end{cases}
+\]
+Дополним систему наблюдателем:
+\begin{equation}
+    \begin{cases}
+        \dot{\hat{x}} = A\hat{x} + B_1 \hat{w} + B_2u + L(\hat{y} - y)\\
+        \hat{y} = C_1\hat{x} + D_1 \hat{w} \\
+        \hat{w} = -\gamma^2 B_1^T Q \hat{x}
+    \end{cases}
+\end{equation}
+
 \begin{equation}
     \begin{cases}
         AP + PA^T + B_1B_1^T - PC_1^T(D_1D_1^T)^{-1}C_1P = 0 \\
@@ -7,6 +23,13 @@
         K = -(D_2^TD_2)^{-1}B_2^TQ
     \end{cases}
 \end{equation}
+Существует \(P > 0\) решение уравнения Рикатти, если:
+\begin{enumerate}
+  \item \(B_1D_1^T = 0\) (\(B_1B_1^T = Q; D_1D_1^T = Q;\))
+  \item \(D_1D_1^T\) -- обратима
+  \item \((C_1, A)\) -- обнаруживаема
+  \item \((A, B_1)\) -- стабилизируема
+\end{enumerate}
 
 Представим систему в виде:
 \begin{equation}

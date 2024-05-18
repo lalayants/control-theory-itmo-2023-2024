@@ -72,6 +72,21 @@ C исходным кодом можно ознакомиться \href{https://
 
 \newpage
 \section{Основная часть}
+\[
+\begin{cases}
+   \dot x = Ax + Bw \\
+   \dot w = \Gamma w \\
+   z = Cx + Dw \\ 
+   z \rightarrow 0 \\
+   \sigma A \in C_- \\
+   \sigma \Gamma \in \bar C_+
+\end{cases} \rightarrow
+\begin{cases}
+   P \Gamma - AP = B \\
+   C P + D = 0
+\end{cases}
+\]
+Доказательство через замену \(v = x - Pw\)
 \input{src/n0}
 \FloatBarrier
 
