@@ -185,33 +185,27 @@
 
 \subsection{Синтез регулятора по выходу}
 На основе двух предыдущих пунктов получен регулятор по выходу.
-\[
-        \begin{cases}
-                \dot{x} = A x + B u\\
-                y = C x \\
-                \dot{\hat{x}} = A \hat{x} + B u + L(\hat{y} - y) \\
-                \hat{y} = C \hat{x} \\
-                u = K \hat{x}
-        \end{cases} \rightarrow
-        \begin{cases}
-            \begin{bmatrix} 
-                \dot{x} \\
-                \dot{e}
-            \end{bmatrix} = 
-            \begin{bmatrix} 
-                A + BK & -BK\\
-                0 & A + LC
-            \end{bmatrix}
-            \begin{bmatrix} 
-              x \\
-              e
-          \end{bmatrix} 
-            \\
-            \hat{x} = x - e \\
-            y = Cx \\
-            \hat{y} = C \hat{x}
-         \end{cases}
-         
-\]
+\[L = \begin{bmatrix}
+        3.33 &  3.33\\
+       -1.83 & -1.83\\
+       -13.33 & -13.33\\
+       -44.17 & -44.17
+      \end{bmatrix}\]
+      \[K = \begin{bmatrix}
+        2.40 &  5.00 & -48.40 & -15.00
+      \end{bmatrix}\]
+      \[\Gamma = \begin{bmatrix}
+       -1.00 & -1.00 &  0.00 &  0.00\\
+        1.00 & -1.00 &  0.00 &  0.00\\
+        0.00 &  0.00 & -2.00 & -2.00\\
+        0.00 &  0.00 &  2.00 & -2.00
+      \end{bmatrix}\]
+
+      \begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_5.jpg}
+        \caption{Динамика компонент системы.}
+        \label{fig:task3_5.jpg}
+\end{figure}
 
 \FloatBarrier
