@@ -1,5 +1,283 @@
-\section{ГЛАВА 4. СТАБИЛИЗАЦИЯ МАЯТНИКА: РЕГУЛЯТОРЫ С ЗАДАННОЙ
-СТЕПЕНЬЮ УСТОЙЧИВОСТИ}
+\section{ГЛАВА 4. СТАБИЛИЗАЦИЯ МАЯТНИКА: РЕГУЛЯТОРЫ С ЗАДАННОЙ СТЕПЕНЬЮ УСТОЙЧИВОСТИ}
 
+\subsection{Синтез регулятора по состоянию}
+В этом задании выводится регулятор заданной степени устойчивости для системы:
+\[
+        \begin{cases}
+                \text{Объект управления: }\dot{x} = A x + Bu \\
+                \text{Регулятор: }u = K x \\
+        \end{cases} \rightarrow
+        \dot{x} = A x + BKx = (A+BK)x
+\]
+По сути, целью данного регулятора является изменение управляемых собственных чисел так, чтобы \(\forall \lambda \in \sigma(A): Re{\lambda} \leq \alpha\), где \(\alpha\) -- степень устойчивости.
+Для этого используется LMI критерий экспоненциальной устойчивости:
+\[ \exists Q \succ 0 , \alpha > 0 :  A^TQ + QA + 2 \alpha Q \preccurlyeq 0 \rightarrow
+\begin{cases}
+    \text{\(\forall x(0)\) А ассимптотически устойчива}\\
+    \exists c :  ||x(t)|| \le  c e^{-\alpha t} ||x(0)|| \\
+\end{cases}
+\]
+
+\[      \begin{cases}
+                Q \succ 0\\
+                A^TQ + QA + 2 \alpha Q \preccurlyeq 0 \\
+        \end{cases} \xleftrightarrow{Q = P^{-1}}
+        \begin{cases}
+                P \succ 0\\
+                PA^T + AP + 2 \alpha P \preccurlyeq 0\\
+        \end{cases} 
+\]
+Подставим вместо матрицы \(A\) нашу систему:
+\[P(A+BK)^T + (A+BK)P + 2 \alpha P \preccurlyeq 0\]
+\[P A^T + P K^T B^T + AP + BKP + 2 \alpha P \preccurlyeq 0\]
+\[
+        \begin{cases}
+                Y = KP\\
+                PA^T + AP + 2 \alpha P + Y^T B^T + BY \preccurlyeq 0  \\
+        \end{cases} 
+\]
+
+Тогда для подбора матрицы \(K\), чтобы задать система степень устойчивости \(\alpha\), достаточно решить через библиотеку CVX следующую систему с двумя неизвестнями:
+\[
+        \begin{cases}
+                K = YP^{-1}\\
+                P \succ 0 \\
+                PA^T + AP + 2 \alpha P + Y^T B^T + BY \preccurlyeq 0  \\
+        \end{cases} 
+\]
+
+На практике, довольно часто \(P\) -- необратима. Приходится использовать псевдообратную.
+
+\[\alpha = 1\]
+\[K = \begin{bmatrix}
+  8.51 &  10.41 & -70.15 & -15.94
+\end{bmatrix}\]
+\[spec(A + B K) = \begin{bmatrix}
+ -1.58 + 6.21j & -1.58 + -6.21j & -1.19 + 0.81j & -1.19 + -0.81j
+\end{bmatrix}\]
+Как видно на графиках ниже, невсегда нелинейная система устойчива. 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_1_0_0.5_0_0.jpg}
+    \caption{Динамика системы.}
+    \label{fig:task4_1_1}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_1_0_0_0.1_0.jpg}
+    \caption{Динамика системы.}
+    \label{fig:task4_1_2}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_1_0_0_0_0.3.jpg}
+    \caption{Динамика системы.}
+    \label{fig:task4_1_3}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_1_0_0_0_1.jpg}
+    \caption{Динамика системы.}
+    \label{fig:task4_1_4}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_1_0_0_1_0.jpg}
+    \caption{Динамика системы.}
+    \label{fig:task4_1_5}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_1_0_1_0_0.jpg}
+    \caption{Динамика системы.}
+    \label{fig:task4_1_6}
+\end{figure}
+
+\FloatBarrier
+
+\subsection{Исследование регулятора по состоянию}
+Ниже приведена таблица сравнений при \(x(0) = [0, 0, 0.1, 0]^T\) для графиков ниже
+\begin{center}
+    \begin{tabular}{ c | c c c }
+$\alpha$ & $\max x$ & $\max \varphi$ & $\max u$ \\
+        $0.1$ & 0.27 & 0.1 & 3.7 \\
+        $0.8$ & 0.24 & 0.1 & 5.7 \\
+        $1.5$ & 0.21 & 0.1 & 11.6 \\
+    \end{tabular}
+\end{center}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_2_0_0_0.1_0.jpg}
+    \caption{Динамика системы.}
+    \label{fig:task4_2_1}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_2_u_0_0_0.1_0.jpg}
+    \caption{Динамика воздействия.}
+    \label{fig:task4_2_2}
+\end{figure}
+\FloatBarrier
+
+\subsection{Синтез регулятора по состоянию с ограничением на управление}
+
+В этом задании выводится ограничение на управление \(||u(t)|| \leq \mu\). Тогда система уравнений принимает вид: 
+\[
+        \begin{cases}
+                \begin{bmatrix}
+                    P &  x_0\\
+                    x_0^T &  1 \\
+                \end{bmatrix} \succ 0 \\
+                \\
+                \begin{bmatrix}
+                    P &  Y^T\\
+                    Y &  \mu^2I \\
+                \end{bmatrix} \succ 0 \\
+                P \succ 0 \\
+                PA^T + AP + 2 \alpha P + Y^T B^T + BY \preccurlyeq 0  \\
+                K = YP^{-1}\\
+        \end{cases} 
+\]
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_3_0.1.jpg}
+    \caption{Динамика системы}
+    \label{fig:task4_3_0.1}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_3_u_0.1.jpg}
+    \caption{Динамика воздействия}
+    \label{fig:task4_3_u_0.1}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_3_0.5.jpg}
+    \caption{Динамика системы}
+    \label{fig:task4_3_0.5}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_3_u_0.5.jpg}
+    \caption{Динамика воздействия}
+    \label{fig:task4_3_u_0.5}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_3_1.jpg}
+    \caption{Динамика системы}
+    \label{fig:task4_3_1}
+\end{figure}
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_3_u_1.jpg}
+    \caption{Динамика воздействия}
+    \label{fig:task4_3_u_1}
+\end{figure}
+\FloatBarrier
+
+\subsection{Синтез наблюдателя}
+
+В этом задании выводится наблюдатель заданной степени устойчивости для системы:
+\[
+        \begin{cases}
+                \dot{x} = A x \\
+                y = C x \\
+                \dot{\hat{x}} = A \hat{x} + L(\hat{y} - y) \\
+                \hat{y} = C \hat{x}
+        \end{cases} \rightarrow
+        \begin{cases}
+            \dot{\hat{x}} = A \hat{x} + L(C \hat{x} - y) = (A + LC )\hat{x} - Ly \\
+            \dot{e} = (A + LC)e
+            
+    \end{cases}
+\]
+
+Для этого достаточно решить систему:
+\[
+        \begin{cases}
+                L = Q^{-1}Y\\
+                Q \succ 0 \\
+                A^TQ + QA + 2 \alpha Q + C^T Y^T + YC \preccurlyeq 0  \\
+        \end{cases} 
+\]
+\[ \alpha = 1\]
+\[L = \begin{bmatrix}
+ -4.48 & -0.63\\
+ -8.92 & -2.11\\
+  0.63 & -4.48\\
+  1.11 & -19.92
+\end{bmatrix}\]
+\[spec(A + LC) = \begin{bmatrix}
+ -2.31 + 2.32j & -2.31 + -2.32j & -2.17 + 1.69j & -2.17 + -1.69j
+\end{bmatrix}\]
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_4_0.0_0.5.jpg}
+    \caption{Динамика ошибки наблюдателя}
+    \label{fig:task4_4_1}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_4_0.1_0.1.jpg}
+    \caption{Динамика ошибки наблюдателя}
+    \label{fig:task4_4_2}
+\end{figure}
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_4_1_0.jpg}
+    \caption{Динамика ошибки наблюдателя}
+    \label{fig:task4_4_3}
+\end{figure}
+\FloatBarrier
+
+\subsection{Синтез регулятора по выходу}
+В этом задании выводится наблюдатель регулятор для системы. Так бы это выглядело для линейной системы.
+\[
+        \begin{cases}
+                \dot{x} = A x + B u\\
+                y = C x \\
+                \dot{\hat{x}} = A \hat{x} + B u + L(\hat{y} - y) \\
+                \hat{y} = C \hat{x} \\
+                u = K \hat{x}
+        \end{cases} \rightarrow
+        \begin{cases}
+            \begin{bmatrix} 
+                \dot{x} \\
+                \dot{e}
+            \end{bmatrix} = 
+            \begin{bmatrix} 
+                A + BK & -BK\\
+                0 & A + LC
+            \end{bmatrix}
+            \begin{bmatrix} 
+              x \\
+              e
+          \end{bmatrix} 
+            \\
+            \hat{x} = x - e \\
+            y = Cx \\
+            \hat{y} = C \hat{x}
+         \end{cases}
+\]
+
+На графике видно, что регулятор справился и с нелинейной системой.
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task4_5.jpg}
+    \caption{Динамика системы}
+    \label{fig:task4_5}
+\end{figure}
+\FloatBarrier
 
 \FloatBarrier
