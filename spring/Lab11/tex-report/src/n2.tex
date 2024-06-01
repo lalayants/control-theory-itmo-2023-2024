@@ -1,7 +1,12 @@
 \subsection{Синтез $H_2$-регулятора по выходу}
+\[
+        \begin{cases}
+                \dot{x} = A x + B_1 w + B_2 u \\
+                z = C_2x + D_2 u  
+        \end{cases}
+\]
 
 Дополним систему наблюдателем:
-
 \begin{equation}
     \begin{cases}
         \dot{\hat{x}} = A\hat{x} + B_2u + L(\hat{y} - y)\\
@@ -17,6 +22,14 @@
         L = -PC_1^T(D_1D_1^T)^{-1}
     \end{cases}
 \end{equation}
+Существует \(P > 0\) решение уравнения Рикатти, если:
+\begin{enumerate}
+  \item \(B_1D_1^T = 0\) (\(B_1B_1^T = Q; D_1D_1^T = R;\))
+  \item \(D_1D_1^T\) -- обратима
+  \item \((C_1, A)\) -- обнаруживаема
+  \item \((A, B_1)\) -- стабилизируема
+\end{enumerate}
+\[||W(s)_{w \rightarrow \hat{z} - z}||_{H_2} = \sqrt{trace(C_2 P C_2^T)}\]
 
 Представим систему в виде:
 \begin{equation}

@@ -1,0 +1,96 @@
+\subsection{Компенсирующий регулятор по состоянию}
+
+Рассмотрим систему вида:
+\[
+    \begin{cases}
+        \dot{x} = A_1x + B_1u + B_2w \\
+        z = C_2x + D_2 w
+    \end{cases},
+\]
+где $w$:
+\[
+    \dot{w} = A_2w
+\]
+
+Для данной системы можем синтезировать регулятор вида $u = K_1x + K_2w$, гарантирующий:
+\begin{equation*}
+    \lim_{t\to\infty} z(t) = 0
+\end{equation*}
+
+$K_1$ можем выбрать как матрицу регулятора, синтезированного любым способом. Матрицу $K_2$ найдем следующим образом:
+\[
+    \begin{cases}
+        PA_2 - A_1P = B_1Y + B_2\\
+        C_2P + D_2 = 0 \\
+        K_2 = Y - K_1P
+    \end{cases}
+\]
+
+\[
+    \begin{cases}
+        \dot{x} = A_1x + B_1 (K_1x + K_2w) + B_2w = (A_1 + B_1 K_1) x + (B_2 + B_1 K_2)w \\
+        z = C_2x + D_2 w
+    \end{cases},
+\]
+
+\[A_1 = \begin{bmatrix}
+  1.00 &  0.00 &  0.00\\
+  0.00 &  2.00 &  0.00\\
+  0.00 &  0.00 &  3.00
+\end{bmatrix}\]
+\[A_2 = \begin{bmatrix}
+  0.00 &  1.00 &  1.00 &  0.00\\
+ -1.00 &  0.00 &  0.00 &  1.00\\
+  0.00 &  0.00 &  0.00 &  1.00\\
+  0.00 &  0.00 & -1.00 &  0.00
+\end{bmatrix}\]
+\[B_1 = \begin{bmatrix}
+  1.00\\
+  1.00\\
+  1.00
+\end{bmatrix}\]
+\[B_1 = \begin{bmatrix}
+  1.00 &  0.00 &  0.00 &  0.00\\
+  0.00 &  1.00 &  0.00 &  0.00\\
+  0.00 &  0.00 &  1.00 &  0.00
+\end{bmatrix}\]
+\[C_2 = \begin{bmatrix}
+  1.00 &  0.00 &  1.00
+\end{bmatrix}\]
+\[D_2 = 0\]
+
+Из LQR  (Q = I, R = 1):
+\[K_1 = \begin{bmatrix}
+  -15.57 &  72.53 & -69.70
+ \end{bmatrix}\]
+ \[spec(A + B_1 K_1) = \begin{bmatrix}
+  -1.28 + 0.00j & -3.22 + 0.00j & -2.24 + 0.00j
+ \end{bmatrix}\]
+ Из матричных уравнений:
+ \[K_2 = \begin{bmatrix}
+  -23.24 &  21.27 & -35.21 & -5.99
+ \end{bmatrix}\]
+
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task1_z.jpg}
+  \caption{Регулируемый выход системы.}
+  \label{fig:task1_z}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task1_ws.jpg}
+  \caption{Внешнее возмущение.}
+  \label{fig:task1_ws}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task1_states.jpg}
+  \caption{Состояния системы.}
+  \label{fig:task1_states}
+\end{figure}
+
+\FloatBarrier

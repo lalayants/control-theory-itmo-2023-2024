@@ -1,0 +1,70 @@
+\section{ГЛАВА 2. АНАЛИЗ МАТЕМАТИЧЕСКОЙ МОДЕЛИ}
+
+\subsection{Анализ матриц}
+\[\sigma(A) = \begin{bmatrix}
+  0.0 &  0.0 &  3.3 & -3.3
+\end{bmatrix}; v(A) = \begin{bmatrix}
+  1.0 & -1.0 &  0.0 & -0.0\\
+  0.0 &  0.0 &  0.1 &  0.1\\
+  0.0 &  0.0 &  0.3 & -0.3\\
+  0.0 &  0.0 &  1.0 &  1.0
+\end{bmatrix} \]
+Первые два числа 0, следовательно первая компонента (координата \(x\)) не влияет на динамику системы. Есть кратные 0 и положительные числа, следовательно система неустойчивая. 
+
+\[rankU = rank[B | AB | \hdots | A^{n-1}B] = 4 \rightarrow \text{полностью управляема}\]
+\[rankV = rank[C | CA | \hdots | CA^{n-1}]^T = 4 \rightarrow \text{полностью наблюдаема}\]
+
+\subsection{Передаточные функции}
+\[\underset{u \to y}W = \begin{bmatrix} \frac{1.0 s^{2} - 10.0}{1.0 s^{4} - 11.0 s^{2}} \\ \frac{1.0 s^{2}}{1.0 s^{4} - 11.0 s^{2}} \end{bmatrix} \]
+Динамический порядок -- 4; относительный -- 2; полюса -- [0, 0, \(\sqrt11, -\sqrt11\)]; нули -- [\( \pm \sqrt{10}, 0\) ]
+\[\underset{f \to y}W = \begin{bmatrix} \frac{1.0}{1.0 s^{2} - 11.0} \\ \frac{11.0}{1.0 s^{2} - 11.0} \end{bmatrix} \]
+Динамический порядок -- 2; относительный -- 2; полюса -- [\(\sqrt11, -\sqrt11\)]; нулей нет;
+
+Все функции описывают расходящиеся процессы.
+
+\subsection{Линейное моделирование}
+Ниже (рис. \ref{fig:task2_3_0_0.01_0_0.1}-- \ref{fig:task2_3_0_0_0_0.01}) приведены графики при различных начальных условиях. Видно, что линейное ускорение тележки влияет только на координату. Если же задавать начальный угол или начальную угловую скорость маятника отличную от 0, то система улетает в бесконечность. 
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task2_3_0_0.01_0_0.jpg}
+  \caption{Динамика системы.}
+  \label{fig:task2_3_0_0.01_0_0.1}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task2_3_0_0_0.01_0.jpg}
+  \caption{Динамика системы.}
+  \label{fig:task2_3_0_0_0.01_0}
+\end{figure}
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task2_3_0_0_0_0.01.jpg}
+  \caption{Динамика системы.}
+  \label{fig:task2_3_0_0_0_0.01}
+\end{figure}
+\FloatBarrier
+
+\subsection{Нелинейное моделирование}
+Ниже (рис. \ref{fig:task2_4_0_0.01_0_0.1}-- \ref{fig:task2_4_0_0_0_0.01}) приведены графики при различных начальных условиях. Заметно, что сначала поведение систем схоже, но при удалении от точки равновесия по углу начинают быть заметны отличия.
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task2_4_0_0.01_0_0.jpg}
+  \caption{Динамика системы.}
+  \label{fig:task2_4_0_0.01_0_0.1}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task2_4_0_0_0.01_0.jpg}
+  \caption{Динамика системы.}
+  \label{fig:task2_4_0_0_0.01_0}
+\end{figure}
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task2_4_0_0_0_0.01.jpg}
+  \caption{Динамика системы.}
+  \label{fig:task2_4_0_0_0_0.01}
+\end{figure}
+\FloatBarrier

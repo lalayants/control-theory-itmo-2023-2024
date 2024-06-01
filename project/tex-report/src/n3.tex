@@ -1,0 +1,229 @@
+\section{ГЛАВА 3. СТАБИЛИЗАЦИЯ МАЯТНИКА: МОДАЛЬНОЕ УПРАВЛЕНИЕ}
+
+\subsection{Синтез регулятора по состоянию}
+В этом задании выводится модальный регулятор для системы:
+\[
+        \begin{cases}
+                \text{Объект управления: }\dot{x} = A x + Bu \\
+                \text{Регулятор: }u = K x \\
+        \end{cases} \rightarrow
+        \dot{x} = A x + BKx = (A+BK)x
+\]
+Для этого подбирается матрица \(\Gamma \in \mathds{R}^{n \times n}\) с желаемыми собственными числами и матрица \(\mathds{Y} \in \mathds{R}^{m \times n}\), такая что пара \((\mathds{Y}, \Gamma)\) наблюдаема. После чего по подобию:
+\[A+BK = P \Gamma P^{-1} \rightarrow
+        \begin{cases}
+                AP - P\Gamma = BY \\
+                K = -YP^{-1} \\
+        \end{cases}
+\]
+
+Получен регулятор:
+\[K = \begin{bmatrix}
+        2.40 &  5.00 & -48.40 & -15.00
+      \end{bmatrix}\]
+\[spec(A + B K) = \begin{bmatrix}
+-4.00 & -3.00 & -2.00 & -1.00
+\end{bmatrix}\]
+
+Он подходит для нелинейной системой, если \(\varphi\) близко к 0. Чем дальше от 0 -- тем хуже справляется. Угловое ускорение такое сильное влияние не оказывает.
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task3_1_0_0_0_1.jpg}
+  \caption{Динамика системы.}
+  \label{fig:task3_1_0_0_0_1.jpg}
+\end{figure}
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_1_0_0_0_2.jpg}
+        \caption{Динамика системы.}
+        \label{fig:task3_1_0_0_0_2.jpg}
+\end{figure}
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_1_0_0_1_0.jpg}
+        \caption{Динамика системы.}
+        \label{fig:task3_1_0_0_1_0.jpg}
+\end{figure}
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_1_0_0_2_0.jpg}
+        \caption{Динамика системы.}
+        \label{fig:task3_1_0_0_2_0.jpg}
+\end{figure}
+\FloatBarrier
+
+\subsection{Исследование регулятора по состоянию}
+\begin{center}
+        \begin{tabular}{ c | c c c }
+    $\sigma G$ & $\max x$ & $\max \varphi$ & $\max u$ \\
+            $\begin{bmatrix}
+     -1 & -2 & -3 & -4
+    \end{bmatrix}$ & 5.1 & 4.0 & 48.4 \\
+            $\begin{bmatrix}
+     -0.10 & -0.20 & -0.30 & -0.40
+    \end{bmatrix}$ & 110.4 & 13.6 & 76.7 \\
+            $\begin{bmatrix}
+     -1 + 1j & -1 + -1j & -2 + 2j & -2 + -2j
+    \end{bmatrix}$ & 31482.2 & 194.8 & 256515.5 \\
+        \end{tabular}
+    \end{center}
+Как видно, система довольно требовательна к спекту, набор из затихающих гармоник приводит к неустойчивому поведению.
+\FloatBarrier
+
+\subsection{Синтез наблюдателя}
+В этом задании выводится наблюдатель состояния для системы:
+\[
+        \begin{cases}
+                \dot{x} = A x \\
+                y = C x \\
+                \dot{\hat{x}} = A \hat{x} + L(\hat{y} - y) \\
+                \hat{y} = C \hat{x}
+        \end{cases} \rightarrow
+        \begin{cases}
+            \dot{\hat{x}} = A \hat{x} + L(C \hat{x} - y) = (A + LC )\hat{x} - Ly \\
+            \dot{e} = (A + LC)e
+            
+    \end{cases}
+\]
+
+Для синтеза наблюдателя подбирается матрица \(\Gamma \in \mathds{R}^{n \times n}\) с желаемыми собственными числами и матрица \(\mathds{Y} \in \mathds{R}^{n \times k}\), такая что пара \((\Gamma, \mathds{Y})\) управляема. После чего:
+\[
+    \begin{cases}
+        \Gamma Q - QA = YC \\
+        L = Q^{-1}Y \\
+    \end{cases}
+\]
+\[L = \begin{bmatrix}
+        2.40 &  5.00 & -48.40 & -15.00
+      \end{bmatrix}\]
+      \[\Gamma = \begin{bmatrix}
+       -1.00 &  0.00 &  0.00 &  0.00\\
+        0.00 & -2.00 &  0.00 &  0.00\\
+        0.00 &  0.00 & -3.00 &  0.00\\
+        0.00 &  0.00 &  0.00 & -4.00
+      \end{bmatrix}\]
+      \[Y = \begin{bmatrix}
+        1.00 &  1.00\\
+        1.00 &  1.00\\
+        1.00 &  1.00\\
+        1.00 &  1.00
+      \end{bmatrix}\]
+На графиках видно, что не при любых начальных условиях наблюдатель сходится.
+
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_3_0.1_0.1.jpg}
+        \caption{Динамика ошибки.}
+        \label{fig:task3_3_0.1_0.1.jpg}
+\end{figure}
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_3_0_1.jpg}
+        \caption{Динамика ошибки.}
+        \label{fig:task3_3_0_1.jpg}
+\end{figure}
+
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_3_1_0.jpg}
+        \caption{Динамика ошибки.}
+        \label{fig:task3_3_1_0.jpg}
+\end{figure}
+\FloatBarrier
+
+\subsection{Исследование наблюдателя}
+Не при любом устойчивом спектре наблюдатель устойчив. 
+\[x(0) = \begin{bmatrix}
+        0.10 &  0.00 &  0.10 &  0.00
+      \end{bmatrix}\]
+
+\[L = \begin{bmatrix}
+        2.40 &  5.00 & -48.40 & -15.00
+      \end{bmatrix}\]
+      \[\Gamma = \begin{bmatrix}
+       -1.00 &  0.00 &  0.00 &  0.00\\
+        0.00 & -2.00 &  0.00 &  0.00\\
+        0.00 &  0.00 & -3.00 &  0.00\\
+        0.00 &  0.00 &  0.00 & -4.00
+      \end{bmatrix}\]
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_4_-1.0_-2.0_-3.0_-4.0.jpg}
+        \caption{Динамика ошибки.}
+        \label{fig:task3_4_1.jpg}
+\end{figure}
+\FloatBarrier
+      \[L = \begin{bmatrix}
+        2.40 &  5.00 & -48.40 & -15.00
+      \end{bmatrix}\]
+      \[\Gamma = \begin{bmatrix}
+       -0.10 &  0.00 &  0.00 &  0.00\\
+        0.00 & -0.20 &  0.00 &  0.00\\
+        0.00 &  0.00 & -0.30 &  0.00\\
+        0.00 &  0.00 &  0.00 & -0.40
+      \end{bmatrix}\]
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_4_-0.1_-0.2_-0.3_-0.4.jpg}
+        \caption{Динамика ошибки.}
+        \label{fig:task3_4_2.jpg}
+\end{figure}
+\FloatBarrier
+      \[L = \begin{bmatrix}
+        2.40 &  5.00 & -48.40 & -15.00
+      \end{bmatrix}\]
+      \[\Gamma = \begin{bmatrix}
+       -1.00 & -1.00 &  0.00 &  0.00\\
+        1.00 & -1.00 &  0.00 &  0.00\\
+        0.00 &  0.00 & -2.00 & -2.00\\
+        0.00 &  0.00 &  2.00 & -2.00
+      \end{bmatrix}\]
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_4_(-1+1j)_(-1-1j)_(-2+2.0000000000000004j)_(-2-2.0000000000000004j).jpg}
+        \caption{Динамика ошибки.}
+        \label{fig:task3_4_3.jpg}
+\end{figure}
+\FloatBarrier
+
+\subsection{Синтез регулятора по выходу}
+На основе двух предыдущих пунктов получен регулятор по выходу.
+\[L = \begin{bmatrix}
+        3.33 &  3.33\\
+       -1.83 & -1.83\\
+       -13.33 & -13.33\\
+       -44.17 & -44.17
+      \end{bmatrix}\]
+      \[K = \begin{bmatrix}
+        2.40 &  5.00 & -48.40 & -15.00
+      \end{bmatrix}\]
+      \[\Gamma = \begin{bmatrix}
+       -1.00 & -1.00 &  0.00 &  0.00\\
+        1.00 & -1.00 &  0.00 &  0.00\\
+        0.00 &  0.00 & -2.00 & -2.00\\
+        0.00 &  0.00 &  2.00 & -2.00
+      \end{bmatrix}\]
+      \[L = \begin{bmatrix}
+        1.50 &  1.50\\
+       -1.08 & -1.08\\
+       -7.50 & -7.50\\
+       -27.92 & -27.92
+      \end{bmatrix}\]
+      \[K = \begin{bmatrix}
+        1.60 &  2.40 & -30.60 & -8.40
+      \end{bmatrix}\]
+      \[\Gamma = \begin{bmatrix}
+       -1.00 & -1.00 &  0.00 &  0.00\\
+        1.00 & -1.00 &  0.00 &  0.00\\
+        0.00 &  0.00 & -2.00 & -2.00\\
+        0.00 &  0.00 &  2.00 & -2.00
+      \end{bmatrix}\]
+      
+      \begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task3_5_new.jpg}
+        \caption{Динамика компонент системы.}
+        \label{fig:task3_5.jpg}
+\end{figure}
+
+\FloatBarrier

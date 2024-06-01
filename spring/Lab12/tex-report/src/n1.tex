@@ -1,0 +1,112 @@
+\subsection{Следящий регулятор по состоянию}
+
+Рассмотрим систему вида:
+\[
+    \begin{cases}
+        \dot{x} = A_1x + B_1u + B_2w \\
+        z = C_2x + D_2w
+    \end{cases},
+\]
+где $w$:
+\[
+    \dot{w} = A_2w
+\]
+
+Для данной системы можем синтезировать регулятор вида $u = K_1x + K_2w$, гарантирующий:
+\begin{equation*}
+    \lim_{t\to\infty} z(t) = 0
+\end{equation*}
+
+$K_1$ можем выбрать как матрицу регулятора, синтезированного любым способом. Матрицу $K_2$ найдем следующим образом:
+\[
+    \begin{cases}
+        PA_2 - A_1P = B_1Y + B_2\\
+        C_2P + D_2 = 0 \\
+        K_2 = Y - K_1P
+    \end{cases}
+\]
+
+\[
+    \begin{cases}
+        \dot{x} = A_1x + B_1 (K_1x + K_2w) + B_2w = (A_1 + B_1 K_1) x + (B_2 + B_1 K_2)w \\
+        z = C_2x + D_2 w
+    \end{cases},
+\]
+
+\[A_1 = \begin{bmatrix}
+  1.00 &  0.00 &  0.00\\
+  0.00 &  2.00 &  0.00\\
+  0.00 &  0.00 &  3.00
+\end{bmatrix}\]
+\[A_2 = \begin{bmatrix}
+  0.00 &  1.00 &  1.00 &  0.00\\
+ -1.00 &  0.00 &  0.00 &  1.00\\
+  0.00 &  0.00 &  0.00 &  1.00\\
+  0.00 &  0.00 & -1.00 &  0.00
+\end{bmatrix}\]
+\[B_1 = \begin{bmatrix}
+  1.00\\
+  1.00\\
+  1.00
+\end{bmatrix}\]
+\[B_1 = \begin{bmatrix}
+  0.00 &  0.00 &  0.00 &  0.00\\
+  0.00 &  0.00 &  0.00 &  0.00\\
+  0.00 &  0.00 &  0.00 &  0.00
+\end{bmatrix}\]
+\[C_2 = \begin{bmatrix}
+  1.00 &  0.00 &  1.00
+\end{bmatrix}\]
+\[D_2 = \begin{bmatrix}
+ -1.00 &  0.00 & -1.00 &  0.00
+\end{bmatrix}\]
+
+
+Из LQR  (Q = I, R = 1):
+\[K_1 = \begin{bmatrix}
+  -2.41 &  -0.00 &  -0.00\\
+   -0.00 & -4.24 &  -0.00\\
+   -0.00 &  -0.00 & -6.16\\
+   -0.00 &  -0.00 &  -0.00
+ \end{bmatrix}\]
+ \[spec(A + B_1 K_1) = \begin{bmatrix}
+  -1.41 + 0.00j & -3.16 + 0.00j & -2.24 + 0.00j
+ \end{bmatrix}\]
+Из матричных уравнений:
+ \[K_2 = \begin{bmatrix}
+  -1.04 & -0.24 &  0.06 &  0.03\\
+   0.48 & -1.40 &  0.28 & -0.27\\
+   0.21 &  0.41 & -1.27 & -0.04\\
+   0.00 &  0.00 &  0.00 &  0.00
+ \end{bmatrix}\]
+
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task2_z.jpg}
+  \caption{Регулируемый выход системы.}
+  \label{fig:task2_z}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task2_ws.jpg}
+  \caption{Внешнее возмущение.}
+  \label{fig:task2_ws}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task2_states.jpg}
+  \caption{Состояния системы.}
+  \label{fig:task2_states}
+\end{figure}
+
+\begin{figure}[ht!]
+  \centering
+  \includegraphics[width=\textwidth]{src/figs/task2_follow.jpg}
+  \caption{Слежение компонент за входным воздействием.}
+  \label{fig:task2_follow}
+\end{figure}
+
+\FloatBarrier

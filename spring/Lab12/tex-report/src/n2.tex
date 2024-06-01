@@ -1,0 +1,176 @@
+\subsection{Регулятор по выходу при различных y и z.}
+
+\[
+    \begin{cases}
+        \dot{x} = A_1x + B_1u + B_2w \\
+        y = C_1x + D_1w \\
+        z = C_2x + D_2w \\
+        \dot{\hat{x}} = A_1\hat{x} + B_1u + B_2\hat{w} + L_1(\hat{y} - y) \\
+        \hat{y} = C_1\hat{x} + D_1\hat{w} \\
+        \dot{\hat{w}} = A_2\hat{w} + L_2(\hat{y} - y)
+    \end{cases},
+\]
+где $u = K_1\hat{x} + K_2\hat{w}$. 
+\[A_1 = \begin{bmatrix}
+    1.00 &  0.00 &  0.00 &  0.00\\
+    0.00 &  2.00 &  0.00 &  0.00\\
+    0.00 &  0.00 &  3.00 &  0.00\\
+    0.00 &  0.00 &  0.00 &  4.00
+  \end{bmatrix}\]
+  \[A_2 = \begin{bmatrix}
+    0.00 &  1.00 &  0.00 &  0.00\\
+   -1.00 &  0.00 &  0.00 &  0.00\\
+    0.00 &  0.00 &  0.00 &  2.00\\
+    0.00 &  0.00 & -2.00 &  0.00
+  \end{bmatrix}\]
+  \[B_1 = \begin{bmatrix}
+    21.00\\
+    22.00\\
+    23.00\\
+    24.00
+  \end{bmatrix}\]
+  \[B_2 = \begin{bmatrix}
+    11.00 &  0.00 &  0.00 &  0.00\\
+    0.00 &  12.00 &  0.00 &  0.00\\
+    0.00 &  0.00 &  13.00 &  0.00\\
+    0.00 &  0.00 &  0.00 &  14.00
+  \end{bmatrix}\]
+  \[C_2 = \begin{bmatrix}
+    11.00 &  12.00 &  13.00 &  14.00
+  \end{bmatrix}\]
+  \[D_2 = \begin{bmatrix}
+    3.00 &  1.00 &  1.00 &  2.00
+  \end{bmatrix}\]
+  \[C_1 = \begin{bmatrix}
+    1.00 &  2.00 &  3.00 &  4.00
+  \end{bmatrix}\]
+  \[D_1 = \begin{bmatrix}
+    3.00 &  2.00 &  1.00 &  4.00
+  \end{bmatrix}\]
+  
+\[
+    \begin{bmatrix}
+        \dot{e_x} \\
+        \dot{e_w}
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        A_1 + L_1C_1 & B_2 + L_1D_1 \\
+        L_2C_1 & A_2 + L_2D_1
+    \end{bmatrix}
+    \begin{bmatrix}
+        e_x \\
+        e_w
+    \end{bmatrix} = A_e 
+    \begin{bmatrix}
+        e_x \\
+        e_w
+    \end{bmatrix}
+\] 
+Убедившись, что матрица \(A_e\) -- гурвицева, можем синтезировать регулятор (матрицы $K_1$ и $K_2$) аналогично предыдущим разделам.
+
+Через LQE (Q = I, R = 1) найдем:
+\[L_1 = \begin{bmatrix}
+    390.07\\
+   -1139.99\\
+    1225.92\\
+   -453.69
+  \end{bmatrix}\]
+  \[L_2 = \begin{bmatrix}
+    0.10\\
+   -1.41\\
+   -1.35\\
+   -0.43
+  \end{bmatrix}\]
+  \[\sigma (A_e) = \begin{bmatrix}
+    -5.8 + 3.1j & -5.8 -3.1j & -5.06  & -2.46  & -0.5 + 1.4j & -0.5 -1.42j & -1.74  & -0.69 
+   \end{bmatrix}\]
+Через LQR (Q = I, R = 1) найдем:
+   \[K_1 = \begin{bmatrix}
+    14.90 & -95.40 &  172.40 & -93.42
+  \end{bmatrix}\]
+  \[spec(A + B_1 K_1) = \begin{bmatrix}
+   -45.15 & -1.47 & -3.64 & -2.55
+  \end{bmatrix}\]
+  \[K_2 = \begin{bmatrix}
+    314.84 & -372.26 &  645.75 &  84.98
+  \end{bmatrix}\]
+
+Получаем систему:
+\[
+    \begin{bmatrix}
+        \dot{x} \\
+        \dot{e_x} \\
+        \dot{e_w}
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        A_1 + B_1K_1 & -B_1K_1 & -B_1K_2 \\
+        0 & A_1 + L_1C_1 & B_2 + L_1 D_1 \\
+        0 & L_2 C_1 & A_2 + L_2 D_1
+    \end{bmatrix}
+    \begin{bmatrix}
+        x \\
+        e_x \\
+        e_w
+    \end{bmatrix} 
+    + 
+    \begin{bmatrix}
+        B_2 + B_1 K_2 \\
+        0 \\
+        0
+    \end{bmatrix} w
+\]
+\[
+    \begin{bmatrix}
+        \dot{\hat{x}} \\
+        \dot{\hat{w}}
+    \end{bmatrix} = 
+    \begin{bmatrix}
+        A_1 + B_1K_1 + L_1C_1 & B_2 + B_1K_2 + L_1D_1 \\
+        L_2C_2 & A_2 + L_2D_2 \\
+    \end{bmatrix}
+    \begin{bmatrix}
+        \hat{x} \\
+        \hat{w}
+    \end{bmatrix}
+    +
+    \begin{bmatrix}
+        -L_1 \\ -L_2 
+    \end{bmatrix}y, u = \begin{bmatrix}
+        K_1 & K_2 
+    \end{bmatrix}\begin{bmatrix}
+        {\hat{x}} \\ {\hat{w}} 
+    \end{bmatrix}
+\]
+\[\sigma (Reg) = \begin{bmatrix}
+    9125.98 & -9237.91 &  23.85 &  6.07 & -2.34 & -0.07 + 1.76j & -0.07 -1.76j &  1.41
+  \end{bmatrix}\]
+  \[\sigma (A_2) = \begin{bmatrix}
+    0.00 + 1.00j &  0.00 + -1.00j &  0.00 + 2.00j &  0.00 + -2.00j
+  \end{bmatrix}\]
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_xs.jpg}
+    \caption{Поведение компонент вектора состояния.}
+    \label{fig:task3_xs}
+  \end{figure} 
+
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_exs.jpg}
+    \caption{Поведение компонент вектора ошибки наблюдателя состояния системы.}
+    \label{fig:task3_exs}
+  \end{figure} 
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_ews.jpg}
+    \caption{Поведение компонент вектора ошибки наблюдателя входного воздействия.}
+    \label{fig:task3_ews}
+  \end{figure} 
+
+  \begin{figure}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{src/figs/task3_z.jpg}
+    \caption{Поведение регулируемого выхода.}
+    \label{fig:task3_z}
+  \end{figure} 

@@ -1,0 +1,185 @@
+\section{ГЛАВА 5. СТАБИЛИЗАЦИЯ МАЯТНИКА: LQR И ФИЛЬТР КАЛМАНА}
+
+\subsection{Синтез линейно-квадратичного регулятора}
+В этом задании выводится регулятор заданной степени устойчивости для системы:
+\[
+        \begin{cases}
+                \text{Объект управления: }\dot{x} = A x + Bu \\
+                \text{Регулятор: }u = -K x \\
+        \end{cases} \rightarrow
+        \dot{x} = A x - BKx = (A-BK)x
+\]
+LQR позволяет оптимизировать критерий качества:
+\[J = \int_0^\infty (x^T Q x + u^T R u)dt \]
+Выбор cотношения матриц \(Q\) и \(R\) позволяет управлять временем сходимости и величиной подаваего управления: чем больше \(\frac{Q}{R}\), тем больше управление и быстрее сходимость.
+
+\(K\) получается решением следующих уравнений:
+\[
+\begin{cases}
+    A^T P + P A + Q - PBR^{-1}B^TP = 0\\
+    K = -R^{-1} B^T P \\
+\end{cases}
+\]
+
+Теоретический минимум критерия качества:
+\[J_{min} = x_0^T P x_0\]
+\FloatBarrier
+
+\subsection{Исследование линейно-квадратичного регулятора}
+Все работает отлично, при небольшом отклонении от горизонтали в начальный момент.
+\[Q = 0.1; R = 10.0; K_0 = \begin{bmatrix}
+        -0.10 & -0.54 &  25.09 &  7.61
+       \end{bmatrix}\]
+       \[eig(A+BK_0) = \begin{bmatrix}
+        -0.22 + 0.21j & -0.22 + -0.21j & -3.37 + 0.00j & -3.27 + 0.00j
+       \end{bmatrix}\]
+       \[Q = 1.0; R = 1.0; K_1 = \begin{bmatrix}
+        -1.00 & -2.40 &  34.91 &  10.76
+       \end{bmatrix}\]
+       \[eig(A+BK_1) = \begin{bmatrix}
+        -3.86 + 0.00j & -2.87 + 0.00j & -0.81 + 0.50j & -0.81 + -0.50j
+       \end{bmatrix}\]
+       \[Q = 10.0; R = 0.1; K_2 = \begin{bmatrix}
+        -10.00 & -17.70 &  117.61 &  38.08
+       \end{bmatrix}\]
+       \[eig(A+BK_2) = \begin{bmatrix}
+        -14.54 + 0.00j & -2.42 + 1.00j & -2.42 + -1.00j & -1.01 + 0.00j
+       \end{bmatrix}\]
+
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task5_states.jpg}
+        \caption{Динамика компонент системы.}
+        \label{fig:task5_states}
+\end{figure}
+
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task5_us.jpg}
+        \caption{Управление.}
+        \label{fig:task5_u}
+\end{figure}
+\FloatBarrier
+
+\subsection{Синтез фильтра Калмана}
+\[      
+        \text{Объект управления: }
+        \begin{cases}
+                \dot{x} = A x + Bu + f, \text{ \(f\) -- внешнее возмущение}\\
+                y = Cx + \xi, \text{ \(\xi\) -- помеха измерений}
+        \end{cases} 
+\]
+Матрицы \(Q\) и \(R\) обозначают, насколько сильно мы оцениваем влиянию \(f\) и \(\xi\).
+
+\(L\) получается решением следующих уравнений:
+\[
+\begin{cases}
+    A P + P A^T + Q - PC^TR^{-1}CP = 0\\
+    L = -P C^T R^{-1}\\
+\end{cases}
+\]
+Ниже приведена ошибка слежения за системой из прошлог пункта.
+\[Q = 0.01; R = 0.01; L = \begin{bmatrix}
+        1.76 &  0.37\\
+        1.11 &  1.88\\
+        0.37 &  6.69\\
+        1.26 &  21.97
+      \end{bmatrix}\]
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task5_3.jpg}
+        \caption{Ошибка.}
+        \label{fig:task5_3}
+\end{figure}
+\FloatBarrier
+
+\subsection{ LQG для линейной модели}
+В этом задании выводится наблюдатель регулятор для системы:
+\[
+        \begin{cases}
+                \dot{x} = A x + B  K \hat{x} + f \\
+                y = Cx + DK\hat{x} + \xi \\
+                \dot{\hat{x}} = A \hat{x} + B  K \hat{x} + L(\hat{y} - y) \\
+                \hat{y} = C \hat{x} + D K \hat{x} \\
+                \hat{x} = x - e \\
+        \end{cases} \rightarrow
+        \begin{cases}
+            \begin{bmatrix} 
+                \dot{x} \\
+                \dot{e}
+            \end{bmatrix} = 
+            A_{new}
+            \begin{bmatrix} 
+              x \\
+              e
+            \end{bmatrix} 
+          + B_{new} 
+          \begin{bmatrix} 
+            f \\
+            \xi
+          \end{bmatrix} 
+            \\
+            A_{new} = 
+            \begin{bmatrix} 
+                A + BK & -BK\\
+                0 & A + LC
+            \end{bmatrix} \\
+            B_{new} = 
+            \begin{bmatrix} 
+                I & 0\\
+                I & L
+            \end{bmatrix} \in R^{2n \times (n + m)}
+         \end{cases}
+\]
+\[Q = 0.01; R = 0.01; L = \begin{bmatrix}
+        -1.76 & -0.37\\
+        -1.11 & -1.88\\
+        -0.37 & -6.69\\
+        -1.26 & -21.97
+       \end{bmatrix}\]
+       \[spec(A+LC) = \begin{bmatrix}
+        -0.87 + 0.50j & -0.87 + -0.50j & -2.88 + 0.00j & -3.84 + 0.00j
+       \end{bmatrix}\]
+       \[Q = 1; R = 1; K= \begin{bmatrix}
+         1.00 &  2.40 & -34.91 & -10.76
+       \end{bmatrix}\]
+       \[spec(A + BK) = \begin{bmatrix}
+        -3.86 + 0.00j & -2.87 + 0.00j & -0.81 + 0.50j & -0.81 + -0.50j
+       \end{bmatrix}\]
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task5_LQG_lin.jpg}
+        \caption{Динамика системы и ошибки.}
+        \label{fig:task5_4}
+\end{figure}
+\FloatBarrier
+
+\subsection{ LQG для нелинейной модели}
+\[Q = 0.01; R = 0.01; L = \begin{bmatrix}
+        1.76 &  0.37\\
+        1.11 &  1.88\\
+        0.37 &  6.69\\
+        1.26 &  21.97
+      \end{bmatrix}\]
+      \[Q = 0.01; R = 0.01; L = \begin{bmatrix}
+       -1.76 & -0.37\\
+       -1.11 & -1.88\\
+       -0.37 & -6.69\\
+       -1.26 & -21.97
+      \end{bmatrix}\]
+      \[spec(A+LC) = \begin{bmatrix}
+       -0.87 + 0.50j & -0.87 + -0.50j & -2.88 + 0.00j & -3.84 + 0.00j
+      \end{bmatrix}\]
+      \[Q = 1; R = 1; K= \begin{bmatrix}
+        1.00 &  2.40 & -34.91 & -10.76
+      \end{bmatrix}\]
+      \[spec(A + BK) = \begin{bmatrix}
+       -3.86 + 0.00j & -2.87 + 0.00j & -0.81 + 0.50j & -0.81 + -0.50j
+      \end{bmatrix}\]
+\begin{figure}[ht!]
+        \centering
+        \includegraphics[width=\textwidth]{src/figs/task5_LQG_non_lin.jpg}
+        \caption{Динамика системы и ошибки.}
+        \label{fig:task5_5}
+\end{figure}
+\FloatBarrier
