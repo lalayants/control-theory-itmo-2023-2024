@@ -243,40 +243,44 @@ $\alpha$ & $\max x$ & $\max \varphi$ & $\max u$ \\
 
 \subsection{Синтез регулятора по выходу}
 В этом задании выводится наблюдатель регулятор для системы. Так бы это выглядело для линейной системы.
-\[
-        \begin{cases}
-                \dot{x} = A x + B u\\
-                y = C x \\
-                \dot{\hat{x}} = A \hat{x} + B u + L(\hat{y} - y) \\
-                \hat{y} = C \hat{x} \\
-                u = K \hat{x}
-        \end{cases} \rightarrow
-        \begin{cases}
-            \begin{bmatrix} 
-                \dot{x} \\
-                \dot{e}
-            \end{bmatrix} = 
-            \begin{bmatrix} 
-                A + BK & -BK\\
-                0 & A + LC
-            \end{bmatrix}
-            \begin{bmatrix} 
-              x \\
-              e
-          \end{bmatrix} 
-            \\
-            \hat{x} = x - e \\
-            y = Cx \\
-            \hat{y} = C \hat{x}
-         \end{cases}
-\]
+\[K = \begin{bmatrix}
+    8.51 &  10.41 & -70.15 & -15.94
+  \end{bmatrix}\]
+  \[spec(A + B K) = \begin{bmatrix}
+   -1.58 + 6.21j & -1.58 + -6.21j & -1.19 + 0.81j & -1.19 + -0.81j
+  \end{bmatrix}\]
+  \[L = \begin{bmatrix}
+   -4.48 & -0.63\\
+   -8.92 & -2.11\\
+    0.63 & -4.48\\
+    1.11 & -19.92
+  \end{bmatrix}\]
+  \[spec(A + L C) = \begin{bmatrix}
+   -2.31 + 2.32j & -2.31 + -2.32j & -2.17 + 1.69j & -2.17 + -1.69j
+  \end{bmatrix}\]
+  \[K = \begin{bmatrix}
+    148.44 &  90.81 & -348.09 & -106.21
+  \end{bmatrix}\]
+  \[spec(A + B K) = \begin{bmatrix}
+   -4.30 + 9.96j & -4.30 + -9.96j & -3.40 + 1.03j & -3.40 + -1.03j
+  \end{bmatrix}\]
+  \[L = \begin{bmatrix}
+   -11.59 & -0.29\\
+   -53.46 & -2.33\\
+    0.29 & -11.59\\
+    1.33 & -64.46
+  \end{bmatrix}\]
+  \[spec(A + L C) = \begin{bmatrix}
+   -5.84 + 4.61j & -5.84 + -4.61j & -5.75 + 4.31j & -5.75 + -4.31j
+  \end{bmatrix}\]
+  
 
 На графике видно, что регулятор справился и с нелинейной системой.
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=\textwidth]{src/figs/task4_5.jpg}
     \caption{Динамика системы}
-    \label{fig:task4_5}
+    \label{fig:task4_5_new}
 \end{figure}
 \FloatBarrier
 

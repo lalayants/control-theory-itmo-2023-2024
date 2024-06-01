@@ -25,25 +25,31 @@
 
 Измеряемыми сигналами \(y = \begin{bmatrix} x & \varphi \end{bmatrix}^T\).
 
-Для вывода математической модели данной физической системы воспользуемся уравнениями Лагранжа:
+Для вывода математической модели данной физической системы воспользуемся уравнениями Лагранжа \(L = T - V\), где где $T$ -- кинетическая энергия системы, $V$ -- потенциальная.
+\[T = T_p + T_c\]
+\[
+T(t) = M\frac{\dot{x}^2}{2} + m\frac{(\frac{d}{dt}(l\cos(\varphi)))^2 + (-\frac{d}{dt}(l\sin(\varphi)) + \dot{x})^2}{2}
+\]
+
+\[V = V_p + V_c = Mgh_c + mgl \cos{\varphi} =  const +  mgl \cos{\varphi}\]
+\[
+  L = M\frac{\dot{x}^2}{2} + m\frac{(\frac{d}{dt}(l\cos(\varphi)))^2 + (-\frac{d}{dt}(l\sin(\varphi)) + \dot{x})^2}{2} - const -  mgl \cos{\varphi}
+\]
+\[
+  L = M\frac{\dot{x}^2}{2} + m\frac{\dot x^2 - 2l \dot x \dot \varphi \cos \varphi + l^2 \dot{\varphi^2}}{2} - const -  mgl \cos{\varphi}
+\]
 \begin{equation} \label{eq:2}
   \begin{cases}
-      \frac{d}{dt}\frac{\partial T}{\partial \dot{x}} - \frac{\partial T}{\partial x} = u \\
-      \frac{d}{dt}\frac{\partial T}{\partial \dot{\varphi}} - \frac{\partial T}{\partial \varphi} = f + mgl\sin(\varphi)
+      \frac{d}{dt}\frac{\partial L}{\partial \dot{x}} - \frac{\partial L}{\partial x} = u \\
+      \frac{d}{dt}\frac{\partial L}{\partial \dot{\varphi}} - \frac{\partial L}{\partial \varphi} = f 
   \end{cases},
 \end{equation}
-где $T$ -- кинетическая энергия системы.
 
-\begin{equation} \label{eq:3}
-  T(t) = M\frac{\dot{x}^2}{2} + m\frac{(\frac{d}{dt}(l\cos(\varphi)))^2 + (-\frac{d}{dt}(l\sin(\varphi)) + \dot{x})^2}{2}=
-  (M+m)\frac{\dot{x}^2}{2} + \frac{ml^2\dot{\varphi}^2}{2} - ml\cos(\varphi)\dot{x}\dot{\varphi}
-\end{equation}
-
-Подставив выражение для $T$ в уравнения \ref{eq:2}, получим уравнения математической модели системы:
+Подставив выражение для $L$ в уравнения \ref{eq:2}, получим уравнения математической модели системы:
 \begin{equation} \label{eq:4}
   \begin{cases}
       (M+m)\ddot{x} + ml(\sin(\varphi)\dot{\varphi}^2 - \cos(\varphi)\ddot{\varphi}) = u \\
-      ml^2\ddot{\varphi} - ml\ddot{x}\cos{\varphi} = f + mgl\sin(\varphi)
+      ml^2\ddot{\varphi} - ml\ddot{x}\cos{\varphi} - mgl\sin(\varphi)= f
   \end{cases}
 \end{equation}
 
